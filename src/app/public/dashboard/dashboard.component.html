@@ -1,0 +1,49 @@
+
+<nb-layout windowMode>
+  <nb-layout-header fixed>
+    <div class="container-fluid">
+      <div class="row h-100">
+        <div class="col-4 my-auto">
+          <div class="header-container normal">
+            <div class="logo-containter">
+              <a (click)="toggle()" href="#" class="navigation" style="font-size: 2rem;"><i class="nb-menu"></i></a>
+              <div class="logo" (click)="inicio()" style="display: inline">
+                <img class="img-fluid d-none d-sm-block" src="/assets/img/logo-lifestyle.png" style="position: absolute;left: 2rem;top: -1rem;" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 my-auto">
+          <div class="pull-right">
+            <div class="header-container inverse" >
+              <nb-actions size="medium" >
+                <nb-action  >
+                  <nb-user [name]="usuarioActivo?.nombre" [picture]="usuarioActivo?.foto"></nb-user>
+                </nb-action>
+              </nb-actions>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-2 my-auto">
+          <div end>
+            <a id="btnSalir" #btnSalir (click)="salir()" href="#" class="navigation"><i class="nb-power-circled"></i> Salir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-layout-header>
+
+  <nb-sidebar class="menu-sidebar"
+              tag="menu-sidebar"
+              responsive
+              start >
+
+    <nb-menu [items]="items"></nb-menu>
+  </nb-sidebar>
+
+  <nb-layout-column class="main-content">
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+
+</nb-layout>

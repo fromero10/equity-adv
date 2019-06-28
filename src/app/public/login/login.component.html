@@ -1,0 +1,42 @@
+<nb-layout>
+  <nb-layout-column>
+    <div class="container" style="margin-top: 10%">
+      <div class="row">
+        <div class="col-md-8" style="margin: 0px auto;">
+          <nb-card>
+            <nb-card-header>
+              <div class="row">
+                <div class="col-12">
+                  <img src="/assets/img/logo-lifestyle.png" class="img-fluid" />
+                </div>
+              </div>
+              Login de usuario
+            </nb-card-header>
+            <nb-card-body>
+              <form [formGroup]="frmLogin" (ngSubmit)="verificacion()" noValidate>
+                <div class="form-group">
+                  <label>Usuario</label>
+                  <input type="text" formControlName="usuario" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }" />
+                  <div *ngIf="submitted && f.usuario.errors" class="invalid-feedback">
+                    <div *ngIf="f.usuario.errors.required">Usuario requerido</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" formControlName="clave" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.clave.errors }" />
+                  <div *ngIf="submitted && f.clave.errors" class="invalid-feedback">
+                    <div *ngIf="f.clave.errors.required">Clave es requerida</div>
+                    <div *ngIf="f.clave.errors.minlength">La clave debe poseer al menos 6 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary">Iniciar</button>
+                </div>
+              </form>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+  </nb-layout-column>
+</nb-layout>

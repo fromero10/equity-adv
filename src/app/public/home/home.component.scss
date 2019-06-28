@@ -1,0 +1,83 @@
+.titulo-tarjeta{
+  font-size: 12px;
+  font-weight: normal;
+  min-height: 2.5em;
+
+}
+
+.valor-estadistica{
+  font-size: 16px;
+  font-weight:bold;
+  text-align:left;
+  margin-bottom: 0px;
+
+}
+
+.estadistica3{
+  font-size: 12px;
+  display:flex;
+  color:darkgoldenrod;
+  text-align:left;
+
+}
+
+.estadistica2{
+  font-size: 12px;
+  display:flex;
+  color:cadetblue;
+  text-align:left;
+
+}
+
+.estadistica1{
+  font-size: 12px;
+  display:flex;
+  color:red;
+  text-align:left;
+
+}
+.grafica1{
+  font-size: 3.5em;
+  margin: 0px auto;
+
+  color:#5dcfe3;
+
+}
+
+.grafica2{
+  font-size: 3.5em;
+  margin: 0px auto;
+
+  color:blueviolet;
+
+}
+
+.grafica3{
+  font-size: 3.5em;
+  margin: 0px auto;
+
+  color:greenyellow;
+
+}
+
+nb-card {
+
+  nb-card-header {
+    border-width: 0px !important;
+    padding-bottom: 0rem;
+
+  }
+
+  .cuerpo-tarjeta{
+    margin-top: 0px; padding-top: 0px
+
+  }
+}
+
+.valor-estadistica {
+  font-size: 40px;
+
+}
+
+
+
