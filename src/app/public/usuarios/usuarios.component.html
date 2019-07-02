@@ -3,7 +3,7 @@
     <div class="col-md-12 col-xs-12 col-xl-12">
       <nb-card>
         <nb-card-header>Listado de usuarios
-          <button nbButton status="success" size="xsmall" class="pull-right"><i
+          <button nbButton status="success" size="xsmall" class="pull-right" (click)="crear()"><i
             class="fa fa-plus"></i> Agregar
           </button>
         </nb-card-header>
@@ -17,3 +17,28 @@
     </div>
   </div>
 </div>
+<!-- PARA EL MODAL -->
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card [nbSpinner]="spinerEdit" nbSpinnerStatus="danger" nbSpinnerMessage="Cargando">
+      <nb-card-header>Modal De Prueba</nb-card-header>
+      <nb-card-body>
+        <div class="container contenedor-nuevo">
+          <div class="row">
+            <div class="col-12">
+              <label class="control-label">Cuerpo modal</label>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row">
+          <div class="col-6">
+            <button  id="btn-close-edit" nbButton (click)="ref.close()" size="small" class="btn-danger">Cerrar</button>
+          </div>
+          <div class="col-6">
+            <button nbButton status="info" size="small" (click)="ref.close()" class="btn-primary pull-right">Acción</button>
+          </div>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+</ng-template>

@@ -11,6 +11,11 @@ import {LocalDataSource} from 'ng2-smart-table';
   styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent implements OnInit {
+
+  /*  Para el modal */
+  @ViewChild('dialog') dialog: ElementRef;
+  spinerEdit = false;
+  /*****/
   settings = {
     hideSubHeader: true,
     actions: {
@@ -51,5 +56,16 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  /** Para modal **/
+
+  crear() {
+    this.openDialogSave(this.dialog);
+  }
+
+  openDialogSave(dialog) {
+    this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
+  }
+
 
 }
