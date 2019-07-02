@@ -13,7 +13,7 @@ import {LocalDataSource} from 'ng2-smart-table';
 export class UsuariosComponent implements OnInit {
 
   /*  Para el modal */
-  @ViewChild('dialog') dialog: ElementRef;
+  @ViewChild('dialog', {static: true}) dialog: ElementRef;
   spinerEdit = false;
   /*****/
   settings = {
@@ -67,5 +67,23 @@ export class UsuariosComponent implements OnInit {
     this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
   }
 
+  accion() {
+    this.spinerEdit = true;
+    const TIME_IN_MS = 3000;
+    setTimeout(() => {
+      this.spinerEdit = false;
+      this.showToast('top-right', 'success', 'Éxito!', 'Se ejecuto éxito!');
+      const element: HTMLElement = document.getElementById('btn-close') as HTMLElement;
+      element.click();
+    }, TIME_IN_MS);
+  }
+
+  /** Toas **/
+  showToast(position, status, titulo, mensaje) {
+    this.toastrService.show(
+      mensaje,
+      titulo,
+      { position, status });
+  }
 
 }
