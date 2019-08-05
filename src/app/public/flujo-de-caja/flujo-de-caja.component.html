@@ -1,0 +1,410 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-5">
+      <label for="">Ultima Actualización: {{fecha | date: 'short'}}</label>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-4">
+          <button class="btn btn-azul">Importar datos</button>
+        </div>
+        <div class="col-sm-4">
+          <button class="btn btn-blanco">Escenario Base <i class="fa fa-chevron-down" aria-hidden="true"
+              style="margin-left: 2px"></i></button>
+        </div>
+        <div class="col-sm-4">
+          <button class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
+              style="margin-left: 2px"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!-- Cajas de Kpis -->
+  <div class="row">
+    <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
+      <nb-card>
+        <nb-card-header>
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="titulo-tarjeta">Saldo Inicial</p>
+            </div>
+            <div class="col-sm-6">
+
+              <button class="btn btn-blanco-sm">Todos los bancos<i class="fa fa-chevron-down" aria-hidden="true"
+                  style="margin-left: 2px"></i></button>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body class="cuerpo-tarjeta">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
+              <p class="valor-estadistica">{{130000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
+                class="fa fa-bar-chart grafica3"></i></div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
+      <nb-card>
+        <nb-card-header class="header-valores">
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="titulo-tarjeta">Ingresos</p>
+            </div>
+            <div class="col-sm-6">
+              <button class="btn-blanco-sm">Todo en ingresos<i class="fa fa-chevron-down" aria-hidden="true"
+                  style="margin-left: 2px"></i></button>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body class="cuerpo-tarjeta">
+          <div class="row" style="padding-top: 0px">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
+              <p class="valor-estadistica">{{40000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <!-- <p class="estadistica2"><i class="nb-arrow-thin-up"></i> 13.8%</p> -->
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
+                class="fa fa-bar-chart grafica2"></i></div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
+      <nb-card>
+        <nb-card-header>
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="titulo-tarjeta">Egresos</p>
+            </div>
+            <div class="col-sm-6">
+              <button class="btn-blanco-sm">Todo en egresos<i class="fa fa-chevron-down" aria-hidden="true"
+                  style="margin-left: 2px"></i></button>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body class="cuerpo-tarjeta">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
+              <p class="valor-estadistica">{{50000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa  grafica1"></i>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
+      <nb-card>
+        <nb-card-header>
+          <p class="titulo-tarjeta">Saldo final</p>
+        </nb-card-header>
+        <nb-card-body class="cuerpo-tarjeta">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
+              <p class="valor-estadistica">{{10000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa  grafica1"></i>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+  </div>
+
+  <!-- Gráfico -->
+  <div class="row">
+    <div class="col-12">
+      <nb-card [nbSpinner]="spinerGrafica" nbSpinnerStatus="success" nbSpinnerMessage="Cargando">
+        <nb-card-header>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="btn btn-dark-graf">Evolución</div>
+              <div class="btn btn-blanco-sm-graf">Ingreso vs egresos</div>
+              <div class="btn btn-blanco-sm-graf" style="padding-top: 9px;">vs presupuesto</div>
+            </div>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="" style="font-size:12px">Filtrar por : </label>
+                </div>
+                <div class="col-sm-6"><button class="btn btn-blanco-sm">Ingresos:Todos <i class="fa fa-chevron-down"
+                      aria-hidden="true" style="margin-left: 2px"></i></button></div>
+              </div>
+
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <canvas #grafico1 style="width: 100%; height: 300px;"></canvas>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <label for="" style="color: black">Flujo de caja anual</label>
+    </div>
+  </div>
+  <br><br>
+
+  <!-- Cajas mensuales -->
+  <div class="row">
+    <div class="contenedorHorizontal">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="cajaMes">
+            <nb-card>
+              <nb-card-header>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>Enero</p>
+                  </div>
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-4">
+
+                    <p>2019</p>
+                  </div>
+                </div>
+              </nb-card-header>
+              <nb-card-body class="cuerpo-tarjeta">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Inicial</span>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="verde fuerte">Ingresos</span>
+                  </div>
+                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="rojo fuerte">Egresos</span>
+                  </div>
+                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Total</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Final</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
+
+        </div>
+        <div class="col-sm-4">
+          <div class="cajaMes">
+            <nb-card>
+              <nb-card-header>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>Febrero</p>
+                  </div>
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-4">
+
+                    <p>2019</p>
+                  </div>
+                </div>
+              </nb-card-header>
+              <nb-card-body class="cuerpo-tarjeta">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Inicial</span>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="verde fuerte">Ingresos</span>
+                  </div>
+                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="rojo fuerte">Egresos</span>
+                  </div>
+                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Total</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Final</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="cajaMes">
+            <nb-card>
+              <nb-card-header>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>Marzo</p>
+                  </div>
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-4">
+
+                    <p>2019</p>
+                  </div>
+                </div>
+              </nb-card-header>
+              <nb-card-body class="cuerpo-tarjeta">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Inicial</span>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="verde fuerte">Ingresos</span>
+                  </div>
+                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <span class="rojo fuerte">Egresos</span>
+                  </div>
+                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Total</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <span class="fuerte">Saldo Final</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                  </div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- <div class="cajaMes">
+                <nb-card>
+                  <nb-card-header>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <p>Abril</p>
+                      </div>
+                      <div class="col-sm-2"></div>
+                      <div class="col-sm-4">
+        
+                        <p>2019</p>
+                      </div>
+                    </div>
+                  </nb-card-header>
+                  <nb-card-body class="cuerpo-tarjeta">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <span class="fuerte">Saldo Inicial</span>
+                      </div>
+        
+                      <div class="col-sm-6">
+                        <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                        <span class="verde fuerte">Ingresos</span>
+                      </div>
+                      <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                        <span class="rojo fuerte">Egresos</span>
+                      </div>
+                      <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <span class="fuerte">Total</span>
+                      </div>
+                      <div class="col-sm-6">
+                        <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <span class="fuerte">Saldo Final</span>
+                      </div>
+                      <div class="col-sm-6">
+                        <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                      </div>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </div> -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

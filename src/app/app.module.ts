@@ -41,6 +41,10 @@ import { TransaccionesComponent } from './public/transacciones/transacciones.com
 import { DashboardComponent } from './public/dashboard/dashboard.component';
 import { LoginComponent } from './public/login/login.component';
 import { UsuariosComponent } from './public/usuarios/usuarios.component';
+import { SignupComponent } from './public/signup/signup.component';
+import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.component';
+import { CosteoComponent } from './public/costeo/costeo.component';
+import { IndicadoresComponent } from './public/indicadores/indicadores.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,11 @@ import { UsuariosComponent } from './public/usuarios/usuarios.component';
     TransaccionesComponent,
     DashboardComponent,
     LoginComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    SignupComponent,
+    FlujoDeCajaComponent,
+    CosteoComponent,
+    IndicadoresComponent
   ],
   imports: [
     FormsModule,

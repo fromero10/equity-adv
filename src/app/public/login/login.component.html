@@ -4,35 +4,42 @@
       <div class="row">
         <div class="col-md-8" style="margin: 0px auto;">
           <nb-card>
-            <nb-card-header>
+            <!-- <nb-card-header>
               <div class="row">
                 <div class="col-12">
-                  <img src="/assets/img/logo-lifestyle.png" class="img-fluid" />
+                  <img src="/assets/img/logo.png" class="img-fluid" style="height: 40px;"/>
                 </div>
               </div>
-              Login de usuario
-            </nb-card-header>
-            <nb-card-body>
+            </nb-card-header> -->
+            <nb-card-body style="padding: 65px;">
+              <div class="row" style="margin-bottom: 20px;">
+                <div class="col-sm-5" style="margin: 0 auto">
+                  <img src="/assets/img/logo.png" class="img-fluid" style="height: 40px;"/>
+                </div>
+              </div>
               <form [formGroup]="frmLogin" (ngSubmit)="verificacion()" noValidate>
                 <div class="form-group">
-                  <label>Usuario</label>
-                  <input type="text" formControlName="usuario" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }" />
+                  <input type="text" formControlName="usuario" placeholder="Correo electrónico" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }" />
                   <div *ngIf="submitted && f.usuario.errors" class="invalid-feedback">
                     <div *ngIf="f.usuario.errors.required">Usuario requerido</div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>Password</label>
-                  <input type="password" formControlName="clave" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.clave.errors }" />
+                  <input type="password" placeholder="Contraseña" formControlName="clave" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.clave.errors }" />
                   <div *ngIf="submitted && f.clave.errors" class="invalid-feedback">
-                    <div *ngIf="f.clave.errors.required">Clave es requerida</div>
-                    <div *ngIf="f.clave.errors.minlength">La clave debe poseer al menos 6 caracteres</div>
+                    <div *ngIf="f.clave.errors.required">Contraseña requerida</div>
+                    <div *ngIf="f.clave.errors.minlength">La contraseña debe poseer al menos 6 caracteres</div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-primary">Iniciar</button>
+                  <button class="btn btn-azul">Iniciar sesión</button>
                 </div>
               </form>
+              <div class="row">
+                <div class="col-md-10" style="margin: 0px auto;">
+                  <label for="">¿Quieres registrar un nuevo negocio? <span style="color: #3D98DE; text-decoration: underline; cursor: pointer;" (click)="goToRegister()">Hazlo aquí</span></label>
+                </div>
+              </div>
             </nb-card-body>
           </nb-card>
         </div>

@@ -4,17 +4,27 @@ import {NbMenuItem} from '@nebular/theme';
 
 export const Menu: NbMenuItem[] = [
   {
-    title: 'Dashboard',
-    icon: 'nb-home',
+    title: 'Flujo de caja',
+    icon: 'nb-angle-double-left',
     home: true,
-    link: 'home'
+    link: 'flujo-de-caja'
+  },
+  {
+    title: 'Costeo',
+    icon: 'nb-keypad',
+    link: 'costeo'
+  },
+  {
+    title: 'Indicadores',
+    icon: 'nb-bar-chart',
+    link: 'indicadores'
   },
   {
     title: 'Usuarios',
     icon: 'nb-person',
     link: 'usuarios'
   },
-  {
+  /* {
     title: 'Configuraciones',
     expanded: true,
     icon: 'nb-gear',
@@ -25,7 +35,7 @@ export const Menu: NbMenuItem[] = [
         link: 'transacciones'
       }
     ],
-  },
+  }, */
 ];
 
 

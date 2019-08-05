@@ -42,7 +42,11 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginRedirect(): void {
-    this.router.navigate(['dashboard/home']);
+    this.router.navigate(['dashboard/flujo-de-caja']);
+  }
+
+  goToRegister(){
+    this.router.navigate(['signup'])
   }
 
 }
