@@ -14,8 +14,16 @@
               style="margin-left: 2px"></i></button>
         </div>
         <div class="col-sm-4">
-          <button class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
+          <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
               style="margin-left: 2px"></i></button>
+              <div *ngIf="calendario" class="col-sm-6">
+                  <dl-date-time-picker
+                  startView="year"
+                  maxView="year"
+                  minView="year">
+                  </dl-date-time-picker>
+              </div>
+              
         </div>
       </div>
     </div>

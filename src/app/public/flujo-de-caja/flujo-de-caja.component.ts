@@ -10,7 +10,7 @@ import Chart from 'chart.js';
 export class FlujoDeCajaComponent implements OnInit {
 
   public fecha: any;
-
+  calendario=false;
   spinerGrafica = true;
   data: any;
 
@@ -43,6 +43,12 @@ export class FlujoDeCajaComponent implements OnInit {
       },
     ]
   };
+
+
+  public abrirCalendario() {
+    this.calendario=true;
+  }
+
   public generarGrafico() {
 
     let graficoObj = this.grafico1.nativeElement.getContext('2d');

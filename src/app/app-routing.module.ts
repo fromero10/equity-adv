@@ -8,6 +8,7 @@ import {TransaccionesComponent} from './public/transacciones/transacciones.compo
 import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.component';
 import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
+import { SignupComponent } from './public/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: SignupComponent
   },
   {
     path: 'dashboard',

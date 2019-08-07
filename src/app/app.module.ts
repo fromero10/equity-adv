@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { DlDateTimeDateModule, DlDateTimePickerModule } from 'angular-bootstrap-datetimepicker';
 import {
   NbThemeModule,
   NbLayoutModule,
@@ -46,6 +47,7 @@ import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.compo
 import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,7 +59,7 @@ import { IndicadoresComponent } from './public/indicadores/indicadores.component
     SignupComponent,
     FlujoDeCajaComponent,
     CosteoComponent,
-    IndicadoresComponent
+    IndicadoresComponent,
   ],
   imports: [
     FormsModule,
@@ -89,9 +91,11 @@ import { IndicadoresComponent } from './public/indicadores/indicadores.component
     NbDateFnsDateModule.forChild({ format: 'dd.MM.yyyy' }),
     NbDatepickerModule.forRoot(),
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    DlDateTimeDateModule,  // <--- Determines the data type of the model
+    DlDateTimePickerModule,
   ],
-  providers: [NbSidebarService, NbMenuService],
+  providers: [NbSidebarService, NbMenuService,FormsModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
