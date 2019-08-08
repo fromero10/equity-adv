@@ -88,7 +88,7 @@
             <button class="btn btn-azul">Registrar negocio</button>
           </div>
         </div>
-        <div *ngIf="etapa1 && etapa2 && !etapa3" class="row">
+        <div *ngIf="etapa1 && etapa2 && !etapa3" class="col-md-12">
             <div class="texto-centrado" style="margin-bottom: 50px">Parece que has olvidado tu contraseña. Ingresa el email que tienes resgitrado y te ayudaremos a reestablecerla.</div>
           </div>
       <div *ngIf="etapa1 && etapa2 && !etapa3" id="user-recover">
@@ -106,7 +106,7 @@
     </div>
     <div *ngIf="etapa1 && etapa2 && etapa3" class="row">
         <div class="titulo" style="margin-bottom: 50px; margin-left: 30%">¡Email enviado con éxito!</div>
-        <div class="texto-centrado" style="margin-left: 10px">Revisa tu bandeja de entrada o SPAM para recibir las instrucciones de cómo reestablecer la contrasena</div>
+        <div class="texto-centrado" style="margin: 0 auto">Revisa tu bandeja de entrada o SPAM para recibir las instrucciones de cómo reestablecer la contrasena</div>
     </div>
     <div *ngIf="etapa1 && etapa2 && etapa3" id="user-recover2">
         <div class="form-group">

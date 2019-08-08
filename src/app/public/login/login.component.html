@@ -13,7 +13,7 @@
             </nb-card-header> -->
             <nb-card-body style="padding: 65px;">
               <div class="row" style="margin-bottom: 20px;">
-                <div class="col-sm-5" style="margin: 0 auto">
+                <div class="col-sm-4" style="margin: 0 auto">
                   <img src="/assets/img/logo.png" class="img-fluid" style="height: 40px;"/>
                 </div>
               </div>
@@ -24,8 +24,6 @@
                     <div *ngIf="f.usuario.errors.required">Usuario requerido</div>
                   </div>
                 </div>
-                <table style="width:100%">
-                <td style="width:70%">
                 <div class="form-group">
                   <input type="password" placeholder="Contraseña" formControlName="clave" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.clave.errors }" />
                   <div *ngIf="submitted && f.clave.errors" class="invalid-feedback">
@@ -33,19 +31,20 @@
                     <div *ngIf="f.clave.errors.minlength">La contraseña debe poseer al menos 6 caracteres</div>
                   </div>
                 </div>
-                </td>
-                <td><span style="color: #3D98DE; margin-left: 10%; text-align: center ; cursor: pointer;" (click)="goToRecover()">Olvidé mi contraseña</span>
-                </td>
-              </table>
                 <div class="form-group">
                   <button class="btn btn-azul">Iniciar sesión</button>
                 </div>
               </form>
               <div class="row">
-                <div class="col-md-10" style="margin: 0px auto;">
+                <div class="col-md-12" style="margin: 0px auto;">
                   <label for="">¿Quieres registrar un nuevo negocio? <span style="color: #3D98DE; text-decoration: underline; cursor: pointer;" (click)="goToRegister()">Hazlo aquí</span></label>
                 </div>
+               <div class="row">
+                 <div class="col-md-12" style="margin: 12%">
+                <span style="color: #3D98DE;  cursor: pointer" (click)="goToRecover()">Olvidé mi contraseña</span>
               </div>
+            </div>
+            </div> 
             </nb-card-body>
           </nb-card>
         </div>

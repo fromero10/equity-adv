@@ -32,7 +32,6 @@ export class FlujoDeCajaComponent implements OnInit {
 
   ngOnInit() {
       this.generarGrafico()
-      this.generarGrafico2()
   }
 
   generarGrafico2(){
@@ -133,6 +132,7 @@ export class FlujoDeCajaComponent implements OnInit {
   }
   public cambiarGrafico2(){
     this.mostrarIvsE=true
+    this.generarGrafico2()
   }
   public goToAgregarEscenario(){
     this.router.navigate(['dashboard/agregar-escenario'])
