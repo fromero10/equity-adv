@@ -3,6 +3,7 @@ import { FormsModule, FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { Categoria } from './signup.categoria';
 import { subCategoria } from './singup.subcategoria';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-signup',
@@ -14,6 +15,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup
   etapa1=false
   etapa2=false
+  etapa3=false
   categoriaSeleccionada: Categoria = new Categoria(1,'Categoria1')
   categorias: Categoria[]
   subCategorias: subCategoria[]
@@ -28,12 +30,19 @@ export class SignupComponent implements OnInit {
       'contrasena2' : new FormControl(null,Validators.required),
       'nombreNegocio' : new FormControl(null,Validators.required),
       'nit' : new FormControl(null,Validators.required),
-      'categoriaNegocio' : new FormControl(null,Validators.required)
+      'categoriaNegocio' : new FormControl(null,Validators.required),
+      'subCategoriaNegocio' : new FormControl(null,Validators.required),
+      'email2': new FormControl(null,[Validators.required,Validators.email])
     });
     this.categorias = this.getCategorias()
+
+    if(this.router.url==='/recuperar-contrasena'){
+      this.etapa1=true
+      this.etapa2=true
+    }
   }
 
-  onSelect(catId) {
+  onSelect(catId: number) {
     this.subCategorias = this.getSubCategorias().filter((item) => item.catId == catId);
   }
   getCategorias() {
@@ -59,7 +68,7 @@ export class SignupComponent implements OnInit {
   verificacion(){
     if (!this.etapa1){ 
       if (this.signupForm.get('email').invalid || this.signupForm.get('contrasena1').invalid || this.signupForm.get('contrasena2').invalid){
-          console.log("Error")
+          console.log("Error",this.router.url)
           return false
         } 
       else{
@@ -69,16 +78,23 @@ export class SignupComponent implements OnInit {
       }
     }
     else if(!this.etapa2){
-      if(this.signupForm.get('nombreNegocio').invalid || this.signupForm.get('nit').invalid || this.signupForm.get('categoriaNegocio').invalid)
+      if(this.signupForm.get('nombreNegocio').invalid || this.signupForm.get('nit').invalid || this.signupForm.get('categoriaNegocio').invalid || this.signupForm.get('subCategoriaNegocio').invalid)
       {
         console.log("Error2")
         return false
       }
-    else{
+      else{
       console.log("Etapa2Success")
       this.etapa2=true
       this.router.navigate(['login'])
      }
+    }
+    else if(!this.etapa3){
+      console.log("Etapa3Success")
+      this.etapa3=true
+    }
+    else{
+      this.router.navigate(['login'])
     }
   }
 }

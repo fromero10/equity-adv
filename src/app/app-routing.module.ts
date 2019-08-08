@@ -9,6 +9,7 @@ import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.compo
 import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
 import { SignupComponent } from './public/signup/signup.component';
+import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component'
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   },
   {
     path: 'signup',
+    component: SignupComponent
+  },
+  {
+    path: 'recuperar-contrasena',
     component: SignupComponent
   },
   {
@@ -42,6 +47,10 @@ const routes: Routes = [
       {
         path: 'flujo-de-caja',
         component: FlujoDeCajaComponent
+      },
+      { 
+        path: 'agregar-escenario',
+        component: AgregarEscenarioComponent
       },
       {
         path: 'costeo',

@@ -46,6 +46,8 @@ import { SignupComponent } from './public/signup/signup.component';
 import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.component';
 import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
+import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component';
+
 
 
 @NgModule({
@@ -60,6 +62,7 @@ import { IndicadoresComponent } from './public/indicadores/indicadores.component
     FlujoDeCajaComponent,
     CosteoComponent,
     IndicadoresComponent,
+    AgregarEscenarioComponent,
   ],
   imports: [
     FormsModule,

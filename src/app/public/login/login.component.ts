@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   public user: any;
+  public registro: boolean;
   frmLogin: FormGroup;
   submitted = false;
   constructor(public fb: FormBuilder , private toastrService: NbToastrService, public router: Router) {
@@ -47,6 +48,11 @@ export class LoginComponent implements OnInit {
 
   goToRegister(){
     this.router.navigate(['signup'])
+  }
+
+  goToRecover(){
+    this.router.navigate(['recuperar-contrasena'])
+    this.registro=true
   }
 
 }
