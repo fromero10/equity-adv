@@ -32,7 +32,8 @@ export class SignupComponent implements OnInit {
       'nit' : new FormControl(null,Validators.required),
       'categoriaNegocio' : new FormControl(null,Validators.required),
       'subCategoriaNegocio' : new FormControl(null,Validators.required),
-      'email2': new FormControl(null,[Validators.required,Validators.email])
+      'email2': new FormControl(null,[Validators.required,Validators.email]),
+      'logoNegocio': new FormControl(null)
     });
     this.categorias = this.getCategorias()
 

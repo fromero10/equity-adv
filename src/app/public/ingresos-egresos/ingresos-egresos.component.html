@@ -1,0 +1,98 @@
+<div class="container" style="background-color: #333333">
+    <div class="row">
+      <div class="col-sm-5">
+        <label for="" style="color:black; font-weight: bold">Ingresos vs Egresos</label>
+      </div>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <button class="btn btn-blanco" (click)="goToAgregarEscenario()">Escenario Base <i class="fa fa-chevron-down" aria-hidden="true"
+                style="margin-left: 2px"></i></button>
+          </div>
+          <div class="col-sm-4">
+            <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
+                style="margin-left: 2px"></i></button>
+  
+                <!--<div *ngIf="calendario" class="col-sm-6">
+                    <dl-date-time-picker
+                    startView="year"
+                    maxView="year"
+                    minView="year">
+                    </dl-date-time-picker>
+                </div>-->
+                
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+      <!-- Gráfico -->
+  <div class="row">
+      <div class="col-12">
+        <nb-card [nbSpinner]="spinerGrafica" nbSpinnerStatus="success" nbSpinnerMessage="Cargando">
+          <nb-card-header>
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-4">
+                    <label for="" style="font-size:12px">Filtrar por : </label>
+                  </div>
+                  <div class="col-sm-4"><button class="btn btn-blanco-sm">Ingresos:Todos <i class="fa fa-chevron-down"
+                        aria-hidden="true" style="margin-left: 2px"></i></button></div>
+                </div>
+  
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div>
+              
+            </div>
+            <canvas #grafico1 style="width: 100%; height: 300px;"></canvas>
+          </nb-card-body>
+        </nb-card>
+        <nb-card>
+          <nb-card-header [ngStyle]="{'background-color': mostrarIngresos? '#5BCE60':'#E3633D'}">
+              <div class="container">
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <label for="" style="color:white; font-weight: bold">Comportamiento</label>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                          <button class="btn btn-blanco" (click)="mostrarIngresos=true" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? '#5BCE60':'white', 'background-color': mostrarIngresos? 'white':'#E3633D'}">Ingresos</button>
+                        </div>
+                        <div class="col-sm-4">
+                          <button (click)="mostrarIngresos=false" class="btn btn-blanco" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? 'white':'#E3633D', 'background-color': mostrarIngresos? '#5BCE60':'white'}">Egresos</button>
+                
+                              <!--<div *ngIf="calendario" class="col-sm-6">
+                                  <dl-date-time-picker
+                                  startView="year"
+                                  maxView="year"
+                                  minView="year">
+                                  </dl-date-time-picker>
+                              </div>-->
+                              
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+            <div class="row"></div>
+                  <p style="color:white; font-size: 50px; margin:0 auto; font:calibri; font-weight: lighter; text-align:center">$170,000,000</p>
+          </nb-card-header>
+          <nb-card-body>
+              <canvas id="pieIngresos" ></canvas>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>

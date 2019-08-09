@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   logueado = false;
-  public usuarioActivo = { nombre: 'Administrador', foto: '/assets/img/usuario_plataforma.png'};
+  public usuarioActivo = { nombre: 'Subway', foto: '/assets/img/subway.png'};
   items = null;
   constructor(
     private menuService: NbMenuService,

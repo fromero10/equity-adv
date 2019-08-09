@@ -138,4 +138,8 @@ export class FlujoDeCajaComponent implements OnInit {
     this.router.navigate(['dashboard/agregar-escenario'])
   }
 
+  public goToIngresosEgresos(){
+    this.router.navigate(['dashboard/ingresos-egresos'])
+  }
+
 }

@@ -1,0 +1,49 @@
+<nb-card>
+  <nb-card-header style="background-color: #333333">
+    <div class="row">
+      <div class="col-sm-5">
+        <label for="" style="color:white; font-weight: bold">Importar > Flujo de caja</label>
+      </div>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <button class="btn btn-blanco" style="border-color:#3D98DE; border-width: 1px"(click)="goToFlujoDeCaja()">Atrás <i class="fa fa-chevron-down" aria-hidden="true"
+                style="margin-left: 2px"></i></button>
+          </div>
+          <div class="col-sm-4">
+            <button (click)="calendario=!calendario" id="butCalendario" style="border-color:#3D98DE;background-color:#3D98DE"class="btn btn-blanco">Continuar <i class="fa fa-chevron-down" aria-hidden="true"
+                style="margin-left: 2px"></i></button>
+  
+                <!--<div *ngIf="calendario" class="col-sm-6">
+                    <dl-date-time-picker
+                    startView="year"
+                    maxView="year"
+                    minView="year">
+                    </dl-date-time-picker>
+                </div>-->
+                
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body style="padding-top: 50px">
+    <div style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+      Importar flujo de caja
+    </div>
+    <div style="padding-top:60px">
+      <input type="radio" id="radio">
+      <label for="radio" style="padding-left:10px">Importar un archivo .CSV</label>
+    </div>
+    <br>
+    <p>Importa el flujo de caja de este negocio en un archivo .CSV</p>
+   <br><br>
+    <p style="font-weight: bold">Sube tu archivo:</p>
+    <div>
+      <input type="file">
+    </div>
+  </nb-card-body>
+
+  </nb-card>

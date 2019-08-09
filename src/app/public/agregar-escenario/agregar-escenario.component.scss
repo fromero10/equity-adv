@@ -1,6 +1,40 @@
-.btn-azul{
-    background-color: #3D98DE;
-    color: white;
+.color{
     width: 100%;
-    
+    height: 40px;
+    &__1{
+        background-color: rgb(235, 123, 123)
+    }
+    &__2{
+        background-color: rgb(123, 1, 123)
+    }
+    &__3{
+        background-color: rgb(230, 12, 1)
+    }
+    &__4{
+        background-color: rgb(1, 123, 123)
+    }
+    &__5{
+        background-color: rgb(123, 54, 23)
+    }
+    &__6{
+        background-color: rgb(123, 123, 123)
+    }
+    &__7{
+        background-color: rgb(14, 123, 15)
+    }
+    &__8{
+        background-color: rgb(20, 12, 123)
+    }
+    &__9{
+        background-color: rgb(234, 123, 123)
+    }
+    &__10{
+        background-color: rgb(123, 123, 234)
+    }
+    &__11{
+        background-color: rgb(233, 123, 233)
+    }
+    &__12{
+        background-color: rgb(233, 233, 14)
+    }
 }

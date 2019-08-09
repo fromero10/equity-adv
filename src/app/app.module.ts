@@ -47,7 +47,8 @@ import { FlujoDeCajaComponent } from './public/flujo-de-caja/flujo-de-caja.compo
 import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
 import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component';
-
+import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egresos.component';
+import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
 
 
 @NgModule({
@@ -63,6 +64,8 @@ import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-es
     CosteoComponent,
     IndicadoresComponent,
     AgregarEscenarioComponent,
+    IngresosEgresosComponent,
+    ImportarFlujoComponent,
   ],
   imports: [
     FormsModule,

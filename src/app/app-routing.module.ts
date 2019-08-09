@@ -10,6 +10,8 @@ import { CosteoComponent } from './public/costeo/costeo.component';
 import { IndicadoresComponent } from './public/indicadores/indicadores.component';
 import { SignupComponent } from './public/signup/signup.component';
 import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component'
+import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egresos.component';
+import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
 
 const routes: Routes = [
   {
@@ -59,6 +61,14 @@ const routes: Routes = [
       {
         path: 'indicadores',
         component: IndicadoresComponent
+      },
+      {
+        path: 'ingresos-egresos',
+        component: IngresosEgresosComponent
+      },
+      {
+        path: 'importar-flujo',
+        component: ImportarFlujoComponent
       },
     ]
   }

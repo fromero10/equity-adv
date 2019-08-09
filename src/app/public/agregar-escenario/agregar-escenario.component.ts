@@ -17,4 +17,8 @@ export class AgregarEscenarioComponent implements OnInit {
     
   }
 
+  public goToFlujo(){
+    this.router.navigate(['dashboard/flujo-de-caja'])
+  }
+
 }
