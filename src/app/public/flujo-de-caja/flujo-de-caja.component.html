@@ -9,11 +9,16 @@
     <div class="col-sm-6">
       <div class="row">
         <div class="col-sm-4">
-          <button class="btn btn-azul">Importar datos</button>
+          <button class="btn btn-azul" (click)="goToImportarFlujo()">Importar datos</button>
         </div>
         <div class="col-sm-4">
-          <button class="btn btn-blanco" (click)="goToAgregarEscenario()">Escenario Base <i class="fa fa-chevron-down" aria-hidden="true"
-              style="margin-left: 2px"></i></button>
+            <div (click)="myFunction()" class="dropdown">
+                <button class="dropbtn">Escenario</button>
+                <div id="myDropdown" class="dropdown-content">
+                  <a href="#">Base</a>
+                  <a href="dashboard/agregar-escenario">Agregar escenario</a>
+                </div>
+              </div>
         </div>
         <div class="col-sm-4">
           <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
@@ -138,8 +143,10 @@
         <nb-card-header>
           <div class="row">
             <div class="col-sm-4">
-              <div class="btn btn-dark-graf">Evolución</div>
-              <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico2()">Ingreso vs egresos</button>
+              <button class="btn btn-dark-graf" (click)="cambiarGrafico1()" [ngStyle]="{'background-color': mostrarIvsE? 'white':'black',
+                                                          'color': !mostrarIvsE? 'white':'black'}">Evolución</button>
+              <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico2()" [ngStyle]="{'background-color': !mostrarIvsE? 'white':'black',
+                                                          'color': mostrarIvsE? 'white':'black'}">Ingreso vs egresos</button>
               <button class="btn btn-blanco-sm-graf" style="padding-top: 9px;">vs presupuesto</button>
             </div>
             <div class="col-sm-4"></div>
@@ -160,7 +167,7 @@
             
           </div>
           <canvas #grafico1 style="width: 100%; height: 300px;" [ngStyle]="{'display': mostrarIvsE? 'none': 'flex'}"></canvas>
-          <canvas id="IvsE"></canvas>
+          <canvas id="IvsE" [ngStyle]="{'display': !mostrarIvsE? 'none': 'flex'}"></canvas>
         </nb-card-body>
       </nb-card>
     </div>

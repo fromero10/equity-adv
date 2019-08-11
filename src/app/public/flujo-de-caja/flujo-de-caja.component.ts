@@ -88,23 +88,14 @@ export class FlujoDeCajaComponent implements OnInit {
     var chartData = {
       labels: this.dataG2.labels,
       datasets: [{
-        label: 'Datos1',
+        label: 'Evolución',
         data: this.dataG2.datasets[0].data,
-        fill: false,
+        fill: true,
         backgroundColor: [
-          'rgba(2, 137, 190, 1)'
+          '#F7F7F7'
         ],
-        borderColor: "#0289be",
-      },
-        {
-          label: 'Datos 2',
-          data: this.dataG2.datasets[1].data,
-          fill: false,
-          backgroundColor: [
-            'rgba(233, 28, 114, 1)'
-          ],
-          borderColor: "#e91c72",
-        }
+        borderColor: "#5BCE60",
+      }
       ]
     };
     var chart = new Chart(
@@ -134,12 +125,24 @@ export class FlujoDeCajaComponent implements OnInit {
     this.mostrarIvsE=true
     this.generarGrafico2()
   }
+
+  public cambiarGrafico1(){
+    this.mostrarIvsE=false
+    this.generarGrafico()
+  }
   public goToAgregarEscenario(){
     this.router.navigate(['dashboard/agregar-escenario'])
   }
 
   public goToIngresosEgresos(){
     this.router.navigate(['dashboard/ingresos-egresos'])
+  }
+  public goToImportarFlujo(){
+    this.router.navigate(['dashboard/importar-flujo'])
+  }
+
+  public myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
   }
 
 }
