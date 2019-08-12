@@ -1,0 +1,173 @@
+<nb-card>
+    <nb-card-header style="background-color: #333333">
+      <div class="row">
+        <div class="col-sm-5">
+          <label for="" style="color:white; font-weight: bold">Importar > costeo</label>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <button class="btn btn-blanco" style="border-color:#3D98DE; border-width: 1px"(click)="retrocederEtapa()">Atrás <!--<i class="fa fa-chevron-down" aria-hidden="true"
+                  style="margin-left: 2px"></i>-->
+                </button>
+            </div>
+            <div class="col-sm-4">
+              <button (click)="avanzarEtapa()" id="butContinuar" style="border-color:#3D98DE;background-color:#3D98DE"class="btn btn-blanco">Continuar <!--<i class="fa fa-chevron-down" aria-hidden="true"
+                  style="margin-left: 2px"></i>-->
+                </button>
+    
+                  <!--<div *ngIf="calendario" class="col-sm-6">
+                      <dl-date-time-picker
+                      startView="year"
+                      maxView="year"
+                      minView="year">
+                      </dl-date-time-picker>
+                  </div>-->
+                  
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body style="padding-top: 50px; padding-bottom: 50px">
+      <div *ngIf="etapa===1"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+        Importar costeo
+      </div>
+      <div *ngIf="etapa===2"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+          Informe de PyG
+        </div>
+      <div *ngIf="etapa===3"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+          Informe de rentabilidad: Eje horizontal
+        </div>
+        <div *ngIf="etapa===4"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+            Informe de rentabilidad: Eje vertical
+          </div>
+      <div style="padding-top:20px">
+        <div *ngIf="etapa===3">
+            <p style="font-size: 18px; width:60%"> Selecciona los filtros que deseas agregar a tu columna horizontal del informe. Estos serán las filtros con los que podrás estudiar la rentabilidad del negocio.
+            </p>
+            <div class="col-sm-5"> 
+              <form [formGroup] = "formHorizontal" (ngSubmit)="verificacion()">
+                <nb-card>
+                  <nb-card-body style="padding: 10px;">
+                <div id="formHorizontal">
+                    <div class="casillaForm">
+                        <input 
+                          type="checkbox" 
+                          id="region" 
+                          formControlName="region"
+                          class="form-control; col-sm-1">
+                          <label for="region" style="padding-left: 10px;font-weight:bold">Región</label>
+                    </div>
+                  <div class="casillaForm">
+                    <input 
+                      type="checkbox" 
+                      id="producto" 
+                      formControlName="producto"
+                      class="form-control; col-sm-1">
+                      <label for="producto" style="padding-left: 10px;font-weight:bold">Producto</label>
+                  </div>
+                  <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="mes" 
+                        formControlName="mes"
+                        class="form-control; col-sm-1">
+                        <label for="mes" style="padding-left: 10px;font-weight:bold">Mes</label>
+                    </div>
+                    <div class="casillaForm">
+                        <input 
+                          type="checkbox" 
+                          id="presupuesto" 
+                          formControlName="presupuesto"
+                          class="form-control; col-sm-1">
+                          <label for="presupuesto" style="padding-left: 10px;font-weight:bold">Presupuesto</label>
+                      </div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+              </form>
+
+            </div>
+            <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
+            <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
+            <div class="col-sm-4" ><p style="margin:0px; font-weight: bold; font-size: 18px">Método de importación</p><p>Archivo .csv</p></div> 
+          </div>
+          <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
+              <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
+              <div class="col-sm-4" ><p style="font-weight: bold; font-size: 18px">Importar 4 de 33 columnas</p>
+                <p>Nombre columna 1 - text_field</p>
+                <p>Nombre columna 2 - text_field</p>
+                <p>Nombre columna 3 - numeric_field</p>
+                <p>Nombre columna 4 - numeric_field</p>
+              </div> 
+            </div>
+            <br>
+        </div>
+        <div *ngIf="etapa===2">
+          <p style="font-size: 18px"> Relaciona las columnas de tu archivos con lo que mostraremos en el PyG.</p>
+          <input type="search" style="width: 50%; height:35px" placeholder="Buscar...">
+          <div class="row" style="padding-top: 10px; margin-top:10px">
+            <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
+                <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
+                <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 1</p>
+                <p style="width:100%; text-align: center">text_field</p>
+                <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 1</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+            </div>
+            <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
+                <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
+                <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 2</p>
+                <p style="width:100%; text-align: center">text_field</p>
+                <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 2</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+            </div>
+            <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
+                <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
+                <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 3</p>
+                <p style="width:100%; text-align: center">numeric_field</p>
+                <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 3</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+            </div>
+            <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
+                <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
+                <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 4</p>
+                <p style="width:100%; text-align: center">numeric_field</p>
+                <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 4</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+                <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
+            </div>
+          </div>
+          <p style="margin-top:20px">Selecciona un máximo de 5 columnas a importar</p>
+        </div>
+        <div *ngIf="etapa===1"><input type="radio" id="radio">
+        <label for="radio" style="padding-left:10px">Importar un archivo .CSV</label>
+      <br>
+      <p>Importa el costeo de este negocio en un archivo .CSV</p>
+     <br><br>
+      <p style="font-weight: bold">Sube tu archivo:</p>
+      <div>
+        <input type="file">
+      </div>
+    </div>
+    </div>
+    </nb-card-body>
+  
+    </nb-card>

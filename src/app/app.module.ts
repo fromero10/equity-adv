@@ -49,6 +49,8 @@ import { IndicadoresComponent } from './public/indicadores/indicadores.component
 import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component';
 import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egresos.component';
 import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
+import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
+import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
 
 
 @NgModule({
@@ -66,6 +68,8 @@ import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.c
     AgregarEscenarioComponent,
     IngresosEgresosComponent,
     ImportarFlujoComponent,
+    AgregarIngresoComponent,
+    ImportarCosteoComponent,
   ],
   imports: [
     FormsModule,

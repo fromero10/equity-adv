@@ -1,15 +1,21 @@
-<div class="container" style="background-color: #333333">
+
     <div class="row">
       <div class="col-sm-5">
-        <label for="" style="color:black; font-weight: bold">Ingresos vs Egresos</label>
+          <a href="dashboard/flujo-de-caja" class="previous" style="font-size:25px">&larr;</a>
+        <label for="" style="color:black; font-weight: bold; padding: 15px">Ingresos vs Egresos</label>
       </div>
       <div class="col-sm-1"></div>
       <div class="col-sm-6">
         <div class="row">
           <div class="col-sm-4"></div>
           <div class="col-sm-4">
-            <button class="btn btn-blanco" (click)="goToAgregarEscenario()">Escenario Base <i class="fa fa-chevron-down" aria-hidden="true"
-                style="margin-left: 2px"></i></button>
+              <div (click)="myFunction()" class="dropdown">
+                  <button class="dropbtn" >ESCENARIO</button>
+                  <div id="myDropdown" class="dropdown-content">
+                    <a href="dashboard/flujo-de-caja">Base</a>
+                    <a href="dashboard/agregar-escenario">Agregar escenario</a>
+                  </div>
+                </div>
           </div>
           <div class="col-sm-4">
             <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
@@ -28,7 +34,7 @@
       </div>
     </div>
     <br>
-
+    <div class="container" style="background-color: #FFFFFF">
       <!-- Gráfico -->
   <div class="row">
       <div class="col-12">

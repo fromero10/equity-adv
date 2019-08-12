@@ -117,4 +117,7 @@ export class IngresosEgresosComponent implements OnInit {
   goToAgregarEscenario(){
     this.router.navigate(['dashboard/agregar-escenario'])
   }
+  public myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
 }

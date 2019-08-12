@@ -15,9 +15,10 @@ export class FlujoDeCajaComponent implements OnInit {
   calendario=false;
   spinerGrafica = true;
   data: any;
-  mostrarIvsE=false;
+  mostrarGraf=1;
 
   BarChart=[];
+  GrafPresupuesto=[];
   usuario: any[];
   reservas: any[];
 
@@ -32,6 +33,8 @@ export class FlujoDeCajaComponent implements OnInit {
 
   ngOnInit() {
       this.generarGrafico()
+      this.generarGrafico2()
+      this.generarGrafico3()
   }
 
   generarGrafico2(){
@@ -121,14 +124,49 @@ export class FlujoDeCajaComponent implements OnInit {
       }
     );
   }
+
+  generarGrafico3(){
+    this.GrafPresupuesto = new Chart('vsPresupuesto',{
+      type:'line',
+      data:{
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets:[
+          {
+            label: "Real",
+            data: [65, 59, 80, 81, 56, 55, 40],
+            backgroundColor: "#5BCE60",
+            borderColor: "#5BCE60",
+            fill: "false",
+          },
+          {
+            
+            label: "Presupuesto",
+            data: [25, 49, 90, 101, 86, 15, 50],
+            backgroundColor:"#B12ABC",
+            borderColor:"#B12ABC",
+            fill: "false",
+          },
+        ]
+      },
+      options: {
+        title:{
+            text:"Real vs presupuesto",
+            display:true
+        }
+      }  
+    })
+  }
+
   public cambiarGrafico2(){
-    this.mostrarIvsE=true
-    this.generarGrafico2()
+    this.mostrarGraf=2
   }
 
   public cambiarGrafico1(){
-    this.mostrarIvsE=false
-    this.generarGrafico()
+    this.mostrarGraf=1
+  }
+
+  public cambiarGrafico3(){
+    this.mostrarGraf=3
   }
   public goToAgregarEscenario(){
     this.router.navigate(['dashboard/agregar-escenario'])

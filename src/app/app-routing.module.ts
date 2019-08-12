@@ -12,6 +12,8 @@ import { SignupComponent } from './public/signup/signup.component';
 import { AgregarEscenarioComponent } from './public/agregar-escenario/agregar-escenario.component'
 import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egresos.component';
 import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
+import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
+import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
 
 const routes: Routes = [
   {
@@ -69,6 +71,14 @@ const routes: Routes = [
       {
         path: 'importar-flujo',
         component: ImportarFlujoComponent
+      },
+      {
+        path:'agregar-ingreso-egreso',
+        component: AgregarIngresoComponent
+      },
+      {
+        path:'importar-costeo',
+        component: ImportarCosteoComponent
       },
     ]
   }
