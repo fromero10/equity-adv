@@ -44,14 +44,19 @@
         <div *ngIf="etapa===4"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
             Informe de rentabilidad: Eje vertical
           </div>
+          <div *ngIf="etapa===5"style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+              Estás casi listo para importar tu archivo
+            </div>
       <div style="padding-top:20px">
         <div *ngIf="etapa===3">
             <p style="font-size: 18px; width:60%"> Selecciona los filtros que deseas agregar a tu columna horizontal del informe. Estos serán las filtros con los que podrás estudiar la rentabilidad del negocio.
             </p>
+            <div class="row">
             <div class="col-sm-5"> 
               <form [formGroup] = "formHorizontal" (ngSubmit)="verificacion()">
                 <nb-card>
                   <nb-card-body style="padding: 10px;">
+                    <input type="search" style="width: 100%; height:35px;margin-bottom: 20px" placeholder="Buscar...">
                 <div id="formHorizontal">
                     <div class="casillaForm">
                         <input 
@@ -85,27 +90,164 @@
                           class="form-control; col-sm-1">
                           <label for="presupuesto" style="padding-left: 10px;font-weight:bold">Presupuesto</label>
                       </div>
+                      <div class="casillaForm">
+                        <input 
+                          type="checkbox" 
+                          id="filtro1" 
+                          formControlName="filtro1"
+                          class="form-control; col-sm-1">
+                          <label for="filtro1" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                      </div>
+                      <div class="casillaForm">
+                        <input 
+                          type="checkbox" 
+                          id="filtro2" 
+                          formControlName="filtro2"
+                          class="form-control; col-sm-1">
+                          <label for="filtro2" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                      </div>
+                      <div class="casillaForm">
+                        <input 
+                          type="checkbox" 
+                          id="filtro3" 
+                          formControlName="filtro3"
+                          class="form-control; col-sm-1">
+                          <label for="filtro3" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                      </div>
                 </div>
               </nb-card-body>
             </nb-card>
               </form>
 
             </div>
+            <div class="col-sm-7">
+              <p style="font-weight: bold">Filtros seleccionados:</p><br>
+              <label style="width:24%; text-align: center; font-size:12px;margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Región</label>
+              <label style="width:24%; text-align: center; font-size:12px;margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Producto</label>
+              <label style="width:24%; text-align: center; font-size:12px;margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Mes</label>
+              <label style="width:24%; text-align: center; font-size:12px;margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Presupuesto</label>
+              <p style="padding-top: 40px; font-size: 11px">Selecciona un máximo de 10 filtros para empezar. Estos pueden ser modificados más adelante.</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="etapa===4">
+          <p style="font-size: 18px; width:60%"> Selecciona las variables que deseas agregar a tu columna vertical del informe. Estas serán las relaciones con las que comparas los filtros asociados al informe.
+          </p>
+          <div class="row">
+          <div class="col-sm-5"> 
+            <form [formGroup] = "formVertical" (ngSubmit)="verificacion()">
+              <nb-card>
+                <nb-card-body style="padding: 10px;">
+                  <input type="search" style="width: 100%; height:35px;margin-bottom: 20px" placeholder="Buscar...">
+              <div id="formHorizontal">
+                  <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="utilidadBruta" 
+                        formControlName="utilidadBruta"
+                        class="form-control; col-sm-1">
+                        <label for="utilidadBruta" style="padding-left: 10px;font-weight:bold">Utilidad bruta</label>
+                  </div>
+                <div class="casillaForm">
+                  <input 
+                    type="checkbox" 
+                    id="ingresos" 
+                    formControlName="ingresos"
+                    class="form-control; col-sm-1">
+                    <label for="ingresos" style="padding-left: 10px;font-weight:bold">Ingresos</label>
+                </div>
+                <div class="casillaForm">
+                    <input 
+                      type="checkbox" 
+                      id="gastos" 
+                      formControlName="gastos"
+                      class="form-control; col-sm-1">
+                      <label for="gastos" style="padding-left: 10px;font-weight:bold">Gastos</label>
+                  </div>
+                  <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="filtro4" 
+                        formControlName="filtro4"
+                        class="form-control; col-sm-1">
+                        <label for="filtro4" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                    </div>
+                    <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="presupuesto" 
+                        formControlName="presupuesto"
+                        class="form-control; col-sm-1">
+                        <label for="presupuesto" style="padding-left: 10px;font-weight:bold">Presupuesto</label>
+                    </div>
+                    <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="filtro5" 
+                        formControlName="filtro5"
+                        class="form-control; col-sm-1">
+                        <label for="filtro5" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                    </div>
+                    <div class="casillaForm">
+                      <input 
+                        type="checkbox" 
+                        id="filtro6" 
+                        formControlName="filtro6"
+                        class="form-control; col-sm-1">
+                        <label for="filtro6" style="padding-left: 10px;font-weight:bold">Filtro</label>
+                    </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+            </form>
+
+          </div>
+          <div class="col-sm-7">
+            <p style="font-weight: bold">Variables seleccionadas:</p><br>
+            <label style="width:24%; text-align: center;font-size:12px; margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Utilidad bruta</label>
+            <label style="width:24%; text-align: center;font-size:12px; margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Ingresos</label>
+            <label style="width:24%; text-align: center;font-size:12px; margin-right:5px;border:solid #EFEFEF; padding:15px" for="">Gastos</label>
+            <p style="padding-top: 40px; font-size: 11px">Selecciona un máximo de 10 variables para empezar. Estas pueden ser modificados más adelante.</p>
+          </div>
+        </div>
+      </div>
+        
+        <div *ngIf="etapa===5"> 
+            <p style="font-size: 18px"> Por favor revisa los detalles de lo que vas a importar al informe.</p>
             <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
             <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
-            <div class="col-sm-4" ><p style="margin:0px; font-weight: bold; font-size: 18px">Método de importación</p><p>Archivo .csv</p></div> 
+            <div class="col-sm-8" ><p style="margin:0px; font-weight: bold; font-size: 18px">Método de importación</p><p>Archivo .csv</p></div> 
           </div>
           <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
               <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
-              <div class="col-sm-4" ><p style="font-weight: bold; font-size: 18px">Importar 4 de 33 columnas</p>
+              <div class="col-sm-8" ><p style="font-weight: bold; font-size: 18px">Análisis PyG</p>
                 <p>Nombre columna 1 - text_field</p>
                 <p>Nombre columna 2 - text_field</p>
                 <p>Nombre columna 3 - numeric_field</p>
                 <p>Nombre columna 4 - numeric_field</p>
               </div> 
             </div>
+            <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
+                <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
+                <div class="col-sm-8" ><p style="font-weight: bold; font-size: 18px">Informe de rentabilidad: Eje horizontal</p>
+                  <p>Región - 7 filtros</p>
+                  <p>Cliente - 15 filtros</p>
+                  <p>Presupuesto - 4 filtros</p>
+                  <p>Producto - 22 filtros</p>
+                </div> 
+              </div>
+              <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
+                  <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
+                  <div class="col-sm-8" ><p style="font-weight: bold; font-size: 18px">Informe de rentabilidad: Eje vertical</p>
+                    <p>Utilidad bruta</p>
+                    <p>Ingresos</p>
+                    <p>Gastos</p>
+                  </div> 
+                </div>
+          </div>
             <br>
-        </div>
+        
         <div *ngIf="etapa===2">
           <p style="font-size: 18px"> Relaciona las columnas de tu archivos con lo que mostraremos en el PyG.</p>
           <input type="search" style="width: 50%; height:35px" placeholder="Buscar...">

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule, FormGroup, FormControl, Validators} from '@angular/forms';
+import { FormsModule, FormGroup, FormControl, Validators, Form} from '@angular/forms';
 
 @Component({
   selector: 'app-importar-costeo',
@@ -13,25 +13,33 @@ export class ImportarCosteoComponent implements OnInit {
   constructor(public router:Router) { }
 
   formHorizontal: FormGroup
+  formVertical: FormGroup
   etapa=1
 
   ngOnInit() {
 
     this.formHorizontal = new FormGroup({
-      'region': new FormControl(null,Validators.required),
-      'producto' : new FormControl(null,Validators.required),
-      'mes' : new FormControl(null,Validators.required),
-      'presupuesto' : new FormControl(null,Validators.required),
-      'nombreNegocio' : new FormControl(null,Validators.required),
-      'nit' : new FormControl(null,Validators.required),
-      'categoriaNegocio' : new FormControl(null,Validators.required),
-      'subCategoriaNegocio' : new FormControl(null,Validators.required),
-      'email2': new FormControl(null,[Validators.required,Validators.email]),
-      'logoNegocio': new FormControl(null)
+      'region': new FormControl(null),
+      'producto' : new FormControl(null),
+      'mes' : new FormControl(null),
+      'presupuesto' : new FormControl(null),
+      'filtro1' : new FormControl(null),
+      'filtro2' : new FormControl(null),
+      'filtro3' : new FormControl(null),
+    });
+
+    this.formVertical = new FormGroup({
+      'utilidadBruta': new FormControl(null),
+      'ingresos' : new FormControl(null),
+      'gastos' : new FormControl(null),
+      'presupuesto' : new FormControl(null),
+      'filtro4' : new FormControl(null),
+      'filtro5' : new FormControl(null),
+      'filtro6' : new FormControl(null),
     });
   }
   goToFlujoDeCaja(){
-    this.router.navigate(['dashboard/flujo-de-caja'])
+    this.router.navigate(['dashboard/costeo'])
   }
   avanzarEtapa(){
     if(this.etapa<5){
