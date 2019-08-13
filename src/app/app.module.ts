@@ -51,6 +51,7 @@ import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egr
 import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
 import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
 import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
+import { ConfiguracionComponent } from './public/configuracion/configuracion.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { ImportarCosteoComponent } from './public/importar-costeo/importar-coste
     ImportarFlujoComponent,
     AgregarIngresoComponent,
     ImportarCosteoComponent,
+    ConfiguracionComponent,
   ],
   imports: [
     FormsModule,

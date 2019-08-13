@@ -14,6 +14,7 @@ import { IngresosEgresosComponent } from './public/ingresos-egresos/ingresos-egr
 import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.component';
 import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
 import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
+import { ConfiguracionComponent } from './public/configuracion/configuracion.component';
 
 const routes: Routes = [
   {
@@ -79,6 +80,10 @@ const routes: Routes = [
       {
         path:'importar-costeo',
         component: ImportarCosteoComponent
+      },
+      {
+        path:'configuracion',
+        component: ConfiguracionComponent
       },
     ]
   }

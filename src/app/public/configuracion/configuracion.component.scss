@@ -1,0 +1,32 @@
+i {
+    padding:0px;
+    margin-bottom:25px;
+    margin-top:25px;
+    font:normal normal normal 14px/1 FontAwesome;
+    font-size:16px;
+    font-style: normal;
+    width:100%;
+    color:white;
+}
+
+p {
+    color:black;
+    margin-bottom:30px;
+}
+
+.btn-blanco{
+    background-color: white;
+    color: red;
+    font-size: 12px;
+    padding: 15px;
+    border:1px solid #EFEFEF
+}
+
+.btn-blanco:hover{
+    background-color: white;
+    color: red;
+    font-size: 12px;
+    font-weight:bold;
+    padding: 15px;
+    border:1px solid #EFEFEF
+}
