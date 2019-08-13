@@ -21,9 +21,7 @@
               </div>
         </div>
         <div class="col-sm-4">
-          <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
-              style="margin-left: 2px"></i></button>
-
+              <dp-date-picker [(ngModel)]="selectedDate" style="font-size: 9px" [config]="datePickerConfig" theme="dp-material" placeholder="Seleccionar año"></dp-date-picker> </div>
               <!--<div *ngIf="calendario" class="col-sm-6">
                   <dl-date-time-picker
                   startView="year"
@@ -31,8 +29,6 @@
                   minView="year">
                   </dl-date-time-picker>
               </div>-->
-              
-        </div>
       </div>
     </div>
   </div>
@@ -213,7 +209,7 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="goToAgregarIngreso()"></i>
                     <span class="verde fuerte">Ingresos</span>
                   </div>
                   <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>

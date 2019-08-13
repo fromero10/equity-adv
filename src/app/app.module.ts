@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {DpDatePickerModule} from 'ng2-date-picker';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -106,6 +107,7 @@ import { ConfiguracionComponent } from './public/configuracion/configuracion.com
     HttpClientModule,
     DlDateTimeDateModule,  // <--- Determines the data type of the model
     DlDateTimePickerModule,
+    DpDatePickerModule
   ],
   providers: [NbSidebarService, NbMenuService,FormsModule],
   bootstrap: [AppComponent]

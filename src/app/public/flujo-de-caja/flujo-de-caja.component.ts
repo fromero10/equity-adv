@@ -179,6 +179,10 @@ export class FlujoDeCajaComponent implements OnInit {
     this.router.navigate(['dashboard/importar-flujo'])
   }
 
+  public goToAgregarIngreso(){
+    this.router.navigate(['dashboard/agregar-ingreso-egreso'])
+  }
+
   public myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
   }

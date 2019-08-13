@@ -38,4 +38,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['login']);
   }
 
+  goToConfiguracion(){
+    this.router.navigate(['dashboard/configuracion'])
+  }
+
 }

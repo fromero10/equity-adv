@@ -1,27 +1,21 @@
-<div style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
+<div style="font-family: Calibri">
   <div class="row">
 <!--Panel izquierdo-->
 <div class="col-sm-3" style="background-color: #333333; padding:15px; padding-right: 0px; margin-right:20px">
-  <i class="fa fa-home" [ngStyle]="{'font-weight': seleccion===1? 'bold':'normal'}" (click)="seleccion=1">
-    Vista general de la cuenta
-  </i>
-  <i class='fa fa-edit' [ngStyle]="{'font-weight': seleccion===2? 'bold':'normal'}" (click)="seleccion=2">
-    Editar perfil
-  </i>
-  <i class="fa fa-lock" [ngStyle]="{'font-weight': seleccion===3? 'bold':'normal'}" (click)="seleccion=3">
-    Cambiar contraseña
-  </i>
-  <i class="fa fa-user" [ngStyle]="{'font-weight': seleccion===4? 'bold':'normal'}" (click)="seleccion=4">
-    Administrar usuarios
-  </i>
-  <i class="fa fa-bell" [ngStyle]="{'font-weight': seleccion===5? 'bold':'normal'}" (click)="seleccion=5">
-    Alertas
-  </i>
-  <i class="fa fa-gear" [ngStyle]="{'font-weight': seleccion===6? 'bold':'normal'}" (click)="seleccion=6">
-    Configuración
-  </i>
+  <div class="row"  (click)="seleccion=1" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===1? 'bold':'normal'}">
+    <i class="fa fa-home" ></i>Vista general de la cuenta</div>
+  <div class="row"  (click)="seleccion=2" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===2? 'bold':'normal'}">
+    <i class='fa fa-edit'></i>Editar perfil</div>
+    <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===3? 'bold':'normal'}" (click)="seleccion=3">
+    <i class="fa fa-lock" ></i>Cambiar contraseña</div>
+    <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===4? 'bold':'normal'}" (click)="seleccion=4">
+    <i class="fa fa-user"></i>Administrar usuarios</div>
+    <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===5? 'bold':'normal'}" (click)="seleccion=5">
+  <i class="fa fa-bell"></i>Alertas</div>
+  <div class="row" style="padding-bottom:25px;padding-top:25px;color:white;cursor: pointer;" [ngStyle]="{'font-weight': seleccion===6? 'bold':'normal'}" (click)="seleccion=6">
+  <i class="fa fa-gear"></i>Configuración</div>
 </div>
-
+​
 <div class="container; col-sm-8" style="padding:0px">
 <!--Vista general de la cuenta-->
   <div *ngIf="seleccion===1" style="padding:0px">
@@ -58,7 +52,76 @@
   <div *ngIf="seleccion===4" style="padding:0px">
       <h4 style="margin-bottom:30px">Administrar usuarios</h4>
       <p> Los usuarios son las personas capaces de observar la información de tu negocio en la plataforma y así puedan tomar mejores decisiones de negocio como equipo.</p>
-    </div>  
+      <div class="row" style="padding-left: 15px; padding-right:15px; margin-bottom: 20px">
+      <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
+        <label for="" style="color:black; font-weight: bold; padding: 15px;margin-bottom: 15px; width: 100%;background-color: #F5F5F5">Nombre</label><br>
+        <div style="padding-left:15px">
+          <p>Diego Valencia</p>
+          <p>Fernando Palacios</p>
+        </div>
+      </div>
+      <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
+        <label for="" style="color:black; font-weight: bold; padding: 15px;margin-bottom: 15px; width: 100%;background-color: #F5F5F5">Email</label><br>
+        <div style="padding-left:15px">
+          <p>valencia.diego@gmail.com </p>
+          <p>fer.pala@empresa.com</p>
+        </div>
+      </div>
+      <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
+        <label for="" style="color:black; font-weight: bold; padding: 15px;margin-bottom: 15px; width: 100%;background-color: #F5F5F5">Rol</label><br>
+        <div style="padding-left:15px">
+          <p >Administrador <button class="btn btn-azul">></button></p>
+          <p>Observador<button class="btn btn-azul">></button></p>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-azul2">Agregar usuario</button>
+    </div>
+    <div *ngIf="seleccion===5" style="padding:0px">
+      <h4 style="margin-bottom:30px">Alertas</h4>
+      <label style="color:black">Mostrar alertas cuando:</label>
+      <div class="row">
+        <select style="width:20%;margin-left: 20px;height: 30px">
+          <option value="flujoDeCaja">Flujo de caja</option>
+          <option value="ingresos">Ingresos</option>
+          <option value="egresos">Engresos</option>
+        </select>
+        <select style="width:20%;margin-left: 20px;height: 30px">
+          <option value="flujoDeCaja">Es menor a</option>
+          <option value="ingresos">Es mayor a</option>
+        </select>
+        <input type="text" value="$0" style="width:20% ;margin-left: 20px;height: 30px">
+      </div>
+      <div class="row" style="margin-top:20px; padding-left:20px">
+        <button class="btn btn-azul3" style="margin-right: 20px">Agregar otra</button>
+        <button class="btn btn-blanco">Eliminar</button>
+      </div>
+  </div>
+  <div *ngIf="seleccion===6" style="padding:0px">
+      <h4 style="margin-bottom:30px; width:30%">Configuración</h4>
+    <div>
+      <label style="color:black; width:30%">Moneda:</label>
+    <select style="width:50%;margin-left: 20px;height: 30px">
+      <option value="flujoDeCaja">COP (Peso Colombiano)</option>
+      <option value="flujoDeCaja">USD (Dólar Americano)</option>
+    </select></div>
+    </div>
+    <label style="color:black; width:30%">Idioma:</label>
+    <select style="width:50%;margin-left: 20px;height: 30px">
+      <option value="flujoDeCaja">Español</option>
+      <option value="flujoDeCaja">Inglés</option>
+    </select><br>
+    <label style="color:black; width:30%">Comiezo de semana:</label>
+    <select style="width:50%;margin-left: 20px;height: 30px">
+      <option value="flujoDeCaja">Domingo</option>
+      <option value="flujoDeCaja">Lunes</option>
+    </select><br>
+    <label style="color:black; width:30%">Escenarios:</label>
+    <select style="width:50%;margin-left: 20px;height: 30px">
+      <option value="flujoDeCaja">Base</option>
+      <option value="flujoDeCaja">Arriendo Chicó</option>
+    </select><br>
+  </div>
       <form [formGroup]="editarPerfilForm" (ngSubmit)="verificacionPerfil()">
 <!--Formulario editar perfil-->
        <div *ngIf="seleccion===2" style="padding:0px">
