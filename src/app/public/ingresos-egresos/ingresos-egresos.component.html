@@ -75,10 +75,10 @@
                       <div class="row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                          <button class="btn btn-blanco" (click)="mostrarIngresos=true" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? '#5BCE60':'white', 'background-color': mostrarIngresos? 'white':'#E3633D'}">Ingresos</button>
+                          <button class="btn btn-blanco" (click)="mostrarIngresos=true;generarGrafico2Ingresos()" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? '#5BCE60':'white', 'background-color': mostrarIngresos? 'white':'#E3633D'}">Ingresos</button>
                         </div>
                         <div class="col-sm-4">
-                          <button (click)="mostrarIngresos=false" class="btn btn-blanco" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? 'white':'#E3633D', 'background-color': mostrarIngresos? '#5BCE60':'white'}">Egresos</button>
+                          <button (click)="mostrarIngresos=false;generarGrafico2Ingresos()" class="btn btn-blanco" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? 'white':'#E3633D', 'background-color': mostrarIngresos? '#5BCE60':'white'}">Egresos</button>
                 
                               <!--<div *ngIf="calendario" class="col-sm-6">
                                   <dl-date-time-picker
@@ -93,11 +93,14 @@
                     </div>
                   </div>
                   </div>
-            <div class="row"></div>
-                  <p style="color:white; font-size: 50px; margin:0 auto; font:calibri; font-weight: lighter; text-align:center">$170,000,000</p>
+            <div class="row" *ngIf="mostrarIngresos">
+              <p style="color:white; font-size: 50px; margin:0 auto; font:calibri; font-weight: lighter; text-align:center">{{sumaIngresos| currency:'USD' :'symbol' : '1.0-0' }}</p></div>
+            <div class="row" *ngIf="!mostrarIngresos">
+              <p style="color:white; font-size: 50px; margin:0 auto; font:calibri; font-weight: lighter; text-align:center">{{sumaEgresos| currency:'USD' :'symbol' : '1.0-0' }}</p></div>
           </nb-card-header>
           <nb-card-body>
-              <canvas id="pieIngresos" ></canvas>
+           
+              <canvas id="pieIngresos"></canvas>
           </nb-card-body>
         </nb-card>
       </div>

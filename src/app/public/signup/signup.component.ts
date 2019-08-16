@@ -28,6 +28,7 @@ export class SignupComponent implements OnInit {
       'email': new FormControl(null,[Validators.required,Validators.email]),
       'contrasena1' : new FormControl(null,Validators.required),
       'contrasena2' : new FormControl(null,Validators.required),
+      'pais': new FormControl("Colombia"),
       'nombreNegocio' : new FormControl(null,Validators.required),
       'nit' : new FormControl(null,Validators.required),
       'categoriaNegocio' : new FormControl(null,Validators.required),

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as XLSX from 'xlsx';
+import { MainService } from '../services/main.service';
+
 
 type AOA = any[][];
 @Component({
@@ -13,9 +15,12 @@ export class ImportarFlujoComponent implements OnInit {
   etapa=1
   data: any = [];
   objetos: any = [];
-  constructor(public router: Router) { }
+  fecha: Date;
+  datinhos: any[];
+  constructor(public router: Router, private mainService: MainService) { }
 
   ngOnInit() {
+    
   }
 
   goToFlujoDeCaja(){
@@ -23,7 +28,12 @@ export class ImportarFlujoComponent implements OnInit {
   }
   avanzarEtapa(){
     if(this.etapa<3){
+
+      if(this.etapa===1){
+        this.post()
+      }
       this.etapa++
+      
     }
     else{
       this.goToFlujoDeCaja()
@@ -55,8 +65,43 @@ export class ImportarFlujoComponent implements OnInit {
 
       /* save data */
       this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      console.log(this.data);
+      this.objetos = [];
+      for (let i = 1; i < this.data.length; i++) {
+      /* let x = {}; */
+      this.fecha=this.excelToJs(this.data[i][5]);
+      let formatted_date = this.fecha.getFullYear() + "-" + this.ponerCeros((this.fecha.getMonth()))+ "-" + this.ponerCeros(this.fecha.getDate())
+      {{}}
+      let x = {
+        empresa: "5d5575040cc34a3ee86deb2c",
+        descripcion: this.data[i][0],
+        ingreso: this.data[i][1],
+        egreso: this.data[i][2],
+        saldoBanco:this.data[i][3],
+        saldoEfectivo:this.data[i][4],
+        fechaMovimiento:formatted_date,
+        metodoPago:this.data[i][6],
+        categoria: this.data[i][7],
+        tipo: this.data[i][8],
+
+        /* icono: this.data[i][3] */
+      }
+      if (x) {
+        this.objetos.push(x);
+      }
+      
+
+    }
+    console.log(this.objetos)
     };
     reader.readAsBinaryString(target.files[0]);
+  }
+
+  public ponerCeros(n){
+    if(n<10){
+      return "0"+n
+    }
+    return n
   }
 
   export(): void {
@@ -72,15 +117,26 @@ export class ImportarFlujoComponent implements OnInit {
     XLSX.writeFile(wb, 'File.xlsx');
   }
 
+  public excelToJs(excelDate) {
+    if(excelDate) {
+      return new Date((excelDate - (25567 + 1))*86400*1000);
+    }
+  }
+  
   public verInfo(){
     this.objetos = [];
     console.log(this.data);
     for (let i = 1; i < this.data.length; i++) {
       /* let x = {}; */
       let x = {
-        pais: this.data[i][0],
-        ciudad: this.data[i][1],
-        especialidad: i,
+        empresa: "5d5575040cc34a3ee86deb2c",
+        descripcion: this.data[i][0],
+        ingreso: this.data[i][1],
+        egreso: this.data[i][2],
+        saldoBanco:this.data[i][3],
+        saldoEfectivo:this.data[i][4],
+        fechaMovimiento:this.data[i][5],
+        metodoPago:this.data[i][6],
         /* icono: this.data[i][3] */
       }
       if (x) {
@@ -88,11 +144,16 @@ export class ImportarFlujoComponent implements OnInit {
       }
 
     }
-
-    /* console.log(this.objetos); */
-
-
     console.log(this.objetos);
   }
 
+  post(){
+
+    for(let i = 0; i < this.objetos.length; i++){
+
+      this.mainService.post('api/flujo_de_caja', this.objetos[i]).subscribe(res=>{console.log(res)})
+
+    }
+    
+  }
 }

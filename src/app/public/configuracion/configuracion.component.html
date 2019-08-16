@@ -99,28 +99,38 @@
   </div>
   <div *ngIf="seleccion===6" style="padding:0px">
       <h4 style="margin-bottom:30px; width:30%">Configuración</h4>
-    <div>
+    <div style="padding-bottom:30px">
       <label style="color:black; width:30%">Moneda:</label>
     <select style="width:50%;margin-left: 20px;height: 30px">
       <option value="flujoDeCaja">COP (Peso Colombiano)</option>
       <option value="flujoDeCaja">USD (Dólar Americano)</option>
     </select></div>
-    </div>
+    <div style="padding-bottom:30px">
     <label style="color:black; width:30%">Idioma:</label>
     <select style="width:50%;margin-left: 20px;height: 30px">
       <option value="flujoDeCaja">Español</option>
       <option value="flujoDeCaja">Inglés</option>
-    </select><br>
+    </select><br></div>
+    <div style="padding-bottom:30px">
     <label style="color:black; width:30%">Comiezo de semana:</label>
     <select style="width:50%;margin-left: 20px;height: 30px">
       <option value="flujoDeCaja">Domingo</option>
       <option value="flujoDeCaja">Lunes</option>
-    </select><br>
+    </select><br></div>
+    <div style="padding-bottom:30px">
+        <label style="color:black; width:30%">Categoría de indicadores:</label>
+        <select style="width:50%;margin-left: 20px;height: 30px">
+          <option >Ingresos</option>
+          <option >Recurrentes</option>
+          <option >Ventas</option>
+          <option value="dashboard/agregar-categoria" style="color:blue">Agregar categoria</option>
+        </select><br></div>
+    <div style="padding-bottom:30px">
     <label style="color:black; width:30%">Escenarios:</label>
     <select style="width:50%;margin-left: 20px;height: 30px">
       <option value="flujoDeCaja">Base</option>
       <option value="flujoDeCaja">Arriendo Chicó</option>
-    </select><br>
+    </select><br></div></div>
   </div>
       <form [formGroup]="editarPerfilForm" (ngSubmit)="verificacionPerfil()">
 <!--Formulario editar perfil-->

@@ -15,6 +15,7 @@ import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.c
 import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
 import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
 import { ConfiguracionComponent } from './public/configuracion/configuracion.component';
+import { AgregarCategoriaComponent } from './public/agregar-categoria/agregar-categoria.component';
 
 const routes: Routes = [
   {
@@ -85,6 +86,10 @@ const routes: Routes = [
         path:'configuracion',
         component: ConfiguracionComponent
       },
+      {
+        path:'agregar-categoria',
+        component: AgregarCategoriaComponent
+      }
     ]
   }
 ];

@@ -1,0 +1,29 @@
+<nb-layout>
+  <nb-layout-column>
+      <div class="col-md-12"
+          style="margin-bottom: 31px;text-align: center; size: 73px; font:calibri;font-size: 24px; font-weight:bold; color:black;background-color: #EFEFEF">
+          Agregar categoria</div>
+          <div class="col-md-12" style="background-color: white;padding-bottom: 300px; padding-top:30px">
+              <div class="row"><div class="col-md-2"></div>
+                      <div class="col-md-4">
+                          <label for="nombre" style="color:black">Nombre:</label>
+                          <input id="nombre" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                          <label for="monto" style="color:black">Tipo:</label>
+                          <select id="monto" class="form-control">
+                            <option>Ingreso</option>
+                            <option>Egreso</option>
+                          </select>
+                  </div></div>
+                  <div class="row" style="padding-top:20px">
+                      <div class="col-md-2"></div>
+                      <div class="col-md-4">
+                      <button class="btn btn-azul" (click)="goToFlujo()">Agregar</button></div>
+                      <div class="col-md-4">
+                      <button class="btn btn-blanco" (click)="goToFlujo()">Agregar y copiar</button></div>
+                  </div>
+
+            </div>
+  </nb-layout-column>
+</nb-layout>

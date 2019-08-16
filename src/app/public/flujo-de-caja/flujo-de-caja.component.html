@@ -53,7 +53,7 @@
         <nb-card-body class="cuerpo-tarjeta">
           <div class="row">
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
-              <p class="valor-estadistica">{{130000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <p class="valor-estadistica">{{saldoInicial| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
             </div>
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
@@ -78,7 +78,7 @@
         <nb-card-body class="cuerpo-tarjeta">
           <div class="row" style="padding-top: 0px" (click)="goToIngresosEgresos()">
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
-              <p class="valor-estadistica">{{40000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <p class="valor-estadistica">{{sumaIngresos| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica2"><i class="nb-arrow-thin-up"></i> 13.8%</p> -->
             </div>
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
@@ -103,7 +103,7 @@
         <nb-card-body class="cuerpo-tarjeta">
           <div class="row" (click)="goToIngresosEgresos()">
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
-              <p class="valor-estadistica">{{50000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <p class="valor-estadistica">{{sumaEgresos| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
             </div>
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa  grafica1"></i>
@@ -120,7 +120,7 @@
         <nb-card-body class="cuerpo-tarjeta">
           <div class="row">
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
-              <p class="valor-estadistica">{{10000000| currency:'USD' :'symbol' : '1.0-0' }}</p>
+              <p class="valor-estadistica">{{saldoFinal| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
             </div>
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa  grafica1"></i>
@@ -207,21 +207,65 @@
                     <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-bottom:10px">
                   <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="goToAgregarIngreso()"></i>
-                    <span class="verde fuerte">Ingresos</span>
+                    <div *ngIf="verdeAMostrar!=1">
+                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="verdeAMostrar=1"></i>
+                    <span class="verde fuerte">Ingresos</span><br>
+                    </div>
+                    <div *ngIf="verdeAMostrar===1">
+                      <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px" (click)="verdeAMostrar=0"></i>
+                      <span class="verde fuerte">Ingresos</span><br>
+                    </div>
+                    <div *ngIf="verdeAMostrar===1">
+                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Ventas únicas</span><br>
+                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Pipeline</span> <br>
+                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Por cobrar</span><br>
+                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Recurrentes</span>
+                    
                   </div>
-                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                </div>
-                <div class="row">
+                  </div>
                   <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                    <span class="rojo fuerte">Egresos</span>
-                  </div>
-                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
+                    <span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                    <div *ngIf="verdeAMostrar===1">
+                      <span class="verde">{{25000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                      <span class="verde">{{0|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                      <span class="verde">{{0|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                      <span class="verde">{{15000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                    </div>
+                    </div>
                 </div>
-                <div class="row">
+                <div *ngIf="verdeAMostrar===1"><button class="btn btn-azul3">Añadir categoría</button></div>
+                <div class="row" style="margin-bottom:10px;margin-top:10px">
+                    <div class="col-sm-6">
+                      <div *ngIf="rojoAMostrar!=1">
+                      <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="rojoAMostrar=1"></i>
+                      <span class="rojo fuerte">Egresos</span><br>
+                      </div>
+                      <div *ngIf="rojoAMostrar===1">
+                        <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px" (click)="rojoAMostrar=0"></i>
+                        <span class="rojo fuerte">Egresos</span><br>
+                      </div>
+                      <div *ngIf="rojoAMostrar===1">
+                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Compras</span><br>
+                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Servicios</span> <br>
+                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Nómina</span><br>
+                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Tecnología</span>
+                      
+                    </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <span class="rojo">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span>
+                      <div *ngIf="rojoAMostrar===1">
+                        <span class="rojo">{{5000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                        <span class="rojo">{{2000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                        <span class="rojo">{{9000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                        <span class="rojo">{{4000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                      </div>
+                      </div>
+                  </div>
+                  <div *ngIf="rojoAMostrar===1"><button class="btn btn-azul3">Añadir categoría</button></div>
+                <div class="row" style="margin-top:10px">
                   <div class="col-sm-6">
                     <span class="fuerte">Total</span>
                   </div>

@@ -53,6 +53,9 @@ import { ImportarFlujoComponent } from './public/importar-flujo/importar-flujo.c
 import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingreso.component';
 import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
 import { ConfiguracionComponent } from './public/configuracion/configuracion.component';
+import { AgregarCategoriaComponent } from './public/agregar-categoria/agregar-categoria.component';
+import { MainService } from './public/services/main.service';
+import { AuthService } from './public/services/auth.service';
 
 
 @NgModule({
@@ -73,6 +76,7 @@ import { ConfiguracionComponent } from './public/configuracion/configuracion.com
     AgregarIngresoComponent,
     ImportarCosteoComponent,
     ConfiguracionComponent,
+    AgregarCategoriaComponent,
   ],
   imports: [
     FormsModule,
@@ -109,7 +113,7 @@ import { ConfiguracionComponent } from './public/configuracion/configuracion.com
     DlDateTimePickerModule,
     DpDatePickerModule
   ],
-  providers: [NbSidebarService, NbMenuService,FormsModule],
+  providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
