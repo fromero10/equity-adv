@@ -71,8 +71,10 @@ nb-card-header{
     padding: 10px!important;
 }
 .contenedorHorizontal{
-    width: 500%;
-    overflow-x: scroll;
+
+
+    overflow-x: auto;
+    overflow-y: hidden;
     /* .cajaMes{
         width: 265px;
         margin-right: 15px;

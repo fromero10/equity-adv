@@ -57,6 +57,8 @@ import { AgregarCategoriaComponent } from './public/agregar-categoria/agregar-ca
 import { MainService } from './public/services/main.service';
 import { AuthService } from './public/services/auth.service';
 import { ListaDatosComponent } from './public/lista-datos/lista-datos.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 
 
 @NgModule({
@@ -113,7 +115,9 @@ import { ListaDatosComponent } from './public/lista-datos/lista-datos.component'
     HttpClientModule,
     DlDateTimeDateModule,  // <--- Determines the data type of the model
     DlDateTimePickerModule,
-    DpDatePickerModule
+    DpDatePickerModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    MultiSelectModule
   ],
   providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService],
   bootstrap: [AppComponent]

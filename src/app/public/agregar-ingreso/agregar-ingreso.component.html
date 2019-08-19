@@ -2,66 +2,82 @@
     <nb-layout-column>
         <div class="col-md-12"
             style="margin-bottom: 31px;text-align: center; size: 73px; font:calibri;font-size: 24px; font-weight:bold; color:black;background-color: #EFEFEF">
-            Agregar ingreso o egreso</div>
+            Agregar movimiento</div>
+        <form [formGroup] = "formAgregarMovimiento" (ngSubmit)="verificacion()">
         <div class="col-md-10" style="font-size: 15px;color:black; margin: 0 auto">
             <div class="card" style="padding: 15px">
-                <p>                </p>
+                <p></p>
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-6">
-                            <label for="nombre">Nombre:</label>
-                            <input id="nombre" class="form-control">
+                            <div class="form-group">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" id="nombre" formControlName="nombre" class="form-control">
+                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="monto">Monto:</label>
-                            <input id="monto" class="form-control">
+                            <div class="form-group">
+                                <label for="monto">Monto:</label>
+                                <input type="number" id="monto" formControlName="monto" class="form-control">
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <label for="tipo">Tipo</label>
-                            <select id="tipo" class="form-control">
-                                <option value="Ingreso">Ingreso</option>
-                                <option value="Egreso">Egreso</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="tipo">Tipo</label>
+                                <select (change)="onSelect($event.target.value)" id="tipo" formControlName="tipo" class="form-control">
+                                    <option value="Ingreso">Ingreso</option>
+                                    <option value="Egreso">Egreso</option>
+                                    <option value="Presupuesto">Presupuesto</option>
+                                    <option value="Escenario">Escenario</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="categoria">Categoría</label>
-                            <select id="categoria" class="form-control">
-                                <option value="Categorai1">Categoría 1</option>
-                                <option value="Categoria2">Categoría 2</option>
-                            </select>
+                            <div class=form-group>
+                                <label for="categoria">Categoría</label>
+                                <select id="categoria" formControlName="categoria" class="form-control">
+                                    <option *ngFor="let categorias of subCategorias; let i = index">{{subCategorias[i]}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <label for="recurrencia">Recurrencia</label>
-                            <select id="recurrencia" class="form-control">
-                                <option value="mensual">Diaria</option>
-                                <option value="anual">Semanal</option>
-                                <option value="anual">Quincenal</option>
-                                <option value="anual">Mensual</option>
-                                <option value="anual">Semestral</option>
-                                <option value="anual">Anual</option>
-                                <option value="anual">No se repite</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="recurrencia">Recurrencia</label>
+                                <select id="recurrencia" formControlName="recurrencia" class="form-control">
+                                    <option value="mensual">Diaria</option>
+                                    <option value="anual">Semanal</option>
+                                    <option value="anual">Mensual</option>
+                                    <option value="anual">Anual</option>
+                                    <option value="anual">No se repite</option>
+                                </select>
+                            </div>  
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <label for="inicioRecurrencia">Inicio de recurrencia</label>
-                            <input id="inicioRecurrencia" type="date" class="form-control">
+                            <div class="form-group">
+                                <label for="inicioRecurrencia">Inicio de recurrencia</label>
+                                <input id="inicioRecurrencia" type="date" formControlName="inicioRecurrencia" class="form-control">
+                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="finRecurrencia">Fin de recurrencia</label>
-                            <input id="finRecurrencia" type="date" class="form-control">
+                            <div class="form-group">
+                                <label for="finRecurrencia">Fin de recurrencia</label>
+                                <input id="finRecurrencia" type="date" formControlName="finRecurrencia" class="form-control">
+                            </div>
                         </div>
                     </div>
+                    <div *ngIf="verificar">No se pudo agregar el movimiento, revise los valores ingresados</div>
                     <div class="form-group" style="padding-top: 20px; text-align: center">
-                        <button class="btn btn-azul" (click)="goToFlujo()">Agregar</button>
+                        <button class="btn btn-azul">Agregar</button>
                     </div>
                 </div>
             </div>
         </div>
+        </form>
     </nb-layout-column>
 </nb-layout>

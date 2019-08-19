@@ -5,35 +5,29 @@
     <div class="col-sm-4">
       <label for="">Ultima Actualización: {{hoy | date: 'short'}}</label>
     </div>
-    <div class="col-sm-8">
+  </div>
       <div class="row">
-          <div class="col-sm-3">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-2">
+            <button class="btn btn-azul" (click)="goToAgregarMovimiento()" style="cursor:pointer">Agregar movimiento</button>
+          </div>
+          <div class="col-sm-2">
               <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
             </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
               <button class="btn btn-blanco" (click)="calendario=!calendario" style="font-weight: bold; cursor:pointer">{{rango}}</button>
             <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)" style="position: absolute;z-index:100;size:100px"></nb-calendar-range></div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
           <button class="btn btn-azul" (click)="goToImportarFlujo()" style="cursor:pointer">Importar datos</button>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <div (click)="myFunction()" class="dropdown" style="padding: 0px; border-radius:.25rem">
                 <button class="btn btn-blanco" style="font-weight: bold; cursor:pointer">Escenario</button>
                 <div id="myDropdown" class="dropdown-content">
                   <a href="#">Base</a>
                   <a href="dashboard/agregar-escenario">Agregar escenario</a>
                 </div>
-              </div>
         </div>
-              <!-- <dp-date-picker [(ngModel)]="selectedDate" style="font-size: 9px" [config]="datePickerConfig" theme="dp-material" placeholder="Seleccionar año"></dp-date-picker> </div> -->
-              <!--<div *ngIf="calendario" class="col-sm-6">
-                  <dl-date-time-picker
-                  startView="year"
-                  maxView="year"
-                  minView="year">
-                  </dl-date-time-picker>
-              </div>-->
-      </div>
     </div>
   </div>
   <br>
@@ -150,16 +144,35 @@
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico3()" [ngStyle]="{'background-color': !(mostrarGraf===3)? 'white':'black',
                                                           'color': (mostrarGraf===3)? 'white':'black'}">vs presupuesto</button>
             </div>
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
+            <!-- <div class="col-sm-4"></div> -->
+            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
               <div class="row">
-                <div class="col-sm-6">
-                  <label for="" style="font-size:12px">Filtrar por : </label>
-                </div>
-                <div class="col-sm-6"><button class="btn btn-blanco-sm">Ingresos:Todos <i class="fa fa-chevron-down"
-                      aria-hidden="true" style="margin-left: 2px"></i></button></div>
+              <div class="col-sm-6">
+                <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos <i class="fa fa-chevron-down"
+                  aria-hidden="true" style="margin-left: 2px"></i></button>
+              <div *ngIf="forma" style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                <form [formGroup]="formIngresos" (ngSubmit)="submit()">
+                    <label formArrayName="objetosCatsI" *ngFor="let order of formIngresos.controls.objetosCatsI.controls; let i = index" style="width: 100%; font-family: Calibri;font-size:11px" >
+                      <input type="checkbox" [formControlName]="i">
+                      {{objetosCatsI[i].name}} 
+                    </label><br>                
+                    <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                </form></div>
               </div>
-             
+              <div class="col-sm-6">
+                  <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos <i class="fa fa-chevron-down"
+                    aria-hidden="true" style="margin-left: 2px"></i></button>
+                <div *ngIf="forma2" style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 30%">
+                  <form [formGroup]="formEgresos" (ngSubmit)="submit2()">
+                      <label formArrayName="objetosCatsE" *ngFor="let order of formEgresos.controls.objetosCatsE.controls; let j = index" style="width: 100%; font-family: Calibri;font-size:11px" >
+                        <input type="checkbox" [formControlName]="j">
+                        {{objetosCatsE[j].name}} 
+                      </label><br>                
+                      <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                  </form></div>
+                </div>
+              </div>
             </div>
           </div>
         </nb-card-header>
@@ -193,19 +206,12 @@
   <div class="row">
     <div class="contenedorHorizontal">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
           <div class="cajaMes">
-            <nb-card>
+            <nb-card *ngFor="let periodos of labels; let i = index">
               <nb-card-header>
                 <div class="row">
-                  <div class="col-sm-6">
-                    <p>Enero</p>
-                  </div>
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-4">
-
-                    <p>2019</p>
-                  </div>
+                  {{labels[i]}}
                 </div>
               </nb-card-header>
               <nb-card-body class="cuerpo-tarjeta">
@@ -228,21 +234,17 @@
                       <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px" (click)="verdeAMostrar=0"></i>
                       <span class="verde fuerte">Ingresos</span><br>
                     </div>
-                    <div *ngIf="verdeAMostrar===1">
-                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Ventas únicas</span><br>
-                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Pipeline</span> <br>
-                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Por cobrar</span><br>
-                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px"></i><span class="verde fuerte">Recurrentes</span>
-                    
+                    <div *ngIf="verdeAMostrar===1" >
+                      <div *ngFor="let catI of categoriasIngresos; let j = index">
+                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px">                     
+                        </i><span class="verde fuerte">{{categoriasIngresos[j]}}</span><br>
+                      </div>
                   </div>
                   </div>
                   <div class="col-sm-6">
                     <span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span>
                     <div *ngIf="verdeAMostrar===1">
-                      <span class="verde">{{25000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                      <span class="verde">{{0|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                      <span class="verde">{{0|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                      <span class="verde">{{15000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
+                      <span class="verde" *ngFor="let catI of categoriasIngresos; let i = index">{{25000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
                     </div>
                     </div>
                 </div>
@@ -298,186 +300,8 @@
           </div>
 
         </div>
-        <div class="col-sm-4">
-          <div class="cajaMes">
-            <nb-card>
-              <nb-card-header>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <p>Febrero</p>
-                  </div>
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-4">
-
-                    <p>2019</p>
-                  </div>
-                </div>
-              </nb-card-header>
-              <nb-card-body class="cuerpo-tarjeta">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Inicial</span>
-                  </div>
-
-                  <div class="col-sm-6">
-                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                    <span class="verde fuerte">Ingresos</span>
-                  </div>
-                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                    <span class="rojo fuerte">Egresos</span>
-                  </div>
-                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Total</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <br>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Final</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-              </nb-card-body>
-            </nb-card>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="cajaMes">
-            <nb-card>
-              <nb-card-header>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <p>Marzo</p>
-                  </div>
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-4">
-
-                    <p>2019</p>
-                  </div>
-                </div>
-              </nb-card-header>
-              <nb-card-body class="cuerpo-tarjeta">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Inicial</span>
-                  </div>
-
-                  <div class="col-sm-6">
-                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                    <span class="verde fuerte">Ingresos</span>
-                  </div>
-                  <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                    <span class="rojo fuerte">Egresos</span>
-                  </div>
-                  <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Total</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <br>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Final</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-              </nb-card-body>
-            </nb-card>
-          </div>
-        </div>
-        <div class="col-sm-4">
-            <!-- <div class="cajaMes">
-                <nb-card>
-                  <nb-card-header>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <p>Abril</p>
-                      </div>
-                      <div class="col-sm-2"></div>
-                      <div class="col-sm-4">
         
-                        <p>2019</p>
-                      </div>
-                    </div>
-                  </nb-card-header>
-                  <nb-card-body class="cuerpo-tarjeta">
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <span class="fuerte">Saldo Inicial</span>
-                      </div>
         
-                      <div class="col-sm-6">
-                        <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                        <span class="verde fuerte">Ingresos</span>
-                      </div>
-                      <div class="col-sm-6"><span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"></i>
-                        <span class="rojo fuerte">Egresos</span>
-                      </div>
-                      <div class="col-sm-4"><span class="rojo">{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <span class="fuerte">Total</span>
-                      </div>
-                      <div class="col-sm-6">
-                        <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                      </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <span class="fuerte">Saldo Final</span>
-                      </div>
-                      <div class="col-sm-6">
-                        <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                      </div>
-                    </div>
-                  </nb-card-body>
-                </nb-card>
-              </div> -->
-        </div>
       </div>
 
     </div>

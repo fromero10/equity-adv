@@ -4,17 +4,19 @@ import Chart from 'chart.js';
 import { ChartComponent } from 'angular2-chartjs';
 import {Router} from '@angular/router';
 import { MainService } from '../services/main.service';
-import { ObjectUnsubscribedError } from 'rxjs';
-import { getLocaleDateTimeFormat } from '@angular/common';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-flujo-de-caja',
   templateUrl: './flujo-de-caja.component.html',
-  styleUrls: ['./flujo-de-caja.component.scss']
+  styleUrls: ['./flujo-de-caja.component.scss'],
 })
 export class FlujoDeCajaComponent implements OnInit {
 
   public fecha: any;
+  forma=false
+  forma2=false
   public hoy: any;
   public rango: any;
   hoyEnFecha: Date;
@@ -38,7 +40,8 @@ export class FlujoDeCajaComponent implements OnInit {
   sumaEgresos=0;
   saldoInicial=0;
   saldoFinal=0;
-  categoriasIngresos=[];
+  categoriasIngresos: string[]=[];
+  categoriasEgresos: string[]=[];
   fromDate:Date;
   toDate:Date;
   ingresosPorPeriodo=[];
@@ -53,6 +56,14 @@ export class FlujoDeCajaComponent implements OnInit {
   arregloCategorias=[];
   monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
   "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  objetosCatsI=[]
+  formIngresos: FormGroup
+  objetosCatsE=[]
+  formEgresos: FormGroup
+  catsIngSelec=[]
+  catsEgrSelec=[]
+  ingresosPorCatPorPeriodo=[]
+  egresosPorCatPorPeriodo=[]
 
   verdeAMostrar=0;
   rojoAMostrar=0;
@@ -61,11 +72,11 @@ export class FlujoDeCajaComponent implements OnInit {
   @ViewChild('grafico1', { static: false}) grafico1: ElementRef;
 
   range: { start: any; end: any; };
-  constructor(private theme: NbThemeService, public router: Router, private mainService: MainService) {
+  constructor(private theme: NbThemeService, public router: Router, private mainService: MainService, private formBuilder: FormBuilder ) {
     let TIME_IN_MS = 3000;
     setTimeout( () => {
       this.spinerGrafica = false;
-    }, TIME_IN_MS);
+    }, TIME_IN_MS);          
   }
 
   ngOnInit() {
@@ -80,13 +91,97 @@ export class FlujoDeCajaComponent implements OnInit {
         this.datinhos=result;
       this.crearArregloDatos()
       this.calcularSaldoInicial()
+      this.crearCategoriaEgresos()
+      this.crearCategoriaIngresos()
       this.calcularIngresosEgresos()
       this.agruparPorDias()
-      
-
-
-      })
+      this.configurarFiltros()
+      this.catsIngSelec=this.categoriasIngresos
+      this.catsEgrSelec=this.categoriasEgresos
+    })  
   }
+
+  private configurarFiltros(){
+    for(let i=0;i<this.categoriasIngresos.length;i++){
+      let x={
+        id: i, name:this.categoriasIngresos[i]
+      }
+      this.objetosCatsI.push(x)
+    }
+    this.formIngresos = this.formBuilder.group({
+      objetosCatsI: new FormArray([])
+    });
+    this.addCheckboxes();
+
+
+    for(let j=0;j<this.categoriasEgresos.length;j++){
+      let x={
+        id: j, name:this.categoriasEgresos[j]
+      }
+      this.objetosCatsE.push(x)
+    }
+    this.formEgresos = this.formBuilder.group({
+      objetosCatsE: new FormArray([])
+    });
+
+    this.addCheckboxes2()
+  }
+  
+  private addCheckboxes() {
+    this.objetosCatsI.map((o, i) => {
+      const control = new FormControl(i>=0); // if first item set to true, else false
+      (this.formIngresos.controls.objetosCatsI as FormArray).push(control);
+    });
+  }
+
+  private addCheckboxes2() {
+    this.objetosCatsE.map((o, j) => {
+      const control = new FormControl(j>=0); // if first item set to true, else false
+      (this.formEgresos.controls.objetosCatsE as FormArray).push(control);
+    });
+  }
+
+  submit() {
+    const selectedOrderNamesI = this.formIngresos.value.objetosCatsI
+      .map((v, i) => v ? this.objetosCatsI[i].name : null)
+      .filter(v => v !== null);
+    this.catsIngSelec=selectedOrderNamesI
+    console.log(this.catsIngSelec);
+    if(this.agrupacionFechas===1){
+      this.agruparPorDias()
+    }
+    else if(this.agrupacionFechas===2){
+      this.agruparPorSemanas()
+    }
+    else if(this.agrupacionFechas===3){
+      this.agruparPorMes()
+    }
+    else if(this.agrupacionFechas===4){
+      this.agruparPorAno()
+    }
+  }
+
+  submit2() {
+    const selectedOrderNamesE = this.formEgresos.value.objetosCatsE
+      .map((v, j) => v ? this.objetosCatsE[j].name : null)
+      .filter(v => v !== null);
+      this.catsEgrSelec=selectedOrderNamesE
+    console.log(this.catsEgrSelec);
+    if(this.agrupacionFechas===1){
+      this.agruparPorDias()
+    }
+    else if(this.agrupacionFechas===2){
+      this.agruparPorSemanas()
+    }
+    else if(this.agrupacionFechas===3){
+      this.agruparPorMes()
+    }
+    else if(this.agrupacionFechas===4){
+      this.agruparPorAno()
+    }
+  }
+
+
 
   generarGrafico2(){
     this.BarChart = new Chart('IvsE',{
@@ -122,11 +217,9 @@ export class FlujoDeCajaComponent implements OnInit {
   }
  
   public crearArregloDatos(){
-    /* for(let i = 0; i < this.datinhos.length; i++){ */
       for(var key in this.datinhos){
         for(var key2 in this.datinhos[key]){
           this.dato=this.datinhos[key][key2]
-          console.log(key2)
           if (key2==="consecutivo"){
             this.arregloConsecutivos.push(this.dato)
           }
@@ -162,10 +255,42 @@ export class FlujoDeCajaComponent implements OnInit {
     }
 }
 
+public crearCategoriaIngresos(){
+  for(let i = 0;i < this.arregloCategorias.length; i++){
+    for(let j = 0; j <= this.categoriasIngresos.length; j++){
+      if(this.arregloCategorias[i]===this.categoriasIngresos[j]){
+        break;
+      }
+      else if(j===(this.categoriasIngresos.length) && this.arregloIngresos[i]>0 && this.arregloTipos[i]!="Escenario" && this.arregloTipos[i]!="Presupuesto"){
+        this.categoriasIngresos.push(this.arregloCategorias[i])
+        break
+      }
+      
+    }
+  }
+}
+
+public crearCategoriaEgresos(){
+  for(let i = 0;i < this.arregloCategorias.length; i++){
+    for(let j = 0; j <= this.categoriasEgresos.length; j++){
+      if(this.arregloCategorias[i]===this.categoriasEgresos[j]){
+        break;
+      }
+      else if(j===(this.categoriasEgresos.length) && this.arregloEgresos[i]>0 && this.arregloTipos[i]!="Escenario" && this.arregloTipos[i]!="Presupuesto"){
+        this.categoriasEgresos.push(this.arregloCategorias[i])
+        break
+      }
+      
+    }
+  }
+}
+
   public calcularIngresosEgresos(){
-    for(let i = 0; i < this.arregloIngresos.length; i++){
-      this.sumaIngresos=this.sumaIngresos+this.arregloIngresos[i]
-      this.sumaEgresos=this.sumaEgresos+this.arregloEgresos[i]
+    this.sumaIngresos=0
+    this.sumaEgresos=0
+    for(let i = 0; i < this.labels.length; i++){
+      this.sumaIngresos=this.sumaIngresos+this.ingresosPorPeriodo[i]
+      this.sumaEgresos=this.sumaEgresos+this.egresosPorPeriodo[i]
     }
     this.saldoFinal=this.saldoInicial+this.sumaIngresos-this.sumaEgresos
   }
@@ -179,7 +304,7 @@ export class FlujoDeCajaComponent implements OnInit {
         label: 'Evolución',
         data: this.saldosPorPeriodo,
         fill: true,
-        steppedLine: 'before',
+        steppedLine: 'middle',
         backgroundColor: [
           '#F7F7F7'
         ],
@@ -255,7 +380,7 @@ export class FlujoDeCajaComponent implements OnInit {
     this.router.navigate(['dashboard/importar-flujo'])
   }
 
-  public goToAgregarIngreso(){
+  public goToAgregarMovimiento(){
     this.router.navigate(['dashboard/agregar-ingreso-egreso'])
   }
 
@@ -272,7 +397,6 @@ export class FlujoDeCajaComponent implements OnInit {
     if (event.start && event.end) {
       this.fromDate = new Date(event.start);
       this.toDate = new Date(event.end);
-      console.log(this.fromDate,this.toDate)
       this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
       if(this.agrupacionFechas===1){
         this.agruparPorDias()
@@ -311,7 +435,7 @@ export class FlujoDeCajaComponent implements OnInit {
 
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
-        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real" && (this.estaEnArreglo(this.catsIngSelec,this.arregloCategorias[j]) || this.estaEnArreglo(this.catsEgrSelec,this.arregloCategorias[j]))){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
@@ -329,7 +453,46 @@ export class FlujoDeCajaComponent implements OnInit {
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();
-    console.log(this.saldosPorPeriodo)
+    this.calcularIngresosEgresos()
+    this.agruparPorDiasPorCat()
+  }
+
+  public agruparPorDiasPorCat(){
+
+    this.ingresosPorCatPorPeriodo=[]
+    this.egresosPorCatPorPeriodo=[]
+
+    let cantidadDias=(this.toDate.getTime()-this.fromDate.getTime())/(1000*60*60*24)+1
+
+    for(let i = 0; i < cantidadDias; i++){
+
+      let inicio=this.fromDate.getTime()+i*(1000*60*60*24)
+      let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24)
+
+      for(let j = 0 ; j < this.categoriasIngresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let dia = i
+
+        for(let k = 0; k < this.arregloIngresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasIngresos[j]){
+
+            valor = valor +this.arregloIngresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: dia
+        }
+        this.ingresosPorCatPorPeriodo.push(x)
+
+      }
+    }console.log(this.ingresosPorCatPorPeriodo)
+
   }
 
   public agruparPorSemanas(){
@@ -360,7 +523,7 @@ export class FlujoDeCajaComponent implements OnInit {
 
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
-        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real" && (this.estaEnArreglo(this.catsIngSelec,this.arregloCategorias[j]) || this.estaEnArreglo(this.catsEgrSelec,this.arregloCategorias[j]))){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
@@ -378,7 +541,7 @@ export class FlujoDeCajaComponent implements OnInit {
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();
-    console.log(this.saldosPorPeriodo)
+    this.calcularIngresosEgresos()
   }
 
   public agruparPorMes(){
@@ -400,11 +563,9 @@ export class FlujoDeCajaComponent implements OnInit {
 
       if (i===0){
         inicio=this.fromDate.getTime()
-        console.log(i)
       }
       else {
         inicio=fin+1
-        console.log(i)
       }
       let inicioFecha=new Date(inicio)
       fin=inicioFecha.getTime()+(1000*60*60*24)*(this.daysInMonth(inicioFecha.getMonth()+1,inicioFecha.getFullYear())-inicioFecha.getDate()+1)-1
@@ -414,7 +575,7 @@ export class FlujoDeCajaComponent implements OnInit {
       }
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
-        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real" && (this.estaEnArreglo(this.catsIngSelec,this.arregloCategorias[j]) || this.estaEnArreglo(this.catsEgrSelec,this.arregloCategorias[j]))){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
@@ -432,7 +593,7 @@ export class FlujoDeCajaComponent implements OnInit {
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();
-    console.log(this.saldosPorPeriodo)
+    this.calcularIngresosEgresos()
   }
 
   public agruparPorAno(){
@@ -456,11 +617,9 @@ export class FlujoDeCajaComponent implements OnInit {
 
       if (i===0){
         inicio=this.fromDate.getTime()
-        console.log(inicioAno)
       }
       else {
         inicio=inicioAno.getTime()
-        console.log(inicioAno)
       }
       fin=siguienteAno.getTime()-1
       this.labels[i]=inicioAno.getFullYear()
@@ -469,7 +628,7 @@ export class FlujoDeCajaComponent implements OnInit {
       }
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
-        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real" && (this.estaEnArreglo(this.catsIngSelec,this.arregloCategorias[j]) || this.estaEnArreglo(this.catsEgrSelec,this.arregloCategorias[j]))){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
@@ -487,7 +646,7 @@ export class FlujoDeCajaComponent implements OnInit {
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();
-    console.log(this.saldosPorPeriodo)
+    this.calcularIngresosEgresos()
   }
     
   public daysInMonth (month, year) { 
@@ -506,7 +665,7 @@ export class FlujoDeCajaComponent implements OnInit {
           indices.push(i)
           consecs.push(this.arregloConsecutivos[i])
           encontrado=true
-        }console.log(inicio,this.arregloFechas[i])
+        }
       }
       if(encontrado){
         minimo=consecs[0]
@@ -520,6 +679,15 @@ export class FlujoDeCajaComponent implements OnInit {
         }
       this.saldoInicial=this.saldoBanco[indice]
     return this.saldoInicial
+  }
+
+  public estaEnArreglo(arreglo: any[], valor: any ){
+    for(let k = 0; k < arreglo.length; k++){
+      if(arreglo[k]===valor){
+        return true
+      }
+    }
+    return false
   }
   
 }
