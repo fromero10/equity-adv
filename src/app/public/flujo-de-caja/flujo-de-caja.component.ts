@@ -46,6 +46,7 @@ export class FlujoDeCajaComponent implements OnInit {
   toDate:Date;
   ingresosPorPeriodo=[];
   egresosPorPeriodo=[];
+  presupuestoPorPeriodo=[];
   saldosPorPeriodo=[];
   arregloTipos=[];
   labels=[];
@@ -330,22 +331,24 @@ public crearCategoriaEgresos(){
     this.GrafPresupuesto = new Chart('vsPresupuesto',{
       type:'line',
       data:{
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: this.labels,
         datasets:[
           {
             label: "Real",
-            data: [65, 59, 80, 81, 56, 55, 40],
+            data: this.saldosPorPeriodo,
             backgroundColor: "#5BCE60",
             borderColor: "#5BCE60",
             fill: "false",
+            steppedLine: 'middle',
           },
           {
             
             label: "Presupuesto",
-            data: [25, 49, 90, 101, 86, 15, 50],
+            data: this.presupuestoPorPeriodo,
             backgroundColor:"#B12ABC",
             borderColor:"#B12ABC",
             fill: "false",
+            steppedLine: 'middle',
           },
         ]
       },
@@ -419,6 +422,7 @@ public crearCategoriaEgresos(){
     let cantidadDias=(this.toDate.getTime()-this.fromDate.getTime())/(1000*60*60*24)+1
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
+    this.presupuestoPorPeriodo=[]
     this.saldosPorPeriodo=[]
     this.labels=[]
     this.calcularSaldoInicial()
@@ -432,6 +436,7 @@ public crearCategoriaEgresos(){
       let dia=new Date(inicio)
       let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24)
       this.labels[i]=dia.getFullYear() + "-" + (dia.getMonth()+1)+ "-" + dia.getDate()
+      let presupuestoPeriodo=0
 
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
@@ -441,11 +446,23 @@ public crearCategoriaEgresos(){
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
 
         }
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Presupuesto"){
+
+          presupuestoPeriodo=presupuestoPeriodo + this.arregloIngresos[j]-this.arregloEgresos[j]
+
+        }
+
         if(j===(this.arregloIngresos.length-1) && i > 0){
+
           this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[i]=this.presupuestoPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
+
         }
         else if(j===(this.arregloIngresos.length-1) && i === 0){
+
           this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         
 
@@ -501,6 +518,7 @@ public crearCategoriaEgresos(){
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
     this.saldosPorPeriodo=[]
+    this.presupuestoPorPeriodo=[]
     this.labels=[]
     this.calcularSaldoInicial()
 
@@ -513,6 +531,7 @@ public crearCategoriaEgresos(){
       let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24*7-1)
       let inicioFecha=new Date(inicio)
       let finFecha=new Date(fin)
+      let presupuestoPeriodo=0
       if(fin<this.toDate.getTime()){
         this.labels[i]=(inicioFecha.getMonth()+1)+"/"+inicioFecha.getDate()+" - "+(finFecha.getMonth()+1)+"/"+finFecha.getDate()
       }
@@ -527,13 +546,21 @@ public crearCategoriaEgresos(){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+        }
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Presupuesto"){
+
+          presupuestoPeriodo=presupuestoPeriodo + this.arregloIngresos[j]-this.arregloEgresos[j]
 
         }
+
         if(j===(this.arregloIngresos.length-1) && i > 0){
           this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[i]=this.presupuestoPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         else if(j===(this.arregloIngresos.length-1) && i === 0){
           this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         
 
@@ -550,6 +577,7 @@ public crearCategoriaEgresos(){
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
     this.saldosPorPeriodo=[]
+    this.presupuestoPorPeriodo=[]
     this.labels=[]
     this.calcularSaldoInicial()
     let inicio=0;
@@ -560,6 +588,7 @@ public crearCategoriaEgresos(){
       this.ingresosPorPeriodo[i]=0;
       this.egresosPorPeriodo[i]=0;
       this.saldosPorPeriodo[i]=0;
+      let presupuestoPeriodo=0;
 
       if (i===0){
         inicio=this.fromDate.getTime()
@@ -581,11 +610,18 @@ public crearCategoriaEgresos(){
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
 
         }
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Presupuesto"){
+
+          presupuestoPeriodo=presupuestoPeriodo + this.arregloIngresos[j]-this.arregloEgresos[j]
+
+        }
         if(j===(this.arregloIngresos.length-1) && i > 0){
           this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[i]=this.presupuestoPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         else if(j===(this.arregloIngresos.length-1) && i === 0){
           this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         
 
@@ -602,6 +638,7 @@ public crearCategoriaEgresos(){
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
     this.saldosPorPeriodo=[]
+    this.presupuestoPorPeriodo=[]
     this.labels=[]
     this.calcularSaldoInicial()
     let inicio=0;
@@ -614,6 +651,7 @@ public crearCategoriaEgresos(){
       this.saldosPorPeriodo[i]=0;
       let inicioAno=new Date((this.fromDate.getFullYear()+i)+"-01-01 GMT -0500")
       let siguienteAno=new Date((this.fromDate.getFullYear()+i+1)+"-01-01 GMT -0500")
+      let presupuestoPeriodo=0
 
       if (i===0){
         inicio=this.fromDate.getTime()
@@ -634,15 +672,22 @@ public crearCategoriaEgresos(){
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
 
         }
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Presupuesto"){
+
+          presupuestoPeriodo=presupuestoPeriodo + this.arregloIngresos[j]-this.arregloEgresos[j]
+
+        }
         if(j===(this.arregloIngresos.length-1) && i > 0){
           this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[i]=this.presupuestoPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         else if(j===(this.arregloIngresos.length-1) && i === 0){
           this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+          this.presupuestoPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]+presupuestoPeriodo
         }
         
 
-      }
+      }console.log(presupuestoPeriodo)
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();

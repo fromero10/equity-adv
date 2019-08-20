@@ -7,7 +7,10 @@
       <div class="col-sm-1"></div>
       <div class="col-sm-6">
         <div class="row">
-          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <button class="btn btn-blanco" (click)="calendario=!calendario" style="font-weight: bold; cursor:pointer">{{rango}}</button>
+            <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)" style="position: absolute;z-index:100;size:100px"></nb-calendar-range>
+          </div>
           <div class="col-sm-4">
               <div (click)="myFunction()" class="dropdown">
                   <button class="dropbtn" >ESCENARIO</button>
@@ -17,41 +20,56 @@
                   </div>
                 </div>
           </div>
-          <div class="col-sm-4">
-            <button (click)="calendario=!calendario" id="butCalendario" class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true"
-                style="margin-left: 2px"></i></button>
-  
-                <!--<div *ngIf="calendario" class="col-sm-6">
-                    <dl-date-time-picker
-                    startView="year"
-                    maxView="year"
-                    minView="year">
-                    </dl-date-time-picker>
-                </div>-->
                 
           </div>
         </div>
       </div>
-    </div>
     <br>
-    <div class="container" style="background-color: #FFFFFF">
+    <div class="container">
       <!-- Gráfico -->
   <div class="row">
       <div class="col-12">
         <nb-card [nbSpinner]="spinerGrafica" nbSpinnerStatus="success" nbSpinnerMessage="Cargando">
           <nb-card-header>
             <div class="row">
-              <div class="col-sm-4"></div>
-              <div class="col-sm-4"></div>
               <div class="col-sm-4">
+                <button class="btn btn-dark-graf" (click)="agrupacionFechas=1;agruparPorDias()" [ngStyle]="{'background-color': !(agrupacionFechas===1)? 'white':'black',
+                'color': (agrupacionFechas===1)? 'white':'black'}" style="width:22%">Día</button>
+                <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=2;agruparPorSemanas()" [ngStyle]="{'background-color': !(agrupacionFechas===2)? 'white':'black',
+                'color': (agrupacionFechas===2)? 'white':'black'}" style="width:22%">Semana</button>
+                <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=3; agruparPorMes()" [ngStyle]="{'background-color': !(agrupacionFechas===3)? 'white':'black',
+                'color': (agrupacionFechas===3)? 'white':'black'}" style="width:22%">Mes</button>
+                <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=4; agruparPorAno()" [ngStyle]="{'background-color': !(agrupacionFechas===4)? 'white':'black',
+                'color': (agrupacionFechas===4)? 'white':'black'}" style="width:22%">Año</button>
+            </div>
+            <div class="col-sm-2"></div>
+              <div class="col-sm-6">
                 <div class="row">
-                  <div class="col-sm-4"></div>
-                  <div class="col-sm-4">
-                    <label for="" style="font-size:12px">Filtrar por : </label>
+                  <div class="col-sm-6">
+                    <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos <i class="fa fa-chevron-down"
+                      aria-hidden="true" style="margin-left: 2px"></i></button>
+                  <div *ngIf="forma" style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                    <form [formGroup]="formIngresos" (ngSubmit)="submit()">
+                        <label formArrayName="objetosCatsI" *ngFor="let order of formIngresos.controls.objetosCatsI.controls; let i = index" style="width: 100%; font-family: Calibri;font-size:11px" >
+                          <input type="checkbox" [formControlName]="i">
+                          {{objetosCatsI[i].name}} 
+                        </label><br>                
+                        <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                    </form></div>
                   </div>
-                  <div class="col-sm-4"><button class="btn btn-blanco-sm">Ingresos:Todos <i class="fa fa-chevron-down"
-                        aria-hidden="true" style="margin-left: 2px"></i></button></div>
-                </div>
+                  <div class="col-sm-6">
+                      <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos <i class="fa fa-chevron-down"
+                        aria-hidden="true" style="margin-left: 2px"></i></button>
+                    <div *ngIf="forma2" style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 30%">
+                      <form [formGroup]="formEgresos" (ngSubmit)="submit2()">
+                          <label formArrayName="objetosCatsE" *ngFor="let order of formEgresos.controls.objetosCatsE.controls; let j = index" style="width: 100%; font-family: Calibri;font-size:11px" >
+                            <input type="checkbox" [formControlName]="j">
+                            {{objetosCatsE[j].name}} 
+                          </label><br>                
+                          <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                      </form></div>
+                    </div>
+                  </div>
   
               </div>
             </div>

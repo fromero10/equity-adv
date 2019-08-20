@@ -42,7 +42,7 @@ datinhos=[]
     },
     delete: {
       confirmDelete: true,
-      deleteButtonContent: 'Eliminar',
+      deleteButtonContent: '<i class="nb-trash"></i>',
     },
     actions: {
       position: 'right',
@@ -52,24 +52,30 @@ datinhos=[]
       custom: []
     },
     columns: {
-      _id: {
-        title: 'Id',
-        editable: false,
-      },
-      empresa: {
-        title: 'Empresa',
+      descripcion: {
+        title: 'Descripcion',
         editable: false,
       },
       ingreso: {
         title: 'Ingreso',
+        editable: false,
+        valuePrepareFunction: (value) => { return Intl.NumberFormat('en-US',{style:'currency', currency: 'USD'}).format(value)}
+      },
+      egreso: {
+        title: 'Egreso',
+        editable: false,
+        valuePrepareFunction: (value) => { return Intl.NumberFormat('en-US',{style:'currency', currency: 'USD'}).format(value)}
+      },
+      fechaMovimiento: {
+        title: 'Fecha',
         editable: false,
       },
       categoria:{
         title: 'Categoría',
         editable: false,
       },
-      createdAt: {
-        title: 'Fecha de creación',
+      tipo: {
+        title: 'Tipo',
         editable: false,
       },
       
