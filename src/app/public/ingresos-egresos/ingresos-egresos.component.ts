@@ -22,7 +22,7 @@ export class IngresosEgresosComponent implements OnInit {
   agrupacionFechas=1;
   calendario=false;
   spinerGrafica = true;
-  pieIngresos=[];
+  pieIngresos:any=[];
   mostrarIngresos=true;
   datinhos:any[];
   dato: any;
@@ -78,9 +78,10 @@ export class IngresosEgresosComponent implements OnInit {
     this.ingresosPorCategoria();
     this.egresosPorCategoria();
     this.agruparPorDias()
-    this.generarGrafico2Ingresos();
     this.configurarFiltros()
   })
+  this.generarGrafico2Ingresos();
+  this.generarGrafico()
   this.catsIngSelec=this.categoriasIngresos
   this.catsEgrSelec=this.categoriasEgresos
 }
@@ -235,7 +236,7 @@ export class IngresosEgresosComponent implements OnInit {
           
         }
       }
-    }this.generarGrafico();console.log(this.catsIngSelec)
+    }this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -283,7 +284,7 @@ export class IngresosEgresosComponent implements OnInit {
 
       }
     }
-    this.generarGrafico();console.log(this.catsIngSelec)
+    this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -332,7 +333,7 @@ export class IngresosEgresosComponent implements OnInit {
 
         }
       }
-    }this.generarGrafico();console.log(this.catsIngSelec)
+    }this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -382,7 +383,7 @@ export class IngresosEgresosComponent implements OnInit {
         }   
       }
     }
-    this.generarGrafico();console.log(this.catsIngSelec)
+    this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -524,6 +525,7 @@ public categoriasGraf(){
     console.log(this.categoriasGrafico,this.agrupadoCategoriasGraf,this.agrupadoCategoriasIngresos)
   }
   else{
+    this.egresosPorCategoria()
     this.categoriasGrafico=this.categoriasEgresos
     this.agrupadoCategoriasGraf=this.agrupadoCategoriasEgresos
   }
@@ -585,6 +587,18 @@ public categoriasGraf(){
     }
     return false
   }
+
+  public actualizarGraficos(){
+    this.categoriasGraf()
+    this.graficoObj.data.labels=this.labels
+    this.graficoObj.data.datasets[0].data=this.ingresosPorPeriodo
+    this.graficoObj.data.datasets[1].data=this.egresosPorPeriodo
+    this.graficoObj.update()
+    this.pieIngresos.data.labels=this.categoriasGrafico
+    this.pieIngresos.data.datasets[0].data=this.agrupadoCategoriasGraf
+    this.pieIngresos.update()
+  }
+
 
 
 }

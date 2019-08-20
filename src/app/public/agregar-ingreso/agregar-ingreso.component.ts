@@ -42,9 +42,9 @@ export class AgregarIngresoComponent implements OnInit {
       'tipo' : new FormControl(null,Validators.required),
       'categoria': new FormControl(null,Validators.required),
       'nuevaCategoria': new FormControl(null),
-      'recurrencia' : new FormControl(null,Validators.required),
+ /*      'recurrencia' : new FormControl(null,Validators.required), */
       'metodoPago' : new FormControl(null,Validators.required),
-      'inicioRecurrencia' : new FormControl(null,Validators.required),
+      /* 'inicioRecurrencia' : new FormControl(null,Validators.required), */
       'finRecurrencia' : new FormControl(null),
     });
   }

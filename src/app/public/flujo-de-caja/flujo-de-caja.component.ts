@@ -383,9 +383,9 @@ public crearCategoriaEgresos(){
           {
             label: "Evolución",
             data: this.saldosPorPeriodo,
-            backgroundColor: "#5BCE60",
+            backgroundColor: "#F7F7F7",
             borderColor: "#5BCE60",
-            fill: "false",
+            fill: true,
             steppedLine: 'middle',
           },
         ]
@@ -393,7 +393,7 @@ public crearCategoriaEgresos(){
       options: {
         title:{
             text:"Evolución",
-            display:true
+            display:false
         }
       }  
     })
