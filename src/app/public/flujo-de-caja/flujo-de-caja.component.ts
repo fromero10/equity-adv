@@ -510,7 +510,7 @@ public crearCategoriaEgresos(){
     this.actualizarGraficos();
     this.calcularIngresosEgresos()
     this.agruparPorDiasPorCat()
-    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    document.getElementById("flujosCaja").style.width = 370*this.labels.length + "px";
   }
 
   public agruparPorDiasPorCat(){
@@ -630,7 +630,7 @@ public crearCategoriaEgresos(){
     }
     this.actualizarGraficos()
     this.calcularIngresosEgresos();
-    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    document.getElementById("flujosCaja").style.width = 370*this.labels.length + "px";
     this.agruparPorSemanasPorCat()
   }
 
@@ -732,7 +732,7 @@ public crearCategoriaEgresos(){
     }
     this.actualizarGraficos();
     this.calcularIngresosEgresos();
-    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    document.getElementById("flujosCaja").style.width = 370*this.labels.length + "px";
     this.agruparPorMesPorCat()
   }
 
@@ -846,7 +846,7 @@ public crearCategoriaEgresos(){
     }
     this.actualizarGraficos()
     this.calcularIngresosEgresos();
-    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    document.getElementById("flujosCaja").style.width = 370*this.labels.length + "px";
     this.agruparPorAnoPorCat()
   }
 
@@ -931,6 +931,8 @@ public crearCategoriaEgresos(){
           }
         }
       this.saldoInicial=this.saldoBanco[indice]
+      if(this.arregloIngresos.length===0){this.saldoInicial=0}
+
     return this.saldoInicial
   }
 

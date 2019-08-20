@@ -192,7 +192,7 @@ export class AgregarIngresoComponent implements OnInit {
         egreso: egr,
         saldoBanco:0,
         saldoEfectivo:0,
-        fechaMovimiento:this.formAgregarMovimiento.get('inicioRecurrencia').value,
+        fechaMovimiento:this.formAgregarMovimiento.get('finRecurrencia').value,
         metodoPago:this.formAgregarMovimiento.get('metodoPago').value,
         categoria: cate,
         tipo: this.formAgregarMovimiento.get('tipo').value
