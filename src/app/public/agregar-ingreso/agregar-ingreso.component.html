@@ -9,10 +9,21 @@
                 <p></p>
                 <div class="col-md-12">
                     <div class="row">
+                        <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="descripcion">Descripción:</label>
+                            <input type="text" id="descripcion" formControlName="descripcion" class="form-control">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" id="nombre" formControlName="nombre" class="form-control">
+                                <label for="movimiento">Movimiento:</label>
+                                <select (change)="onSelect3($event.target.value)" id="movimiento" formControlName="movimiento" class="form-control">
+                                    <option value="Ingreso">Ingreso</option>
+                                    <option value="Egreso">Egreso</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -27,9 +38,8 @@
                             <div class="form-group">
                                 <label for="tipo">Tipo</label>
                                 <select (change)="onSelect($event.target.value)" id="tipo" formControlName="tipo" class="form-control">
-                                    <option value="Ingreso">Ingreso</option>
-                                    <option value="Egreso">Egreso</option>
-                                    <option value="Presupuesto">Presupuesto</option>
+                                    <option value="Real">Real</option>
+                                    <option value="Presupuesto">Presupuesto</option>                                    
                                     <option value="Escenario">Escenario</option>
                                 </select>
                             </div>
@@ -37,14 +47,32 @@
                         <div class="col-sm-6">
                             <div class=form-group>
                                 <label for="categoria">Categoría</label>
-                                <select id="categoria" formControlName="categoria" class="form-control">
-                                    <option *ngFor="let categorias of subCategorias; let i = index">{{subCategorias[i]}}</option>
+                                <select id="categoria" formControlName="categoria" class="form-control" (change)="onSelect2($event.target.value)">
+                                    <option *ngFor="let categorias of subCategorias; let i = index" value="{{subCategorias[i]}}">{{subCategorias[i]}}</option>
+                                    <option value="Otra">Otra</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="nuevaCategoria===true">
                         <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="nuevaCategoria">Nombre nueva categoría</label>
+                                <input id="nuevaCategoria" formControlName="nuevaCategoria" class="form-control">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="metodoPago">Método de pago</label>
+                                <select id="metodoPago" formControlName="metodoPago" class="form-control">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Transaccion">Transacción</option>
+                                </select>
+                            </div>  
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="recurrencia">Recurrencia</label>
                                 <select id="recurrencia" formControlName="recurrencia" class="form-control">

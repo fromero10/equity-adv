@@ -10,12 +10,12 @@
           <div class="col-sm-4"></div>
           <div class="col-sm-4">
             <button class="btn btn-blanco" style="border-color:#3D98DE; border-width: 1px"
-              (click)="retrocederEtapa()">Atrás <i class="fa fa-chevron-down" aria-hidden="true"
-                style="margin-left: 2px"></i></button>
+              (click)="retrocederEtapa()"><i class="fa fa-chevron-left" aria-hidden="true"
+              style="margin-left: 2px"></i>  Atrás </button>
           </div>
           <div class="col-sm-4">
             <button (click)="avanzarEtapa()" id="butContinuar" style="border-color:#3D98DE;background-color:#3D98DE"
-              class="btn btn-blanco">Continuar <i class="fa fa-chevron-down" aria-hidden="true"
+              class="btn btn-blanco">Continuar <i class="fa fa-chevron-right" aria-hidden="true"
                 style="margin-left: 2px"></i></button>
 
             <!--<div *ngIf="calendario" class="col-sm-6">
@@ -32,85 +32,27 @@
     </div>
   </nb-card-header>
   <nb-card-body style="padding-top: 50px; padding-bottom: 50px">
-    <div *ngIf="etapa===1 || etapa===2" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+    <div *ngIf="etapa===1" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
       Importar flujo de caja
     </div>
-    <div *ngIf="etapa===3" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
-      Estás casi listo para importar tu archivo
+    <div *ngIf="etapa===2" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
+      Resumen de la importación:
     </div>
     <div style="padding-top:20px">
-      <div *ngIf="etapa===3">
-        <p style="font-size: 18px"> Por favor revisa los detalles de lo que vas a importar a la plataforma.</p>
-        <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
+      <div *ngIf="etapa===2">
+        <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px; align-content: center">
           <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
-          <div class="col-sm-4">
+          <div class="col-sm-10" style="font-weight: bold; font-size: 18px">
             <p style="margin:0px; font-weight: bold; font-size: 18px">Método de importación</p>
             <p>Archivo .xlsx</p>
           </div>
         </div>
         <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
           <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
-          <div class="col-sm-4">
-            <p style="font-weight: bold; font-size: 18px">Importar 4 de 33 columnas</p>
-            <p>Nombre columna 1 - text_field</p>
-            <p>Nombre columna 2 - text_field</p>
-            <p>Nombre columna 3 - numeric_field</p>
-            <p>Nombre columna 4 - numeric_field</p>
+          <div class="col-sm-10" style="font-weight: bold; font-size: 18px; padding-top: 8px">Se importaron {{data.length}} movimientos exitosamente
           </div>
         </div>
         <br>
-      </div>
-      <div *ngIf="etapa===2">
-        <p style="font-size: 18px"> Ahora vamos a relacionar las columnas de tus archivos con lo que mostraremos en la
-          plataforma.</p>
-        <input type="search" style="width: 50%; height:35px" placeholder="Buscar...">
-        <div class="row" style="padding-top: 10px; margin-top:10px">
-          <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
-            <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
-            <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 1</p>
-            <p style="width:100%; text-align: center">text_field</p>
-            <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 1</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-          </div>
-          <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
-            <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
-            <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 2</p>
-            <p style="width:100%; text-align: center">text_field</p>
-            <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 2</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-          </div>
-          <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
-            <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
-            <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 3</p>
-            <p style="width:100%; text-align: center">numeric_field</p>
-            <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 3</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-          </div>
-          <div class="column" style="border-style: solid;border-color:#EFEFEF;border-width: 1px;padding:0px">
-            <input type="radio" id="radio2" style="text-align: center; width: 100%;margin-top:16px"><br>
-            <p style="text-align: center; width:100%; margin-top: 16px; font-weight: bold">Columna 4</p>
-            <p style="width:100%; text-align: center">numeric_field</p>
-            <div style="background-color: #EFEFEF; width:100%; padding: 10px">Columna 4</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-            <div style="padding: 10px;border-style: solid;border-color:#EFEFEF;border-width: 1px">Fila</div>
-          </div>
-        </div>
-        <p style="margin-top:20px">Selecciona un máximo de 5 columnas a importar</p>
       </div>
       <div *ngIf="etapa===1"><input type="radio" id="radio">
         <label for="radio" style="padding-left:10px">Importar un archivo .xlsx</label>

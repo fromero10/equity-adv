@@ -1,33 +1,34 @@
-
-
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
       <label for="">Ultima Actualización: {{hoy | date: 'short'}}</label>
     </div>
   </div>
-      <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2">
-            <button class="btn btn-azul" (click)="goToAgregarMovimiento()" style="cursor:pointer">Agregar movimiento</button>
-          </div>
-          <div class="col-sm-2">
-              <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
-            </div>
-          <div class="col-sm-2">
-              <button class="btn btn-blanco" (click)="calendario=!calendario" style="font-weight: bold; cursor:pointer">{{rango}}</button>
-            <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)" style="position: absolute;z-index:100;size:100px"></nb-calendar-range></div>
-        <div class="col-sm-2">
-          <button class="btn btn-azul" (click)="goToImportarFlujo()" style="cursor:pointer">Importar datos</button>
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
+      <button class="btn btn-azul" (click)="goToAgregarMovimiento()" style="cursor:pointer">Agregar movimiento</button>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-blanco" (click)="calendario=!calendario"
+        style="font-weight: bold; cursor:pointer">{{rango}}</button>
+      <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)"
+        style="position: absolute;z-index:100;size:100px"></nb-calendar-range>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-azul" (click)="goToImportarFlujo()" style="cursor:pointer">Importar datos</button>
+    </div>
+    <div class="col-sm-2">
+      <div (click)="myFunction()" class="dropdown" style="padding: 0px; border-radius:.25rem">
+        <button class="btn btn-blanco" style="font-weight: bold; cursor:pointer">Escenario</button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="#">Base</a>
+          <a href="dashboard/agregar-escenario">Agregar escenario</a>
         </div>
-        <div class="col-sm-2">
-            <div (click)="myFunction()" class="dropdown" style="padding: 0px; border-radius:.25rem">
-                <button class="btn btn-blanco" style="font-weight: bold; cursor:pointer">Escenario</button>
-                <div id="myDropdown" class="dropdown-content">
-                  <a href="#">Base</a>
-                  <a href="dashboard/agregar-escenario">Agregar escenario</a>
-                </div>
-        </div>
+      </div>
     </div>
   </div>
   <br>
@@ -42,9 +43,6 @@
               <p class="titulo-tarjeta">Saldo Inicial</p>
             </div>
             <div class="col-sm-6">
-
-              <button class="btn btn-blanco-sm">Todos los bancos<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
             </div>
           </div>
         </nb-card-header>
@@ -68,8 +66,6 @@
               <p class="titulo-tarjeta">Ingresos</p>
             </div>
             <div class="col-sm-6">
-              <button class="btn-blanco-sm">Todo en ingresos<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
             </div>
           </div>
         </nb-card-header>
@@ -93,8 +89,6 @@
               <p class="titulo-tarjeta">Egresos</p>
             </div>
             <div class="col-sm-6">
-              <button class="btn-blanco-sm">Todo en egresos<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
             </div>
           </div>
         </nb-card-header>
@@ -137,40 +131,51 @@
         <nb-card-header>
           <div class="row">
             <div class="col-sm-4">
-              <button class="btn btn-dark-graf" (click)="cambiarGrafico1(); generarGrafico()" [ngStyle]="{'background-color': !(mostrarGraf===1)? 'white':'black',
+              <button class="btn btn-dark-graf" (click)="cambiarGrafico1()"
+                [ngStyle]="{'background-color': !(mostrarGraf===1)? 'white':'black',
                                                           'color': (mostrarGraf===1)? 'white':'black'}">Evolución</button>
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico2()" [ngStyle]="{'background-color': !(mostrarGraf===2)? 'white':'black',
-                                                          'color': (mostrarGraf===2)? 'white':'black'}">Ingreso vs egresos</button>
+                                                          'color': (mostrarGraf===2)? 'white':'black'}">Ingreso vs
+                egresos</button>
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico3()" [ngStyle]="{'background-color': !(mostrarGraf===3)? 'white':'black',
-                                                          'color': (mostrarGraf===3)? 'white':'black'}">vs presupuesto</button>
+                                                          'color': (mostrarGraf===3)? 'white':'black'}">vs
+                presupuesto</button>
             </div>
             <!-- <div class="col-sm-4"></div> -->
             <div class="col-sm-2"></div>
             <div class="col-sm-6">
               <div class="row">
-              <div class="col-sm-6">
-                <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos <i class="fa fa-chevron-down"
-                  aria-hidden="true" style="margin-left: 2px"></i></button>
-              <div *ngIf="forma" style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
-                <form [formGroup]="formIngresos" (ngSubmit)="submit()">
-                    <label formArrayName="objetosCatsI" *ngFor="let order of formIngresos.controls.objetosCatsI.controls; let i = index" style="width: 100%; font-family: Calibri;font-size:11px" >
-                      <input type="checkbox" [formControlName]="i">
-                      {{objetosCatsI[i].name}} 
-                    </label><br>                
-                    <button style="font-family: Calibri;font-size:11px">Aplicar</button>
-                </form></div>
-              </div>
-              <div class="col-sm-6">
-                  <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos <i class="fa fa-chevron-down"
-                    aria-hidden="true" style="margin-left: 2px"></i></button>
-                <div *ngIf="forma2" style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 30%">
-                  <form [formGroup]="formEgresos" (ngSubmit)="submit2()">
-                      <label formArrayName="objetosCatsE" *ngFor="let order of formEgresos.controls.objetosCatsE.controls; let j = index" style="width: 100%; font-family: Calibri;font-size:11px" >
-                        <input type="checkbox" [formControlName]="j">
-                        {{objetosCatsE[j].name}} 
-                      </label><br>                
+                <div class="col-sm-6">
+                  <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos
+                    <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
+                  <div *ngIf="forma"
+                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                    <form [formGroup]="formIngresos" (ngSubmit)="submit()">
+                      <label formArrayName="objetosCatsI"
+                        *ngFor="let order of formIngresos.controls.objetosCatsI.controls; let i = index"
+                        style="width: 100%; font-family: Calibri;font-size:11px">
+                        <input type="checkbox" [formControlName]="i">
+                        {{objetosCatsI[i].name}}
+                      </label><br>
                       <button style="font-family: Calibri;font-size:11px">Aplicar</button>
-                  </form></div>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos
+                    <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
+                  <div *ngIf="forma2"
+                    style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 30%">
+                    <form [formGroup]="formEgresos" (ngSubmit)="submit2()">
+                      <label formArrayName="objetosCatsE"
+                        *ngFor="let order of formEgresos.controls.objetosCatsE.controls; let j = index"
+                        style="width: 100%; font-family: Calibri;font-size:11px">
+                        <input type="checkbox" [formControlName]="j">
+                        {{objetosCatsE[j].name}}
+                      </label><br>
+                      <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -178,16 +183,16 @@
         </nb-card-header>
         <nb-card-body>
           <div class="col-sm-4">
-              <button class="btn btn-dark-graf" (click)="agrupacionFechas=1;agruparPorDias()" [ngStyle]="{'background-color': !(agrupacionFechas===1)? 'white':'black',
+            <button class="btn btn-dark-graf" (click)="agrupacionFechas=1;agruparPorDias()" [ngStyle]="{'background-color': !(agrupacionFechas===1)? 'white':'black',
               'color': (agrupacionFechas===1)? 'white':'black'}" style="width:22%">Día</button>
-              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=2;agruparPorSemanas()" [ngStyle]="{'background-color': !(agrupacionFechas===2)? 'white':'black',
+            <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=2;agruparPorSemanas()" [ngStyle]="{'background-color': !(agrupacionFechas===2)? 'white':'black',
               'color': (agrupacionFechas===2)? 'white':'black'}" style="width:22%">Semana</button>
-              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=3; agruparPorMes()" [ngStyle]="{'background-color': !(agrupacionFechas===3)? 'white':'black',
+            <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=3; agruparPorMes()" [ngStyle]="{'background-color': !(agrupacionFechas===3)? 'white':'black',
               'color': (agrupacionFechas===3)? 'white':'black'}" style="width:22%">Mes</button>
-              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=4; agruparPorAno()" [ngStyle]="{'background-color': !(agrupacionFechas===4)? 'white':'black',
+            <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=4; agruparPorAno()" [ngStyle]="{'background-color': !(agrupacionFechas===4)? 'white':'black',
               'color': (agrupacionFechas===4)? 'white':'black'}" style="width:22%">Año</button>
           </div>
-          <canvas #grafico1 style="width: 100%; height: 300px;" [ngStyle]="{'display': !(mostrarGraf===1)? 'none': 'flex'}"></canvas>
+          <canvas id="evolucionn" [ngStyle]="{'display': !(mostrarGraf===1)? 'none': 'flex'}"></canvas>
           <canvas id="IvsE" [ngStyle]="{'display': !(mostrarGraf===2)? 'none': 'flex'}"></canvas>
           <canvas id="vsPresupuesto" [ngStyle]="{'display': !(mostrarGraf===3)? 'none': 'flex'}"></canvas>
         </nb-card-body>
@@ -197,113 +202,107 @@
 
   <div class="row">
     <div class="col-sm-4">
-      <label for="" style="color: black">Flujo de caja anual</label>
+      <label for="" style="color: black; font-weight: bold">Flujos de caja</label>
     </div>
   </div>
   <br><br>
 
   <!-- Cajas mensuales -->
-  <div class="row">
-    <div class="contenedorHorizontal">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="cajaMes">
-            <nb-card *ngFor="let periodos of labels; let i = index">
-              <nb-card-header>
-                <div class="row">
-                  {{labels[i]}}
+    <div class="row" style="overflow-x: scroll">
+            <div style="width:100%">
+              <div id="flujosCaja" style="overflow-x: scroll">
+                <div class="row" style="padding-left:20px">
+                    <nb-card *ngFor="let periodos of labels; let i = index" style="width: 250px; margin-right:20px">
+                        <nb-card-header style="text-align: center">
+                            {{labels[i]}}
+                        </nb-card-header>
+                        <nb-card-body class="cuerpo-tarjeta">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <span class="fuerte">Saldo Inicial</span>
+                            </div>
+      
+                            <div class="col-sm-6">
+                              <span>{{saldosPorPeriodo[i]-ingresosPorPeriodo[i]+egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-6">
+                              <div *ngIf="verdeAMostrar!=1">
+                                <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"
+                                  (click)="verdeAMostrar=1"></i>
+                                <span class="verde fuerte">Ingresos</span><br>
+                              </div>
+                              <div *ngIf="verdeAMostrar===1">
+                                <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px"
+                                  (click)="verdeAMostrar=0"></i>
+                                <span class="verde fuerte">Ingresos</span><br>
+                              </div>
+                              <div *ngIf="verdeAMostrar===1">
+                                <div *ngFor="let catI of categoriasIngresos; let j = index">
+                                  <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px">
+                                  </i><span class="verde fuerte">{{categoriasIngresos[j]}}</span><br>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <span class="verde">{{ingresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
+                              <div *ngIf="verdeAMostrar===1">
+                                <span class="verde"
+                                  *ngFor="let catI of categoriasIngresos; let k = index">{{arreglinho[k+i*categoriasIngresos.length]|currency:'USD':'symbol' : '1.0-0'}}<br></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-bottom:10px;margin-top:10px">
+                            <div class="col-sm-6">
+                              <div *ngIf="rojoAMostrar!=1">
+                                <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"
+                                  (click)="rojoAMostrar=1"></i>
+                                <span class="rojo fuerte">Egresos</span><br>
+                              </div>
+                              <div *ngIf="rojoAMostrar===1">
+                                <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px"
+                                  (click)="rojoAMostrar=0"></i>
+                                <span class="rojo fuerte">Egresos</span><br>
+                              </div>
+                              <div *ngIf="rojoAMostrar===1">
+                                <div *ngFor="let catE of categoriasEgresos; let l = index">
+                                  <i class="fa fa-minus" style="color:#E3633D; padding-right: 10px">
+                                  </i><span class="rojo fuerte">{{categoriasEgresos[l]}}</span><br>
+                              </div>
+                            </div>
+                          </div>
+                            <div class="col-sm-6">
+                              <span class="rojo">{{egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
+                              <div *ngIf="rojoAMostrar===1">
+                                <span class="rojo"
+                                  *ngFor="let catE of categoriasEgresos; let m = index">{{arreglinho2[m+i*categoriasEgresos.length]|currency:'USD':'symbol' : '1.0-0'}}<br></span>
+                              </div>
+                            </div>
+                          
+                        </div>
+                          <div class="row" style="margin-top:10px">
+                            <div class="col-sm-6">
+                              <span class="fuerte">Total</span>
+                            </div>
+                            <div class="col-sm-6">
+                              <span>{{ingresosPorPeriodo[i]-egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <span class="fuerte">Saldo Final</span>
+                            </div>
+                            <div class="col-sm-6">
+                              <span>{{saldosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
+                            </div>
+                          </div>
+                        </nb-card-body>
+                      </nb-card> 
                 </div>
-              </nb-card-header>
-              <nb-card-body class="cuerpo-tarjeta">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Inicial</span>
-                  </div>
-
-                  <div class="col-sm-6">
-                    <span>{{70000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <div class="row" style="margin-bottom:10px">
-                  <div class="col-sm-6">
-                    <div *ngIf="verdeAMostrar!=1">
-                    <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="verdeAMostrar=1"></i>
-                    <span class="verde fuerte">Ingresos</span><br>
-                    </div>
-                    <div *ngIf="verdeAMostrar===1">
-                      <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px" (click)="verdeAMostrar=0"></i>
-                      <span class="verde fuerte">Ingresos</span><br>
-                    </div>
-                    <div *ngIf="verdeAMostrar===1" >
-                      <div *ngFor="let catI of categoriasIngresos; let j = index">
-                        <i class="fa fa-plus" style="color:#5BCE60; padding-right: 10px">                     
-                        </i><span class="verde fuerte">{{categoriasIngresos[j]}}</span><br>
-                      </div>
-                  </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <span class="verde">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                    <div *ngIf="verdeAMostrar===1">
-                      <span class="verde" *ngFor="let catI of categoriasIngresos; let i = index">{{25000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                    </div>
-                    </div>
-                </div>
-                <div *ngIf="verdeAMostrar===1"><button class="btn btn-azul3">Añadir categoría</button></div>
-                <div class="row" style="margin-bottom:10px;margin-top:10px">
-                    <div class="col-sm-6">
-                      <div *ngIf="rojoAMostrar!=1">
-                      <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px" (click)="rojoAMostrar=1"></i>
-                      <span class="rojo fuerte">Egresos</span><br>
-                      </div>
-                      <div *ngIf="rojoAMostrar===1">
-                        <i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 2px" (click)="rojoAMostrar=0"></i>
-                        <span class="rojo fuerte">Egresos</span><br>
-                      </div>
-                      <div *ngIf="rojoAMostrar===1">
-                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Compras</span><br>
-                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Servicios</span> <br>
-                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Nómina</span><br>
-                          <i class="fa fa-plus" style="color:#E3633D; padding-right: 10px"></i><span class="rojo fuerte">Tecnología</span>
-                      
-                    </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <span class="rojo">{{40000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                      <div *ngIf="rojoAMostrar===1">
-                        <span class="rojo">{{5000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                        <span class="rojo">{{2000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                        <span class="rojo">{{9000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                        <span class="rojo">{{4000000|currency:'USD':'symbol' : '1.0-0'}}</span><br>
-                      </div>
-                      </div>
-                  </div>
-                  <div *ngIf="rojoAMostrar===1"><button class="btn btn-azul3">Añadir categoría</button></div>
-                <div class="row" style="margin-top:10px">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Total</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{20000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-                <br>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <span class="fuerte">Saldo Final</span>
-                  </div>
-                  <div class="col-sm-6">
-                    <span>{{90000000|currency:'USD':'symbol' : '1.0-0'}}</span>
-                  </div>
-                </div>
-              </nb-card-body>
-            </nb-card>
+               
+              </div>
           </div>
-
-        </div>
-        
-        
-      </div>
-
     </div>
-  </div>
 </div>

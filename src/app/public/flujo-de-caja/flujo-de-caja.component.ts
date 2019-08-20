@@ -5,6 +5,7 @@ import { ChartComponent } from 'angular2-chartjs';
 import {Router} from '@angular/router';
 import { MainService } from '../services/main.service';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import * as _ from 'lodash';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class FlujoDeCajaComponent implements OnInit {
   forma=false
   forma2=false
   public hoy: any;
+  public arreglinho = [];
+  public arreglinho2 = [];
   public rango: any;
   hoyEnFecha: Date;
   calendario=false;
@@ -27,8 +30,8 @@ export class FlujoDeCajaComponent implements OnInit {
   mostrarGraf=1;
   dato:any;
   min: Date;
-  BarChart=[];
-  GrafPresupuesto=[];
+  BarChart:any=[];
+  GrafPresupuesto: any=[];
   usuario: any[];
   reservas: any[];
   datinhos: any[];
@@ -65,6 +68,7 @@ export class FlujoDeCajaComponent implements OnInit {
   catsEgrSelec=[]
   ingresosPorCatPorPeriodo=[]
   egresosPorCatPorPeriodo=[]
+  contador=0
 
   verdeAMostrar=0;
   rojoAMostrar=0;
@@ -73,6 +77,7 @@ export class FlujoDeCajaComponent implements OnInit {
   @ViewChild('grafico1', { static: false}) grafico1: ElementRef;
 
   range: { start: any; end: any; };
+  graficoObj: any=[];
   constructor(private theme: NbThemeService, public router: Router, private mainService: MainService, private formBuilder: FormBuilder ) {
     let TIME_IN_MS = 3000;
     setTimeout( () => {
@@ -95,11 +100,19 @@ export class FlujoDeCajaComponent implements OnInit {
       this.crearCategoriaEgresos()
       this.crearCategoriaIngresos()
       this.calcularIngresosEgresos()
-      this.agruparPorDias()
       this.configurarFiltros()
       this.catsIngSelec=this.categoriasIngresos
       this.catsEgrSelec=this.categoriasEgresos
-    })  
+      
+      this.generarGrafico2()
+      this.generarGrafico3()
+      this.generarGrafico()
+      this.submit()
+      this.agruparPorDias()
+      
+
+    })
+
   }
 
   private configurarFiltros(){
@@ -184,7 +197,7 @@ export class FlujoDeCajaComponent implements OnInit {
 
 
 
-  generarGrafico2(){
+  generarGrafico2(){   
     this.BarChart = new Chart('IvsE',{
       type:'bar',
       data:{
@@ -296,9 +309,9 @@ public crearCategoriaEgresos(){
     this.saldoFinal=this.saldoInicial+this.sumaIngresos-this.sumaEgresos
   }
 
-  public generarGrafico() {
+/*   public generarGrafico() {
 
-    let graficoObj = this.grafico1.nativeElement.getContext('2d');
+    this.graficoObj = this.grafico1.nativeElement.getContext('2d');
     var chartData = {
       labels: this.labels,
       datasets: [{
@@ -314,7 +327,7 @@ public crearCategoriaEgresos(){
       ]
     };
     var chart = new Chart(
-      graficoObj,
+      this.graficoObj,
       {
         "type": 'line',
         "data": chartData,
@@ -325,7 +338,7 @@ public crearCategoriaEgresos(){
         }
       }
     );
-  }
+  } */
 
   generarGrafico3(){
     this.GrafPresupuesto = new Chart('vsPresupuesto',{
@@ -355,6 +368,31 @@ public crearCategoriaEgresos(){
       options: {
         title:{
             text:"Real vs presupuesto",
+            display:true
+        }
+      }  
+    })
+  }
+
+  generarGrafico(){
+    this.graficoObj = new Chart('evolucionn',{
+      type:'line',
+      data:{
+        labels: this.labels,
+        datasets:[
+          {
+            label: "Evolución",
+            data: this.saldosPorPeriodo,
+            backgroundColor: "#5BCE60",
+            borderColor: "#5BCE60",
+            fill: "false",
+            steppedLine: 'middle',
+          },
+        ]
+      },
+      options: {
+        title:{
+            text:"Evolución",
             display:true
         }
       }  
@@ -413,6 +451,7 @@ public crearCategoriaEgresos(){
       else if(this.agrupacionFechas===4){
         this.agruparPorAno()
       }
+      
   }
   
   }
@@ -467,11 +506,11 @@ public crearCategoriaEgresos(){
         
 
       }
-    }this.generarGrafico();
-    this.generarGrafico2();
-    this.generarGrafico3();
+    }
+    this.actualizarGraficos();
     this.calcularIngresosEgresos()
     this.agruparPorDiasPorCat()
+    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
   }
 
   public agruparPorDiasPorCat(){
@@ -506,9 +545,32 @@ public crearCategoriaEgresos(){
           periodo: dia
         }
         this.ingresosPorCatPorPeriodo.push(x)
-
       }
-    }console.log(this.ingresosPorCatPorPeriodo)
+
+      for(let j = 0 ; j < this.categoriasEgresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let dia = i
+
+        for(let k = 0; k < this.arregloEgresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasEgresos[j]){
+
+            valor = valor +this.arregloEgresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: dia
+        }
+        this.egresosPorCatPorPeriodo.push(x)
+      }
+    }
+    this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    this.arreglinho2=this.crearArregloPorPeriodo(this.egresosPorCatPorPeriodo)
 
   }
 
@@ -565,10 +627,51 @@ public crearCategoriaEgresos(){
         
 
       }
-    }this.generarGrafico();
-    this.generarGrafico2();
-    this.generarGrafico3();
-    this.calcularIngresosEgresos()
+    }
+    this.actualizarGraficos()
+    this.calcularIngresosEgresos();
+    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    this.agruparPorSemanasPorCat()
+  }
+
+  public agruparPorSemanasPorCat(){
+
+    this.ingresosPorCatPorPeriodo=[]
+    this.egresosPorCatPorPeriodo=[]
+
+    let cantidadSemanas=Math.ceil(((this.toDate.getTime()-this.fromDate.getTime())/(1000*60*60*24)+1)/7)
+
+    for(let i = 0; i < cantidadSemanas; i++){
+
+      let inicio=this.fromDate.getTime()+i*(1000*60*60*24*7)
+      let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24*7-1)
+
+      for(let j = 0 ; j < this.categoriasIngresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let semana = i
+
+        for(let k = 0; k < this.arregloIngresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasIngresos[j]){
+
+            valor = valor +this.arregloIngresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: semana
+        }
+        this.ingresosPorCatPorPeriodo.push(x)
+
+      }
+    }console.log(this.ingresosPorCatPorPeriodo)
+    this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    console.log(this.arreglinho)
+
   }
 
   public agruparPorMes(){
@@ -626,10 +729,62 @@ public crearCategoriaEgresos(){
         
 
       }
-    }this.generarGrafico();
-    this.generarGrafico2();
-    this.generarGrafico3();
-    this.calcularIngresosEgresos()
+    }
+    this.actualizarGraficos();
+    this.calcularIngresosEgresos();
+    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    this.agruparPorMesPorCat()
+  }
+
+  public agruparPorMesPorCat(){
+
+    this.ingresosPorCatPorPeriodo=[]
+    this.egresosPorCatPorPeriodo=[]
+
+    let cantidadMeses=(this.toDate.getFullYear()-this.fromDate.getFullYear())*12+this.toDate.getMonth()-this.fromDate.getMonth()+1
+
+    for(let i = 0; i < cantidadMeses; i++){
+
+      let inicio=0
+      let fin=0
+      if (i===0){
+        inicio=this.fromDate.getTime()
+      }
+      else {
+        inicio=fin+1
+      }
+      let inicioFecha=new Date(inicio)
+      fin=inicioFecha.getTime()+(1000*60*60*24)*(this.daysInMonth(inicioFecha.getMonth()+1,inicioFecha.getFullYear())-inicioFecha.getDate()+1)-1
+      if(fin >= this.toDate.getTime()){
+        fin=this.toDate.getTime()+1
+      }
+
+      for(let j = 0 ; j < this.categoriasIngresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let mes = i
+
+        for(let k = 0; k < this.arregloIngresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasIngresos[j]){
+
+            valor = valor +this.arregloIngresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: mes
+        }
+        this.ingresosPorCatPorPeriodo.push(x)
+
+      }
+    }console.log(this.ingresosPorCatPorPeriodo)
+    this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    console.log(this.arreglinho)
+
   }
 
   public agruparPorAno(){
@@ -688,10 +843,63 @@ public crearCategoriaEgresos(){
         
 
       }console.log(presupuestoPeriodo)
-    }this.generarGrafico();
-    this.generarGrafico2();
-    this.generarGrafico3();
-    this.calcularIngresosEgresos()
+    }
+    this.actualizarGraficos()
+    this.calcularIngresosEgresos();
+    document.getElementById("flujosCaja").style.width = 270*this.labels.length + "px";
+    this.agruparPorAnoPorCat()
+  }
+
+  public agruparPorAnoPorCat(){
+
+    this.ingresosPorCatPorPeriodo=[]
+    this.egresosPorCatPorPeriodo=[]
+    let inicio=0;
+    let fin=0;
+
+    let cantidadAnos=(this.toDate.getFullYear()-this.fromDate.getFullYear())+1
+
+    for(let i = 0; i < cantidadAnos; i++){
+
+      let inicioAno=new Date((this.fromDate.getFullYear()+i)+"-01-01 GMT -0500")
+      let siguienteAno=new Date((this.fromDate.getFullYear()+i+1)+"-01-01 GMT -0500")
+
+      if (i===0){
+        inicio=this.fromDate.getTime()
+      }
+      else {
+        inicio=inicioAno.getTime()
+      }
+      fin=siguienteAno.getTime()-1
+      if(fin >= this.toDate.getTime()){
+        fin=this.toDate.getTime()+1
+      }
+      for(let j = 0 ; j < this.categoriasIngresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let ano = i
+
+        for(let k = 0; k < this.arregloIngresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasIngresos[j]){
+
+            valor = valor +this.arregloIngresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: ano
+        }
+        this.ingresosPorCatPorPeriodo.push(x)
+
+      }
+    }console.log(this.ingresosPorCatPorPeriodo)
+    this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    console.log(this.arreglinho)
+
   }
     
   public daysInMonth (month, year) { 
@@ -733,6 +941,26 @@ public crearCategoriaEgresos(){
       }
     }
     return false
+  }
+
+  crearArregloPorPeriodo(array: any []){
+    return _.map(array, 'ingreso');
+  }
+
+  public actualizarGraficos(){
+    this.BarChart.data.labels=this.labels
+    this.BarChart.data.datasets[0].data=this.ingresosPorPeriodo
+    this.BarChart.data.datasets[1].data=this.egresosPorPeriodo
+    this.BarChart.update()
+    this.GrafPresupuesto.data.labels=this.labels
+    this.GrafPresupuesto.data.datasets[0].data=this.saldosPorPeriodo
+    this.GrafPresupuesto.data.datasets[1].data=this.presupuestoPorPeriodo
+    this.GrafPresupuesto.update()
+    this.graficoObj.data.labels=this.labels
+    this.graficoObj.data.datasets[0].data=this.saldosPorPeriodo
+    this.graficoObj.update()
+    console.log(this.labels)
+
   }
   
 }

@@ -22,6 +22,8 @@ export class AgregarIngresoComponent implements OnInit {
   formAgregarMovimiento: FormGroup
   subCategorias=[]
   verificar=false
+  nuevaCategoria=false;
+  ingreso:boolean;
   constructor(public router:Router, private mainService: MainService) { }
 
   ngOnInit() {
@@ -34,22 +36,25 @@ export class AgregarIngresoComponent implements OnInit {
     this.crearCategoriaIngresos()
     this.crearCategoriaEscenarios()})
     this.formAgregarMovimiento = new FormGroup({
-      'nombre': new FormControl(null,Validators.required),
+      'descripcion': new FormControl(null,Validators.required),
+      'movimiento': new FormControl(null,Validators.required),
       'monto' : new FormControl(null,[Validators.required,Validators.min(0)]),
       'tipo' : new FormControl(null,Validators.required),
-      'categoria': new FormControl(null),
+      'categoria': new FormControl(null,Validators.required),
+      'nuevaCategoria': new FormControl(null),
       'recurrencia' : new FormControl(null,Validators.required),
+      'metodoPago' : new FormControl(null,Validators.required),
       'inicioRecurrencia' : new FormControl(null,Validators.required),
       'finRecurrencia' : new FormControl(null),
     });
   }
 
   onSelect(catId: string) {
-    if (catId==="Ingreso"){
+    if (catId==="Real" && this.ingreso===true){
       this.subCategorias = this.categoriasIngresos
       console.log(this.categoriasEgresos, catId)
     }
-    else if (catId==="Egreso"){
+    else if (catId==="Real" && this.ingreso===false){
       this.subCategorias = this.categoriasEgresos
       console.log(this.subCategorias, catId)
     }
@@ -64,6 +69,30 @@ export class AgregarIngresoComponent implements OnInit {
     
   }
 
+  onSelect2(catId: string) {
+    if (catId==="Otra"){
+      this.nuevaCategoria = true
+    }
+    else{
+      this.nuevaCategoria = false
+
+    }
+  }
+
+  onSelect3(catId: string) {
+    if (catId==="Ingreso"){
+      this.ingreso = true
+      if(this.formAgregarMovimiento.get('tipo').value==="Real"){
+        this.onSelect("Real")
+      }
+    }
+    else{
+      this.ingreso = false
+      if(this.formAgregarMovimiento.get('tipo').value==="Real"){
+        this.onSelect("Real")
+      }
+    }
+  }
   public crearArregloDatos(){
     for(var key in this.datinhos){
       for(var key2 in this.datinhos[key]){
@@ -129,16 +158,62 @@ export class AgregarIngresoComponent implements OnInit {
   }
 
   verificacion(){
+    let ing:number
+    let egr:number
+    let cate: string
     if(this.formAgregarMovimiento.invalid){
-      this.verificar=true
       console.log("falla")
+      this.verificar=true
       return false
-    } 
+    }
+    else{
+
+      if(this.formAgregarMovimiento.get('movimiento').value==="Ingreso"){
+        ing=this.formAgregarMovimiento.get('monto').value
+        egr=0
+      }
+      else{
+        egr=this.formAgregarMovimiento.get('monto').value
+        ing=0
+      }
+
+      if(this.formAgregarMovimiento.get('categoria').value==="Otra"){
+        cate = this.formAgregarMovimiento.get('nuevaCategoria').value
+      }
+      else{
+        cate = this.formAgregarMovimiento.get('categoria').value
+      }
+ 
+      let x = {
+        empresa: "5d5575040cc34a3ee86deb2c",
+        consecutivo: "",
+        descripcion: this.formAgregarMovimiento.get('descripcion').value,
+        ingreso: ing,
+        egreso: egr,
+        saldoBanco:0,
+        saldoEfectivo:0,
+        fechaMovimiento:this.formAgregarMovimiento.get('inicioRecurrencia').value,
+        metodoPago:this.formAgregarMovimiento.get('metodoPago').value,
+        categoria: cate,
+        tipo: this.formAgregarMovimiento.get('tipo').value
+
+      } 
+
+      if (x) {
+        console.log(x)
+      } 
       this.verificar=false
       console.log("exito")
+      this.post(x)
       this.goToFlujo()
+    }
+
   }
 
+  post(objeto: Object){
+      this.mainService.post('api/flujo_de_caja', objeto).subscribe(res=>{console.log(res)})
+    }
+  
   public goToFlujo(){
     this.router.navigate(['dashboard/flujo-de-caja'])
   }

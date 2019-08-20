@@ -27,21 +27,18 @@ export class ImportarFlujoComponent implements OnInit {
     this.router.navigate(['dashboard/flujo-de-caja'])
   }
   avanzarEtapa(){
-    if(this.etapa<3){
 
       if(this.etapa===1){
         this.post()
+        this.etapa++
       }
-      this.etapa++
-      
-    }
-    else{
+      else{
       this.goToFlujoDeCaja()
     }
   }
 
   retrocederEtapa(){
-    if(this.etapa>1){
+    if(this.etapa===2){
       this.etapa--
     }
     else{
