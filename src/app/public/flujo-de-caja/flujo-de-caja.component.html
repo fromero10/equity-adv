@@ -142,10 +142,44 @@
                 presupuesto</button>
             </div>
             <!-- <div class="col-sm-4"></div> -->
-            <div class="col-sm-2"></div>
-            <div class="col-sm-6">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7">
               <div class="row">
-                <div class="col-sm-6">
+                  <div class="col-sm-3">
+                      <button class="btn btn-blanco-sm" (click)="escenarios=!escenarios" style="cursor: pointer">Escenarios
+                          <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i>
+                      </button>
+                      <div *ngIf="escenarios"
+                      style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                      <form [formGroup]="formEscenario" (ngSubmit)="submit4()">
+                        <label formArrayName="objetosEscen"
+                          *ngFor="let order of formEscenario.controls.objetosEscen.controls; let m = index"
+                          style="width: 100%; font-family: Calibri;font-size:11px">
+                          <input type="checkbox" [formControlName]="m">
+                          {{objetosEscen[m].name}}
+                        </label><br>
+                        <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                      </form>
+                    </div>
+                  </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-blanco-sm" (click)="metodos=!metodos" style="cursor: pointer">Métodos de pago
+                        <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i>
+                    </button>
+                    <div *ngIf="metodos"
+                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                    <form [formGroup]="formMetodos" (ngSubmit)="submit3()">
+                      <label formArrayName="objetosMetodos"
+                        *ngFor="let order of formMetodos.controls.objetosMetodos.controls; let k = index"
+                        style="width: 100%; font-family: Calibri;font-size:11px">
+                        <input type="checkbox" [formControlName]="k">
+                        {{objetosMetodos[k].name}}
+                      </label><br>
+                      <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-sm-3">
                   <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos
                     <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
                   <div *ngIf="forma"
@@ -161,7 +195,7 @@
                     </form>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                   <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos
                     <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
                   <div *ngIf="forma2"
@@ -218,16 +252,16 @@
                         </nb-card-header>
                         <nb-card-body class="cuerpo-tarjeta">
                           <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <span class="fuerte">Saldo Inicial</span>
                             </div>
       
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <span>{{saldosPorPeriodo[i]-ingresosPorPeriodo[i]+egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
                             </div>
                           </div>
                           <div class="row" style="margin-bottom:10px">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <div *ngIf="verdeAMostrar!=1">
                                 <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"
                                   (click)="verdeAMostrar=1"></i>
@@ -245,7 +279,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <span class="verde">{{ingresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
                               <div *ngIf="verdeAMostrar===1">
                                 <span class="verde"
@@ -254,7 +288,7 @@
                             </div>
                           </div>
                           <div class="row" style="margin-bottom:10px;margin-top:10px">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <div *ngIf="rojoAMostrar!=1">
                                 <i class="fa fa-chevron-right" aria-hidden="true" style="margin-right: 2px"
                                   (click)="rojoAMostrar=1"></i>
@@ -272,7 +306,7 @@
                               </div>
                             </div>
                           </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <span class="rojo">{{egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
                               <div *ngIf="rojoAMostrar===1">
                                 <span class="rojo"
@@ -282,19 +316,19 @@
                           
                         </div>
                           <div class="row" style="margin-top:10px">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <span class="fuerte">Total</span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <span>{{ingresosPorPeriodo[i]-egresosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
                             </div>
                           </div>
                           <br>
                           <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <span class="fuerte">Saldo Final</span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <span>{{saldosPorPeriodo[i]|currency:'USD':'symbol' : '1.0-0'}}</span>
                             </div>
                           </div>
