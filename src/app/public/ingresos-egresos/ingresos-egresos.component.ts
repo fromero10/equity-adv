@@ -48,9 +48,12 @@ export class IngresosEgresosComponent implements OnInit {
   ingresosPorPeriodo=[];
   egresosPorPeriodo=[];
   labels=[];
+  ingresoAcumuladosPorPeriodo=[]
+  egresoAcumuladosPorPeriodo=[]
   private location: Location;
   monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
   "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  titulo= "Ingresos por Categoria"
   
 
   @ViewChild('grafico1', { static: false}) grafico1: ElementRef;
@@ -207,6 +210,8 @@ export class IngresosEgresosComponent implements OnInit {
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
     this.labels=[]
+    let ingresoEste=0
+    let egresoEste=0
 
     for(let i = 0; i < cantidadDias; i++){
 
@@ -216,6 +221,8 @@ export class IngresosEgresosComponent implements OnInit {
       let dia=new Date(inicio)
       let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24)
       this.labels[i]=dia.getFullYear() + "-" + (dia.getMonth()+1)+ "-" + dia.getDate()
+      ingresoEste=0
+      egresoEste=0
 
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
@@ -224,19 +231,22 @@ export class IngresosEgresosComponent implements OnInit {
           if(i===0){
 
             this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
-            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
-          
+            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]        
           }
           else{
-
-            this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
-            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+this.egresosPorPeriodo[i]+this.arregloEgresos[j]
-
-          }
-          
+            ingresoEste=ingresoEste+this.arregloIngresos[j]
+            egresoEste=egresoEste+this.arregloEgresos[j]     
+          } 
         }
       }
-    }this.actualizarGraficos()
+      if(i!=0){
+      this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+ingresoEste
+      this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+egresoEste}
+    }console.log(this.egresoAcumuladosPorPeriodo)
+    console.log(this.ingresoAcumuladosPorPeriodo)
+    this.ingresosPorCategoria()
+    this.egresosPorCategoria()
+    this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -246,6 +256,8 @@ export class IngresosEgresosComponent implements OnInit {
     this.ingresosPorPeriodo=[]
     this.egresosPorPeriodo=[]
     this.labels=[]
+    let ingresoEste=0
+    let egresoEste=0
 
     for(let i = 0; i < cantidadSemanas; i++){
 
@@ -255,7 +267,8 @@ export class IngresosEgresosComponent implements OnInit {
       let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24*7-1)
       let inicioFecha=new Date(inicio)
       let finFecha=new Date(fin)
-      let presupuestoPeriodo=0
+      ingresoEste=0
+      egresoEste=0
       if(fin<this.toDate.getTime()){
         this.labels[i]=(inicioFecha.getMonth()+1)+"/"+inicioFecha.getDate()+" - "+(finFecha.getMonth()+1)+"/"+finFecha.getDate()
       }
@@ -276,14 +289,16 @@ export class IngresosEgresosComponent implements OnInit {
           }
           else{
 
-            this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
-            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+this.egresosPorPeriodo[i]+this.arregloEgresos[j]
-
+            ingresoEste=ingresoEste+this.arregloIngresos[j]
+            egresoEste=egresoEste+this.arregloEgresos[j]
           }
         }
 
-      }
-    }
+      }if(i!=0){
+        this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+ingresoEste
+        this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+egresoEste}
+    }this.ingresosPorCategoria()
+    this.egresosPorCategoria()
     this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
@@ -296,11 +311,15 @@ export class IngresosEgresosComponent implements OnInit {
     this.labels=[]
     let inicio=0;
     let fin=0;
+    let ingresoEste=0
+    let egresoEste=0
 
     for(let i = 0; i < cantidadMeses; i++){
 
       this.ingresosPorPeriodo[i]=0;
       this.egresosPorPeriodo[i]=0;
+      ingresoEste=0
+      egresoEste=0
 
       if (i===0){
         inicio=this.fromDate.getTime()
@@ -326,14 +345,18 @@ export class IngresosEgresosComponent implements OnInit {
           }
           else{
 
-            this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
-            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+            ingresoEste=ingresoEste+this.arregloIngresos[j]
+            egresoEste=egresoEste+this.arregloEgresos[j]
 
           }
 
         }
-      }
-    }this.actualizarGraficos()
+      }if(i!=0){
+        this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+ingresoEste
+        this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+egresoEste}
+    }this.ingresosPorCategoria()
+    this.egresosPorCategoria()
+    this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
@@ -345,11 +368,15 @@ export class IngresosEgresosComponent implements OnInit {
     this.labels=[]
     let inicio=0;
     let fin=0;
+    let ingresoEste=0
+    let egresoEste=0
 
     for(let i = 0; i < cantidadAnos; i++){
 
       this.ingresosPorPeriodo[i]=0;
       this.egresosPorPeriodo[i]=0;
+      ingresoEste=0
+      egresoEste=0
       let inicioAno=new Date((this.fromDate.getFullYear()+i)+"-01-01 GMT -0500")
       let siguienteAno=new Date((this.fromDate.getFullYear()+i+1)+"-01-01 GMT -0500")
       if (i===0){
@@ -375,25 +402,25 @@ export class IngresosEgresosComponent implements OnInit {
           }
           else{
 
-            this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
-            this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+this.egresosPorPeriodo[i]+this.arregloEgresos[j]
-
+            ingresoEste=ingresoEste+this.arregloIngresos[j]
+            egresoEste=egresoEste+this.arregloEgresos[j]
           }
 
         }   
-      }
-    }
+      }if(i!=0){
+        this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i-1]+ingresoEste
+        this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i-1]+egresoEste}
+    }this.ingresosPorCategoria()
+    this.egresosPorCategoria()
     this.actualizarGraficos()
     this.calcularIngresosEgresos()
   }
 
   public calcularIngresosEgresos(){
-    this.sumaIngresos=0
-    this.sumaEgresos=0
-    for(let i = 0; i < this.labels.length; i++){
-      this.sumaIngresos=this.sumaIngresos+this.ingresosPorPeriodo[i]
-      this.sumaEgresos=this.sumaEgresos+this.egresosPorPeriodo[i]
-    }
+
+      this.sumaIngresos=this.ingresosPorPeriodo[this.ingresosPorPeriodo.length-1]
+      this.sumaEgresos=this.egresosPorPeriodo[this.egresosPorPeriodo.length-1]
+    
   }
 
   generarGrafico(){   
@@ -408,7 +435,6 @@ export class IngresosEgresosComponent implements OnInit {
             backgroundColor: "#5BCE60",
             borderColor:"#5BCE60",
             fill: "false",
-            steppedLine: 'middle',
           },
           {
             
@@ -417,13 +443,12 @@ export class IngresosEgresosComponent implements OnInit {
             backgroundColor:"#E3633D",
             borderColor:"#E3633D",
             fill: "false",
-            steppedLine: 'middle',
           },
         ]
       },
       options: {
         title:{
-            text:"Ingresos vs egresos",
+            text:"Ingresos vs Egresos",
             display:true
         }
       }  
@@ -491,11 +516,12 @@ public crearCategoriaEgresos(){
 }
 
 public ingresosPorCategoria(){
-
-  for(let i = 0; i < this.labels.length; i++){
+  let inicio=this.fromDate.getTime();
+  let fin=this.toDate.getTime();
+  for(let i = 0; i < this.arregloIngresos.length; i++){
     for(let j = 0; j < this.categoriasIngresos.length; j++){
       if(i===0){this.agrupadoCategoriasIngresos[j]=0;}
-      if(this.arregloCategorias[i]===this.categoriasIngresos[j]){
+      if(this.arregloCategorias[i]===this.categoriasIngresos[j] && inicio<=this.arregloFechas[i] && this.arregloFechas[i]<=fin && this.arregloTipos[i]==="Real"){
         this.agrupadoCategoriasIngresos[j]=this.agrupadoCategoriasIngresos[j]+this.arregloIngresos[i]
         if(i!=0){break}
       }
@@ -505,10 +531,12 @@ public ingresosPorCategoria(){
 
 public egresosPorCategoria(){
 
+  let inicio=this.fromDate.getTime();
+  let fin=this.toDate.getTime();
   for(let i = 0; i < this.arregloEgresos.length; i++){
     for(let j = 0; j < this.categoriasEgresos.length; j++){
       if(i===0){this.agrupadoCategoriasEgresos[j]=0;}
-      if(this.arregloCategorias[i]===this.categoriasEgresos[j]){
+      if(this.arregloCategorias[i]===this.categoriasEgresos[j] && inicio<=this.arregloFechas[i] && this.arregloFechas[i]<=fin && this.arregloTipos[i]==="Real"){
         this.agrupadoCategoriasEgresos[j]=this.agrupadoCategoriasEgresos[j]+this.arregloEgresos[i]
         if(i!=0){break}
       }
@@ -554,7 +582,7 @@ public categoriasGraf(){
       },
       options: {
         title:{
-            text:"Ingresos por Categoría",
+            text:this.titulo,
             display:true
         }
       }  
@@ -596,7 +624,9 @@ public categoriasGraf(){
     this.graficoObj.update()
     this.pieIngresos.data.labels=this.categoriasGrafico
     this.pieIngresos.data.datasets[0].data=this.agrupadoCategoriasGraf
+    this.pieIngresos.options.title.text=this.titulo
     this.pieIngresos.update()
+    
   }
 
 

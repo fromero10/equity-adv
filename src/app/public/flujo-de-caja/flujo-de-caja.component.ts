@@ -317,6 +317,15 @@ export class FlujoDeCajaComponent implements OnInit {
         title:{
             text:"Ingresos vs egresos",
             display:true
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                return value.toLocaleString("en-US",{style:"currency", currency:"USD"});
+            }
+            }
+          }]
         }
       }  
     })
@@ -496,6 +505,21 @@ public crearMetodos(){
         title:{
             text:"Real vs presupuesto",
             display:true
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              userCallback: function(value, index, values) {
+                // Convert the number to a string and splite the string every 3 charaters from the end
+                value = value.toString();
+                value = value.split(/(?=(?:...)*$)/);
+    
+                // Convert the array to a string and format the output
+                value = value.join(',');
+                return '$' + value;
+            }
+            }
+          }]
         }
       }  
     })
@@ -529,6 +553,21 @@ public crearMetodos(){
         title:{
             text:"Evolución",
             display:false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              userCallback: function(value, index, values) {
+                // Convert the number to a string and splite the string every 3 charaters from the end
+                value = value.toString();
+                value = value.split(/(?=(?:...)*$)/);
+    
+                // Convert the array to a string and format the output
+                value = value.join(',');
+                return '$' + value;
+            }
+            }
+          }]
         }
       }  
     })
@@ -825,8 +864,30 @@ public crearMetodos(){
         this.ingresosPorCatPorPeriodo.push(x)
 
       }
+      for(let j = 0 ; j < this.categoriasEgresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let dia = i
+
+        for(let k = 0; k < this.arregloEgresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasEgresos[j]){
+
+            valor = valor +this.arregloEgresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: dia
+        }
+        this.egresosPorCatPorPeriodo.push(x)
+      }
     }console.log(this.ingresosPorCatPorPeriodo)
     this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    this.arreglinho2=this.crearArregloPorPeriodo(this.egresosPorCatPorPeriodo)
     console.log(this.arreglinho)
 
   }
@@ -896,7 +957,7 @@ public crearMetodos(){
         }
         
 
-      }
+      }console.log(inicioFecha)
     }
     this.actualizarGraficos();
     this.calcularIngresosEgresos();
@@ -908,13 +969,14 @@ public crearMetodos(){
 
     this.ingresosPorCatPorPeriodo=[]
     this.egresosPorCatPorPeriodo=[]
+    let inicio=0
+    let fin=0
 
     let cantidadMeses=(this.toDate.getFullYear()-this.fromDate.getFullYear())*12+this.toDate.getMonth()-this.fromDate.getMonth()+1
 
     for(let i = 0; i < cantidadMeses; i++){
 
-      let inicio=0
-      let fin=0
+
       if (i===0){
         inicio=this.fromDate.getTime()
       }
@@ -932,12 +994,14 @@ public crearMetodos(){
         let valor = 0
         let cat = j
         let mes = i
+        let contador=0
 
         for(let k = 0; k < this.arregloIngresos.length; k++){
 
           if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasIngresos[j]){
 
             valor = valor +this.arregloIngresos[k]
+            contador++
           }
         } 
 
@@ -947,11 +1011,35 @@ public crearMetodos(){
           periodo: mes
         }
         this.ingresosPorCatPorPeriodo.push(x)
+        console.log(contador)
 
       }
-    }console.log(this.ingresosPorCatPorPeriodo)
+      for(let j = 0 ; j < this.categoriasEgresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let dia = i
+
+        for(let k = 0; k < this.arregloEgresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasEgresos[j]){
+
+            valor = valor +this.arregloEgresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: dia
+        }
+        this.egresosPorCatPorPeriodo.push(x)
+        
+      }console.log(inicioFecha)
+    }console.log(this.egresosPorCatPorPeriodo)
     this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
-    console.log(this.arreglinho)
+    this.arreglinho2=this.crearArregloPorPeriodo(this.egresosPorCatPorPeriodo)
+    console.log(this.arreglinho2)
 
   }
 
@@ -1073,8 +1161,30 @@ public crearMetodos(){
         this.ingresosPorCatPorPeriodo.push(x)
 
       }
+      for(let j = 0 ; j < this.categoriasEgresos.length; j++){
+
+        let valor = 0
+        let cat = j
+        let dia = i
+
+        for(let k = 0; k < this.arregloEgresos.length; k++){
+
+          if(inicio<=this.arregloFechas[k] && this.arregloFechas[k]<fin && this.arregloTipos[k]==="Real" && this.arregloCategorias[k]===this.categoriasEgresos[j]){
+
+            valor = valor +this.arregloEgresos[k]
+          }
+        } 
+
+        let x = {
+          categoria: cat,
+          ingreso : valor,
+          periodo: dia
+        }
+        this.egresosPorCatPorPeriodo.push(x)
+      }
     }console.log(this.ingresosPorCatPorPeriodo)
     this.arreglinho=this.crearArregloPorPeriodo(this.ingresosPorCatPorPeriodo)
+    this.arreglinho2=this.crearArregloPorPeriodo(this.egresosPorCatPorPeriodo)
     console.log(this.arreglinho)
 
   }

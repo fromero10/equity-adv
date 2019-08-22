@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from '../services/main.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-lista-datos',
@@ -25,6 +26,10 @@ datinhos=[]
     let dato = event.data;
     this.mainService.delete('api/flujo_de_caja/'+ dato._id).subscribe(res =>{
       console.log(res);
+      event.confirm.resolve()
+
+    
+    
     }) 
   }
 

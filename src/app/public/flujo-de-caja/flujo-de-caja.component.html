@@ -5,12 +5,9 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-2"></div>
+    <div class="col-sm-4"></div>
     <div class="col-sm-2">
       <button class="btn btn-azul" (click)="goToAgregarMovimiento()" style="cursor:pointer">Agregar movimiento</button>
-    </div>
-    <div class="col-sm-2">
-      <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
     </div>
     <div class="col-sm-2">
       <button class="btn btn-blanco" (click)="calendario=!calendario"
@@ -19,16 +16,10 @@
         style="position: absolute;z-index:100;size:100px"></nb-calendar-range>
     </div>
     <div class="col-sm-2">
-      <button class="btn btn-azul" (click)="goToImportarFlujo()" style="cursor:pointer">Importar datos</button>
+      <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
     </div>
     <div class="col-sm-2">
-      <div (click)="myFunction()" class="dropdown" style="padding: 0px; border-radius:.25rem">
-        <button class="btn btn-blanco" style="font-weight: bold; cursor:pointer">Escenario</button>
-        <div id="myDropdown" class="dropdown-content">
-          <a href="#">Base</a>
-          <a href="dashboard/agregar-escenario">Agregar escenario</a>
-        </div>
-      </div>
+      <button class="btn btn-azul" (click)="goToImportarFlujo()" style="cursor:pointer">Importar datos</button>
     </div>
   </div>
   <br>

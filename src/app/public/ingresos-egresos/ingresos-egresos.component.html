@@ -93,10 +93,10 @@
                       <div class="row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                          <button class="btn btn-blanco" (click)="mostrarIngresos=true;actualizarGraficos()" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? '#5BCE60':'white', 'background-color': mostrarIngresos? 'white':'#E3633D'}">Ingresos</button>
+                          <button class="btn btn-blanco" (click)="mostrarIngresos=true;titulo='Ingresos por categoría';actualizarGraficos()" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? '#5BCE60':'white', 'background-color': mostrarIngresos? 'white':'#E3633D'}">Ingresos</button>
                         </div>
                         <div class="col-sm-4">
-                          <button (click)="mostrarIngresos=false;actualizarGraficos()" class="btn btn-blanco" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? 'white':'#E3633D', 'background-color': mostrarIngresos? '#5BCE60':'white'}">Egresos</button>
+                          <button (click)="mostrarIngresos=false;titulo='Egresos por categoría';actualizarGraficos()" class="btn btn-blanco" style="border-color: white" [ngStyle]="{'color': mostrarIngresos? 'white':'#E3633D', 'background-color': mostrarIngresos? '#5BCE60':'white'}">Egresos</button>
                 
                               <!--<div *ngIf="calendario" class="col-sm-6">
                                   <dl-date-time-picker
