@@ -1,0 +1,17 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row" style="width: 100%; background:white; color: black; padding: 4px 12px; border-radius: 4px; margin-bottom: 5px; margin-left: 1px; font-size: 24px; line-height: 28px;">
+          <div class="col-sm-6" style="padding-top: 10px">LISTA ESTADOS FINANCIEROS</div>
+          <div class="col-sm-6">
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <ng2-smart-table [settings]="settings" [source]="datinhos" (editConfirm)="onActualizar($event)" (createConfirm)="onAgregar($event)"
+                      (deleteConfirm)="onEliminar($event)" (custom)="onVer($event)"></ng2-smart-table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

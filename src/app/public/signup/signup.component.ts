@@ -4,6 +4,9 @@ import {Router} from '@angular/router';
 import { Categoria } from './signup.categoria';
 import { subCategoria } from './singup.subcategoria';
 import { LoginComponent } from '../login/login.component';
+import {  AuthService } from '../services/auth.service';
+import { TheadFormRowComponent } from 'ng2-smart-table/lib/components/thead/rows/thead-form-row.component';
+import { MainService } from '../services/main.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,25 +19,40 @@ export class SignupComponent implements OnInit {
   etapa1=false
   etapa2=false
   etapa3=false
+  obj={}
+  user: any ={};
+  empresa={}
   categoriaSeleccionada: Categoria = new Categoria(1,'Categoria1')
   categorias: Categoria[]
   subCategorias: subCategoria[]
 
-  constructor(public router: Router) {
+  constructor(
+    public router: Router, 
+    private authService: AuthService,
+    private mainService: MainService
+    ) {
   }
 
   ngOnInit() {
     this.signupForm = new FormGroup({
-      'email': new FormControl(null,[Validators.required,Validators.email]),
-      'contrasena1' : new FormControl(null,Validators.required),
-      'contrasena2' : new FormControl(null,Validators.required),
-      'pais': new FormControl("Colombia"),
-      'nombreNegocio' : new FormControl(null,Validators.required),
-      'nit' : new FormControl(null,Validators.required),
+      'nombreEmpresa' : new FormControl(null,Validators.required),
+      'contactoNombre' : new FormControl(null,Validators.required),
+      'contactoTelefono' : new FormControl(null,Validators.required),
+      'contactoEmail': new FormControl(null,[Validators.required,Validators.email]),
+      'contactoCargo' : new FormControl(null,Validators.required),
+      'descripcion' : new FormControl(null,Validators.required),
       'categoriaNegocio' : new FormControl(null,Validators.required),
       'subCategoriaNegocio' : new FormControl(null,Validators.required),
+      'nombreUsuario' : new FormControl(null,Validators.required),
+      'apellido' : new FormControl(null,Validators.required),
+      'telefono' : new FormControl(null,Validators.required),
+      'emailUsuario': new FormControl(null,[Validators.required,Validators.email]),
+      'contrasena1' : new FormControl(null,[Validators.required,Validators.minLength(6)]),
+      'contrasena2' : new FormControl(null,[Validators.required, Validators.minLength(6)]),
+      'cargo': new FormControl(null,Validators.required),
+      'empresa' : new FormControl(null,Validators.required),
+      'tipo' : new FormControl(null,Validators.required),
       'email2': new FormControl(null,[Validators.required,Validators.email]),
-      'logoNegocio': new FormControl(null)
     });
     this.categorias = this.getCategorias()
 
@@ -69,7 +87,7 @@ export class SignupComponent implements OnInit {
 
   verificacion(){
     if (!this.etapa1){ 
-      if (this.signupForm.get('email').invalid || this.signupForm.get('contrasena1').invalid || this.signupForm.get('contrasena2').invalid){
+      if (this.signupForm.get('nombreEmpresa').invalid || this.signupForm.get('contactoNombre').invalid || this.signupForm.get('contactoTelefono').invalid || this.signupForm.get('contactoEmail').invalid || this.signupForm.get('contactoCargo').invalid || this.signupForm.get('descripcion').invalid|| this.signupForm.get('categoriaNegocio').invalid|| this.signupForm.get('subCategoriaNegocio').invalid){
           console.log("Error",this.router.url)
           return false
         } 
@@ -80,7 +98,7 @@ export class SignupComponent implements OnInit {
       }
     }
     else if(!this.etapa2){
-      if(this.signupForm.get('nombreNegocio').invalid || this.signupForm.get('nit').invalid || this.signupForm.get('categoriaNegocio').invalid || this.signupForm.get('subCategoriaNegocio').invalid)
+      if(this.signupForm.get('nombreUsuario').invalid || this.signupForm. get('apellido').invalid || this.signupForm.get('telefono').invalid || this.signupForm.get('emailUsuario').invalid || this.signupForm.get('contrasena1').invalid|| this.signupForm.get('contrasena2').invalid|| this.signupForm.get('cargo').invalid|| this.signupForm.get('tipo').invalid && (this.signupForm.get('contrasena1').value===this.signupForm.get('contrasena2').value))
       {
         console.log("Error2")
         return false
@@ -89,8 +107,44 @@ export class SignupComponent implements OnInit {
       console.log("Etapa2Success")
       this.etapa2=true
       this.router.navigate(['login'])
-     }
+      this.empresa={
+        nombre: this.signupForm.get('nombreEmpresa').value,
+        contactoNombre: this.signupForm.get('contactoNombre').value,
+        contactoTelefono: this.signupForm.get('contactoTelefono').value,
+        contactoEmail: this.signupForm.get('contactoEmail').value,
+        contactoCargo: this.signupForm.get('contactoCargo').value,
+        descripcion: this.signupForm.get('descripcion').value,
+        categoria: this.signupForm.get('categoriaNegocio').value,
+        subcategoria: this.signupForm.get('subCategoriaNegocio').value,
+      }
+      this.user={
+        nombre: this.signupForm.get('nombreUsuario').value,
+        apellido: this.signupForm.get('apellido').value,
+        telefono: this.signupForm.get('telefono').value,
+        email: this.signupForm.get('emailUsuario').value,
+        password: this.signupForm.get('contrasena1').value,
+        cargo: this.signupForm.get('cargo').value,
+        tipo: this.signupForm.get('tipo').value,
+      }
+
+      this.mainService.post('api/empresa', this.empresa).subscribe(res1 =>{
+        console.log(res1);
+        if(res1._id){
+          this.user.empresa = res1._id;
+          this.authService.registerUser(this.user)
+          .subscribe(result => {
+            console.log(result)
+          
+          })
+        }
+
+      });
+      }
+    
+    
     }
+      
+                
     else if(!this.etapa3){
       console.log("Etapa3Success")
       this.etapa3=true
@@ -98,5 +152,5 @@ export class SignupComponent implements OnInit {
     else{
       this.router.navigate(['login'])
     }
-  }
-}
+  
+}}

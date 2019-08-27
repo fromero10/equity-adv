@@ -103,8 +103,9 @@ export class FlujoDeCajaComponent implements OnInit {
       this.hoyEnFecha=new Date(this.hoy)
       this.fromDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-01")
       this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-"+this.daysInMonth(this.hoyEnFecha.getMonth()+1,this.hoyEnFecha.getFullYear()))
-      this.rango="Seleccionar rango"
-      this.mainService.get('api/flujo_de_caja/empresa/5d5575040cc34a3ee86deb2c').subscribe(result =>{
+      this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
+      let usuario = JSON.parse(localStorage.getItem('usuario'));
+      this.mainService.get('api/flujo_de_caja/empresa/'+ usuario.empresa).subscribe(result =>{
         this.datinhos=result;
       this.crearArregloDatos()
       this.calcularSaldoInicial()
@@ -509,14 +510,8 @@ public crearMetodos(){
         scales: {
           yAxes: [{
             ticks: {
-              userCallback: function(value, index, values) {
-                // Convert the number to a string and splite the string every 3 charaters from the end
-                value = value.toString();
-                value = value.split(/(?=(?:...)*$)/);
-    
-                // Convert the array to a string and format the output
-                value = value.join(',');
-                return '$' + value;
+              callback: function(value, index, values) {
+                return value.toLocaleString("en-US",{style:"currency", currency:"USD"});
             }
             }
           }]
@@ -557,14 +552,8 @@ public crearMetodos(){
         scales: {
           yAxes: [{
             ticks: {
-              userCallback: function(value, index, values) {
-                // Convert the number to a string and splite the string every 3 charaters from the end
-                value = value.toString();
-                value = value.split(/(?=(?:...)*$)/);
-    
-                // Convert the array to a string and format the output
-                value = value.join(',');
-                return '$' + value;
+              callback: function(value, index, values) {
+                return value.toLocaleString("en-US",{style:"currency", currency:"USD"});
             }
             }
           }]
@@ -1194,6 +1183,8 @@ public crearMetodos(){
 } 
   public calcularSaldoInicial(){
     let encontrado=false
+    let fechaEncontrada: any
+    let donde=0
     let indices=[]
     let consecs=[]
     let inicio=this.fromDate.getTime()
@@ -1210,7 +1201,7 @@ public crearMetodos(){
         }console.log(indices)
       }
 
-      if(inicio<_.min(this.arregloFechas)){
+      else if(inicio<_.min(this.arregloFechas)){
         for(let i = 0; i < this.arregloFechas.length; i++){
           if(this.arregloFechas[i]===_.min(this.arregloFechas)){
             indices.push(i)
@@ -1222,14 +1213,27 @@ public crearMetodos(){
 
 
       else{
-
+        
+        let fechasOrdenado=_.sortBy(this.arregloFechas)
+          for(let i = fechasOrdenado.length-1; i > 0 ; i--){
+            if(fechasOrdenado[i]>inicio && fechasOrdenado[i-1]<=inicio){
+              encontrado=true
+              fechaEncontrada=fechasOrdenado[i-1]
+              inicio=fechaEncontrada
+              donde=i-1
+              break
+            }
+            
+          }
+          console.log(inicio,fechaEncontrada,donde)
+                 
+        
         for(let i = 0; i < this.arregloFechas.length; i++){
           if(this.arregloFechas[i]===inicio){
             indices.push(i)
             consecs.push(this.arregloConsecutivos[i])
-            encontrado=true
           }  
-        }
+        } 
       }
       if(encontrado){
         minimo=consecs[0]

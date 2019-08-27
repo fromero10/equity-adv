@@ -2,7 +2,7 @@
   <nb-card-header style="background-color: #333333">
     <div class="row">
       <div class="col-sm-5">
-        <label for="" style="color:white; font-weight: bold">Importar > Flujo de caja</label>
+        <label for="" style="color:white; font-weight: bold">Importar > Estados Financieros</label>
       </div>
       <div class="col-sm-1"></div>
       <div class="col-sm-6">
@@ -33,7 +33,7 @@
   </nb-card-header>
   <nb-card-body style="padding-top: 50px; padding-bottom: 50px">
     <div *ngIf="etapa===1" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
-      Importar flujo de caja
+      Importar estados finacieros
     </div>
     <div *ngIf="etapa===2" style="color:black; font: Calibri; font-size: 18px; font-weight: bold">
       Resumen de la importación:
@@ -49,18 +49,15 @@
         </div>
         <div class="row" style="padding-top:20px;border-top-style: solid;border-color: #CCCCCC;border-width: 0.2px">
           <div class="col-sm-1"><span style='font-size:30px;'>&#9989;</span> </div>
-          <div class="col-sm-10" style="font-weight: bold; font-size: 18px; padding-top: 8px">Se importaron {{data.length - 1}} movimientos exitosamente
+          <div class="col-sm-10" style="font-weight: bold; font-size: 18px; padding-top: 8px">Se importaron {{cols}} datos de estados financieros exitosamente
           </div>
         </div>
         <br>
-        <div *ngIf="error">
-          <p *ngFor="let errores of objetosError; let i=index">{{objetosError[i].descripcion}}</p>
-        </div>
       </div>
       <div *ngIf="etapa===1"><input type="radio" id="radio">
         <label for="radio" style="padding-left:10px">Importar un archivo .xlsx</label>
         <br>
-        <p>Importa el flujo de caja de este negocio en un archivo .xlsx</p>
+        <p>Importa los estados financieros de este negocio en un archivo .xlsx</p>
         <br><br>
         <p style="font-weight: bold">Sube tu archivo:</p>
         <div>

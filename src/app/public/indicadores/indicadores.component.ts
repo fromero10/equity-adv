@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import Chart from 'chart.js';
 import { NbThemeService } from '@nebular/theme';
+import { MainService } from '../services/main.service';
+import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-indicadores',
@@ -12,14 +15,66 @@ export class IndicadoresComponent implements OnInit {
   public fecha: any;
   spinerGrafica = true;
   data: any;
-
-  usuario: any[];
+  dato: any;
+  hoyEnFecha: any;
+  fromDate:Date;
+  toDate:Date;
+  calendario=false;
+  usuario: any={};
   reservas: any[];
-
-  @ViewChild('grafico1', { static: false }) grafico1: ElementRef;
-  @ViewChild('grafico2', { static: false }) grafico2: ElementRef;
-  @ViewChild('grafico3', { static: false }) grafico3: ElementRef;
-  @ViewChild('grafico4', { static: false }) grafico4: ElementRef;
+  datinhos=[]
+  labels=[]
+  liquidez=0
+  variacionLiquidez=0
+  rentabilidad=0
+  variacionRentabilidad=0
+  endeudamiento=0
+  variacionEndeudamiento=0
+  sistemaDupont=0
+  variacionSistemaDupont=0
+  agrupar=1
+  public rango: any;
+  monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
+  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  arregloRazonCorriente=[];
+  arregloPruebaAcida=[];
+  arregloCapitaldeTrabajo=[]
+  arregloRotacionCarteraDias=[]
+  arregloRotacionProveedoresDias=[]
+  arregloRotacionInventariosDias=[]
+  arregloCicloEfectivo=[]
+  arregloRotacionActivosFijos=[]
+  arregloRotacionActivosTotales=[]
+  arregloMargenesUB=[]
+  arregloMargenesEBITDA=[]
+  arregloMargenesEBIT=[]
+  arregloMargenesUN=[]
+  arregloRentabilidadDelPatrimonio=[]
+  arregloRentabilidadActivoTotal=[]
+  arregloRentabilidadOperacionalPatrimonio=[]
+  arregloRentabilidadOperacionalActivoTotal=[]
+  arregloEndeudamientoTotal=[]
+  arregloEndeudamientoFinanciero=[]
+  arregloROA=[]
+  arregloROE=[]
+  datinhosOrdenados: any=[]
+  chart5: any=[]
+  chart6: any=[]
+  chart7: any=[]
+  chart8: any=[]
+  chart9: any=[]
+  chart10: any=[]
+  chart11: any=[]
+  chart12: any=[]
+  chartData: any=[]
+  chartData5: any=[]
+  chartData6: any=[]
+  chartData7: any=[]
+  chartData8: any=[]
+  chartData9: any=[]
+  chartData10: any=[]
+  chartData11: any=[]
+  chartData12: any=[]
 
   @ViewChild('grafico5', { static: false }) grafico5: ElementRef;
   @ViewChild('grafico6', { static: false }) grafico6: ElementRef;
@@ -29,8 +84,9 @@ export class IndicadoresComponent implements OnInit {
   @ViewChild('grafico10', { static: false }) grafico10: ElementRef;
   @ViewChild('grafico11', { static: false }) grafico11: ElementRef;
   @ViewChild('grafico12', { static: false }) grafico12: ElementRef;
+  
 
-  constructor(private theme: NbThemeService) {
+  constructor(private theme: NbThemeService, private mainService: MainService, public router: Router) {
     let TIME_IN_MS = 1000;
     setTimeout(() => {
       this.spinerGrafica = false;
@@ -39,37 +95,312 @@ export class IndicadoresComponent implements OnInit {
 
   ngOnInit() {
     this.fecha = Date.now();
-    this.generarGrafico();
+    this.hoyEnFecha=new Date(this.fecha)
+    this.fromDate=new Date(this.hoyEnFecha.getFullYear()-1+"-"+"12-31")
+    this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+"12-31")
+    this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
+    this.cargueBase();
+    
+
   }
 
-  dataG2 = {
-    labels: ["2006", "2010", "2014", "2018"],
-    datasets: [
-      {
-        label: "My First dataset",
-        data: [65, 59, 80, 81]
-      },
-      {
-        label: "My second dataset",
-        data: [25, 49, 90, 101]
-      },
-      {
-        label: "My third dataset",
-        data: [25, 24, 48, 61]
-      },
-      {
-        label: "My fourth dataset",
-        data: [25, 30, 32, 40]
-      },
-    ]
-  };
+  public cargueBase(){
+    this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    this.mainService.get('api/periodo/empresa/' + this.usuario.empresa ).subscribe(result =>{
+      this.datinhos=result;
+      console.log(this.datinhos, this.usuario.empresa)
+      this.crearArregloDatos();
+      this.calculoIndicadores();  
+      this.generarGrafico();
+    })
+      
+  }
+
+  public crearArregloDatos(){
+    this.datinhosOrdenados=_.orderBy(this.datinhos, ['perido', 'fecha'], ['asc', 'asc']);
+  }
+
+  public calculoIndicadores(){
+    this.arregloRazonCorriente=[]
+    this.arregloPruebaAcida=[]
+    this.labels=[]
+    this.arregloCapitaldeTrabajo=[]
+    this.arregloRotacionCarteraDias=[]
+    this.arregloRotacionProveedoresDias=[]
+    this.arregloRotacionInventariosDias=[]
+    this.arregloCicloEfectivo=[]
+    this.arregloRotacionActivosFijos=[]
+    this.arregloRotacionActivosTotales=[]
+    this.arregloMargenesUB=[]
+    this.arregloMargenesEBITDA=[]
+    this.arregloMargenesEBIT=[]
+    this.arregloMargenesUN=[]
+    this.arregloRentabilidadDelPatrimonio=[]
+    this.arregloRentabilidadActivoTotal=[]
+    this.arregloRentabilidadOperacionalPatrimonio=[]
+    this.arregloRentabilidadOperacionalActivoTotal=[]
+    this.arregloEndeudamientoTotal=[]
+    this.arregloEndeudamientoFinanciero=[]
+    this.arregloROA=[]
+    this.arregloROE=[]
+    this.liquidez=0
+    this.variacionLiquidez=0
+    this.rentabilidad=0
+    this.variacionRentabilidad=0
+    this.endeudamiento=0
+    this.variacionEndeudamiento=0
+    this.sistemaDupont=0
+    this.variacionSistemaDupont=0
+    let inicio=0;
+    let fin=0;
+    let contar=0
+    if(this.agrupar===1){
+      
+      let cantidadMeses=(this.toDate.getFullYear()-this.fromDate.getFullYear())*12+this.toDate.getMonth()-this.fromDate.getMonth()+1
+      console.log('cantidad de meses', cantidadMeses)
+      for (let j = 0; j < cantidadMeses; j++){
+        if (j===0){
+          inicio=this.fromDate.getTime()
+        }
+        else {
+          inicio=fin+1
+        }
+        let inicioFecha=new Date(inicio)
+        fin=inicioFecha.getTime()+(1000*60*60*24)*(this.daysInMonth(inicioFecha.getMonth()+1,inicioFecha.getFullYear()) -inicioFecha.getDate()+1)-1
+          for (let i = 0; i < this.datinhosOrdenados.length; i++){
+            let fecha=(Date.parse(this.datinhosOrdenados[i].fecha)+this.hoyEnFecha.getTimezoneOffset()*60000)
+            
+            if(this.datinhosOrdenados[i].periodoDeLosEEFF===1 && fecha <= fin && fecha >= inicio){
+              console.log(inicio,fecha,fin)
+            /* Crear labels graficos */
+              this.labels[contar]=this.monthNames[inicioFecha.getMonth()]+" - "+inicioFecha.getFullYear();
+            /* Cálculo razón corriente */
+              this.arregloRazonCorriente[contar]=this.datinhosOrdenados[i].totalActivoCorriente/this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo prueba ácida */
+              this.arregloPruebaAcida[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].inventarios)/  this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo capital de trabajo (liquidez) */
+              this.arregloCapitaldeTrabajo[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].totalPasivoCorriente)/1000000;
+            /* Cálculo rotacion de cartera */
+              this.arregloRotacionCarteraDias[contar]=this.datinhosOrdenados[i].cuentasPorCobrar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/  this.datinhosOrdenados[i].ventas
+            /* Cálculo rotacion de proveedores */
+              this.arregloRotacionProveedoresDias[contar]=this.datinhosOrdenados[i].cuentasPorPagar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo rotacion de inventarios */
+              this.arregloRotacionInventariosDias[contar]=this.datinhosOrdenados[i].inventarios*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo ciclo de conversión de efectivo */
+              this.arregloCicloEfectivo[contar]=this.arregloRotacionCarteraDias[contar]+this.arregloRotacionInventariosDias[contar]  -this.arregloRotacionProveedoresDias[contar]
+            /* Cálculo rotacion de activos fijos */
+              this.arregloRotacionActivosFijos[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivoNoCorriente
+            /* Cálculo rotacion de activos totales */
+              this.arregloRotacionActivosTotales[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo margen utilidad bruta */
+              this.arregloMargenesUB[contar]=this.datinhosOrdenados[i].utilidadBruta/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBITDA */
+              this.arregloMargenesEBITDA[contar]=this.datinhosOrdenados[i].ebitda/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBIT */
+              this.arregloMargenesEBIT[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen utilidad neta */
+              this.arregloMargenesUN[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].ventas
+            /* Cálculo rentabilidad del patrimonio */
+              this.arregloRentabilidadDelPatrimonio[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad del activo total */
+              this.arregloRentabilidadActivoTotal[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo rentabilidad operacional del patrimonio */
+              this.arregloRentabilidadOperacionalPatrimonio[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad operacional del activo fijo */
+              this.arregloRentabilidadOperacionalActivoTotal[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento total */
+              this.arregloEndeudamientoTotal[contar]=this.datinhosOrdenados[i].totalPasivo/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento financiero */
+              this.arregloEndeudamientoFinanciero[contar]=this.datinhosOrdenados[i].obligacionesFinancieras/this.datinhosOrdenados[i].totalPasivo
+            /* Cálculo ROA */
+              this.arregloROA[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo ROE */
+              this.arregloROE[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+  
+              contar++
+            }
+          }    
+      }
+    }
+    else if(this.agrupar===3){
+      
+      let cantidadTrimestres=(this.toDate.getFullYear()-this.fromDate.getFullYear())*4+Math.ceil((this.toDate.getMonth()+1)/3)-Math.ceil((this.fromDate.getMonth()+1)/3)+1
+      console.log('cantidad de trimestres', cantidadTrimestres)
+      for (let j = 0; j < cantidadTrimestres; j++){
+        if (j===0){
+          inicio=this.fromDate.getTime()
+        }
+        else {
+          inicio=fin+1
+        }
+        let inicioFecha=new Date(inicio)
+        fin=inicioFecha.getTime()+(1000*60*60*24)*(this.daysInMonth(inicioFecha.getMonth()+1,inicioFecha.getFullYear()) -inicioFecha.getDate()+1)-1
+          for (let i = 0; i < this.datinhosOrdenados.length; i++){
+            let fecha=(Date.parse(this.datinhosOrdenados[i].fecha)+this.hoyEnFecha.getTimezoneOffset()*60000)
+            
+            if(this.datinhosOrdenados[i].periodoDeLosEEFF===1 && fecha <= fin && fecha >= inicio){
+              console.log(inicio,fecha,fin)
+            /* Crear labels graficos */
+              this.labels[contar]=this.monthNames[inicioFecha.getMonth()]+" - "+inicioFecha.getFullYear();
+            /* Cálculo razón corriente */
+              this.arregloRazonCorriente[contar]=this.datinhosOrdenados[i].totalActivoCorriente/this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo prueba ácida */
+              this.arregloPruebaAcida[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].inventarios)/  this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo capital de trabajo (liquidez) */
+              this.arregloCapitaldeTrabajo[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].totalPasivoCorriente)/1000000;
+            /* Cálculo rotacion de cartera */
+              this.arregloRotacionCarteraDias[contar]=this.datinhosOrdenados[i].cuentasPorCobrar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/  this.datinhosOrdenados[i].ventas
+            /* Cálculo rotacion de proveedores */
+              this.arregloRotacionProveedoresDias[contar]=this.datinhosOrdenados[i].cuentasPorPagar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo rotacion de inventarios */
+              this.arregloRotacionInventariosDias[contar]=this.datinhosOrdenados[i].inventarios*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo ciclo de conversión de efectivo */
+              this.arregloCicloEfectivo[contar]=this.arregloRotacionCarteraDias[contar]+this.arregloRotacionInventariosDias[contar]  -this.arregloRotacionProveedoresDias[contar]
+            /* Cálculo rotacion de activos fijos */
+              this.arregloRotacionActivosFijos[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivoNoCorriente
+            /* Cálculo rotacion de activos totales */
+              this.arregloRotacionActivosTotales[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo margen utilidad bruta */
+              this.arregloMargenesUB[contar]=this.datinhosOrdenados[i].utilidadBruta/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBITDA */
+              this.arregloMargenesEBITDA[contar]=this.datinhosOrdenados[i].ebitda/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBIT */
+              this.arregloMargenesEBIT[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen utilidad neta */
+              this.arregloMargenesUN[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].ventas
+            /* Cálculo rentabilidad del patrimonio */
+              this.arregloRentabilidadDelPatrimonio[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad del activo total */
+              this.arregloRentabilidadActivoTotal[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo rentabilidad operacional del patrimonio */
+              this.arregloRentabilidadOperacionalPatrimonio[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad operacional del activo fijo */
+              this.arregloRentabilidadOperacionalActivoTotal[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento total */
+              this.arregloEndeudamientoTotal[contar]=this.datinhosOrdenados[i].totalPasivo/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento financiero */
+              this.arregloEndeudamientoFinanciero[contar]=this.datinhosOrdenados[i].obligacionesFinancieras/this.datinhosOrdenados[i].totalPasivo
+            /* Cálculo ROA */
+              this.arregloROA[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo ROE */
+              this.arregloROE[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+  
+              contar++
+            }
+          }    
+      }
+    }
+
+    else if(this.agrupar===12){
+      
+      let cantidadAnos=(this.toDate.getFullYear()-this.fromDate.getFullYear())+1
+      console.log(cantidadAnos  )
+      for (let j = 0; j < cantidadAnos; j++){
+        let inicioAno=new Date((this.fromDate.getFullYear()+j)+"-01-01 GMT -0500")
+        let siguienteAno=new Date((this.fromDate.getFullYear()+j+1)+"-01-01 GMT -0500")
+        if (j===0){
+          inicio=this.fromDate.getTime()
+        }
+        else {
+          inicio=inicioAno.getTime()
+        }
+        fin=siguienteAno.getTime()-1
+        if(fin >= this.toDate.getTime()){
+        fin=this.toDate.getTime()+1
+        }
+        console.log(inicioAno,siguienteAno)
+          for (let i = 0; i < this.datinhosOrdenados.length; i++){
+            let fecha=(Date.parse(this.datinhosOrdenados[i].fecha))
+            if(this.datinhosOrdenados[i].periodoDeLosEEFF===12 && fecha < fin && fecha >= inicio){
+              console.log(inicio,fecha,fin)
+            /* Crear labels graficos */
+              this.labels[contar]=inicioAno.getFullYear()
+            /* Cálculo razón corriente */
+              this.arregloRazonCorriente[contar]=this.datinhosOrdenados[i].totalActivoCorriente/this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo prueba ácida */
+              this.arregloPruebaAcida[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].inventarios)/  this.datinhosOrdenados[i].totalPasivoCorriente;
+            /* Cálculo capital de trabajo (liquidez) */
+              this.arregloCapitaldeTrabajo[contar]=(this.datinhosOrdenados[i].totalActivoCorriente-this.datinhosOrdenados[i].totalPasivoCorriente)/1000000;
+            /* Cálculo rotacion de cartera */
+              this.arregloRotacionCarteraDias[contar]=this.datinhosOrdenados[i].cuentasPorCobrar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/  this.datinhosOrdenados[i].ventas
+            /* Cálculo rotacion de proveedores */
+              this.arregloRotacionProveedoresDias[contar]=this.datinhosOrdenados[i].cuentasPorPagar*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo rotacion de inventarios */
+              this.arregloRotacionInventariosDias[contar]=this.datinhosOrdenados[i].inventarios*30*this.datinhosOrdenados[i].periodoDeLosEEFF/ this.datinhosOrdenados[i].costoDeVentas
+            /* Cálculo ciclo de conversión de efectivo */
+              this.arregloCicloEfectivo[contar]=this.arregloRotacionCarteraDias[contar]+this.arregloRotacionInventariosDias[contar]  -this.arregloRotacionProveedoresDias[contar]
+            /* Cálculo rotacion de activos fijos */
+              this.arregloRotacionActivosFijos[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivoNoCorriente
+            /* Cálculo rotacion de activos totales */
+              this.arregloRotacionActivosTotales[contar]=this.datinhosOrdenados[i].ventas/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo margen utilidad bruta */
+              this.arregloMargenesUB[contar]=this.datinhosOrdenados[i].utilidadBruta/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBITDA */
+              this.arregloMargenesEBITDA[contar]=this.datinhosOrdenados[i].ebitda/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen EBIT */
+              this.arregloMargenesEBIT[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].ventas
+            /* Cálculo margen utilidad neta */
+              this.arregloMargenesUN[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].ventas
+            /* Cálculo rentabilidad del patrimonio */
+              this.arregloRentabilidadDelPatrimonio[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad del activo total */
+              this.arregloRentabilidadActivoTotal[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo rentabilidad operacional del patrimonio */
+              this.arregloRentabilidadOperacionalPatrimonio[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalPatrimonio
+            /* Cálculo rentabilidad operacional del activo fijo */
+              this.arregloRentabilidadOperacionalActivoTotal[contar]=this.datinhosOrdenados[i].ebit/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento total */
+              this.arregloEndeudamientoTotal[contar]=this.datinhosOrdenados[i].totalPasivo/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo endeudamiento financiero */
+              this.arregloEndeudamientoFinanciero[contar]=this.datinhosOrdenados[i].obligacionesFinancieras/this.datinhosOrdenados[i].totalPasivo
+            /* Cálculo ROA */
+              this.arregloROA[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalActivo
+            /* Cálculo ROE */
+              this.arregloROE[contar]=this.datinhosOrdenados[i].utilidadNeta/this.datinhosOrdenados[i].totalPatrimonio
+  
+              contar++
+            }
+          }    
+      }
+    }
+    
+    this.liquidez=this.arregloCapitaldeTrabajo[contar-1]
+    this.rentabilidad=this.arregloRentabilidadDelPatrimonio[contar-1]
+    this.endeudamiento=this.arregloEndeudamientoTotal[contar-1]
+    this.sistemaDupont=this.arregloROA[contar-1]
+    if(contar>1){
+      /* Cálculo variación de la liquidez */
+      this.variacionLiquidez=(this.arregloCapitaldeTrabajo[contar-1]-this.arregloCapitaldeTrabajo[contar-2])/this.arregloCapitaldeTrabajo[contar-2]
+      /* Cálculo variación de la rentabilidad */
+      this.variacionRentabilidad=(this.arregloRentabilidadDelPatrimonio[contar-1]-this.arregloRentabilidadDelPatrimonio[contar-2])/this.arregloRentabilidadDelPatrimonio[contar-2]
+      /* Cálculo variación del endeudamiento */
+      this.variacionEndeudamiento=(this.arregloEndeudamientoTotal[contar-1]-this.arregloEndeudamientoTotal[contar-2])/this.arregloEndeudamientoTotal[contar-2]
+      /* Cálculo variación del sistema dupont */
+      this.variacionSistemaDupont=(this.arregloROA[contar-1]-this.arregloROA[contar-2])/this.arregloROA[contar-2]
+    }
+    console.log(this.arregloRotacionActivosFijos)
+  }
+
+  getRangeDate(event) {
+
+    if (event.start && event.end) {
+      this.fromDate = new Date(event.start);
+      this.toDate = new Date(event.end);
+      this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()    
+      this.calculoIndicadores()
+      this.actualizarGraficos()
+    }
+  }
+
+  public daysInMonth (month, year) { 
+    return new Date(year, month, 0).getDate(); 
+  } 
+
+  public goToImportarEEFF(){
+    this.router.navigate(['dashboard/importar-eeff'])
+  }
+
   public generarGrafico() {
-
-    let graficoObj = this.grafico1.nativeElement.getContext('2d');
-    let graficoObj2 = this.grafico2.nativeElement.getContext('2d');
-    let graficoObj3 = this.grafico3.nativeElement.getContext('2d');
-    let graficoObj4 = this.grafico4.nativeElement.getContext('2d');
-
     let graficoObj5 = this.grafico5.nativeElement.getContext('2d');
     let graficoObj6 = this.grafico6.nativeElement.getContext('2d');
     let graficoObj7 = this.grafico7.nativeElement.getContext('2d');
@@ -80,11 +411,11 @@ export class IndicadoresComponent implements OnInit {
     let graficoObj12 = this.grafico12.nativeElement.getContext('2d');
 
 
-    var chartData = {
-      labels: this.dataG2.labels,
+    this.chartData = {
+      labels: this.labels,
       datasets: [{
-        label: 'Datos1',
-        data: this.dataG2.datasets[0].data,
+        label: 'Capital de trabajo',
+        data: this.arregloCapitaldeTrabajo,
         fill: false,
         backgroundColor: [
           'rgba(234, 208, 79, 1)'
@@ -93,138 +424,83 @@ export class IndicadoresComponent implements OnInit {
       }
       ]
     };
-    var chartDat2 = {
-      labels: this.dataG2.labels,
-      datasets: [
-        {
-          label: 'Datos 2',
-          data: this.dataG2.datasets[1].data,
-          fill: false,
-          backgroundColor: [
-            'rgba(91, 206, 96, 1)'
-          ],
-          borderColor: "#5BCE60",
-        }
-      ]
-    };
-    var chartData3 = {
-      labels: this.dataG2.labels,
-      datasets: [{
-        label: 'Datos1',
-        data: this.dataG2.datasets[2].data,
-        fill: false,
-        backgroundColor: [
-          'rgba(227, 99, 61, 1)'
-        ],
-        borderColor: "#E3633D",
-      }
-      ]
-    };
-    var chartData4 = {
-      labels: this.dataG2.labels,
-      datasets: [{
-        label: 'Datos1',
-        data: this.dataG2.datasets[3].data,
-        fill: false,
-        backgroundColor: [
-          'rgba(177, 42, 188, 1)'
-        ],
-        borderColor: "#B12ABC",
-      }
-      ]
-    };
-    var chartData5 = {
-      labels: this.dataG2.labels,
+
+    this.chartData5 = {
+      labels: this.labels,
       datasets: [{
         label: 'Razón corriente',
-        data: this.dataG2.datasets[0].data,
+        data: this.arregloRazonCorriente,
         fill: false,
-        backgroundColor: [
-          'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)'
-        ],
+        backgroundColor: 'rgba(234, 208, 79, 1)',
         borderColor: "#EAD04F",
       },
       {
         label: 'Prueba ácida',
-        data: this.dataG2.datasets[1].data,
+        data: this.arregloPruebaAcida,
         fill: false,
-        backgroundColor: [
-          'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)'
-        ],
+        backgroundColor: 'rgba(177, 42, 188, 1)',
         borderColor: "#B12ABC",
       },
       ]
     };
 
-    var chartData7 = {
-      labels: this.dataG2.labels,
+    this.chartData7 = {
+      labels: this.labels,
       datasets: [{
-        label: 'Variable',
-        data: this.dataG2.datasets[0].data,
+        label: 'Cartera',
+        data: this.arregloRotacionCarteraDias,
         fill: false,
-        backgroundColor: [
-          'rgba(108, 108, 108, 1)', 'rgba(108, 108, 108, 1)', 'rgba(108, 108, 108, 1)', 'rgba(108, 108, 108, 1)'
-        ],
+        backgroundColor:'rgba(108, 108, 108, 1)',
         borderColor: "#6C6C6C",
       },
       {
-        label: 'Variable',
-        data: this.dataG2.datasets[1].data,
+        label: 'Proveedores',
+        data: this.arregloRotacionProveedoresDias,
         fill: false,
-        backgroundColor: [
-          'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)'
-        ],
+        backgroundColor: 'rgba(95, 185, 255, 1)',
         borderColor: "#5FB9FF",
       },
       {
-        label: 'Variable',
-        data: this.dataG2.datasets[2].data,
+        label: 'Inventarios',
+        data: this.arregloRotacionInventariosDias,
         fill: false,
-        backgroundColor: [
-          'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)'
-        ],
+        backgroundColor: 'rgba(146, 229, 131, 1)',
         borderColor: "#92E583",
       },
       {
-        label: 'Variable',
-        data: this.dataG2.datasets[3].data,
+        label: 'Ciclo de conversión de efectivo',
+        data: this.arregloCicloEfectivo,
         fill: false,
-        backgroundColor: [
-          'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)'
-        ],
+        backgroundColor:'rgba(237, 94, 94, 1)',
         borderColor: "#ED5E5E",
       },
       ]
     };
 
-    var chartData8 = {
-      labels: this.dataG2.labels,
+    this.chartData8 = {
+      labels: this.labels,
       datasets: [{
-        label: 'Flujo',
-        data: this.dataG2.datasets[0].data,
+        label: 'Fijos',
+        data: this.arregloRotacionActivosFijos,
         fill: false,
-        backgroundColor: [
-          'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)', 'rgba(95, 185, 255, 1)'
-        ],
+        backgroundColor: 'rgba(95, 185, 255, 1)',
         borderColor: "#5FB9FF",
       },
       {
         label: 'Total',
-        data: this.dataG2.datasets[1].data,
+        data: this.arregloRotacionActivosTotales,
         fill: false,
-        backgroundColor: [
-          'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)', 'rgba(146, 229, 131, 1)'
-        ],
+        backgroundColor:'rgba(146, 229, 131, 1)',
         borderColor: "#92E583",
       },
       ]
     };
 
-    var chartData9 = {
-      labels: this.dataG2.labels,
+    this.chartData9 = {
+      labels: this.labels,
       datasets: [{
-        label: 'Datos 2',
-        data: this.dataG2.datasets[0].data,
+        label: 'Margen utilidad bruta',
+        data: this.arregloMargenesUB,
         fill: false,
         backgroundColor: [
           'rgba(177, 42, 188, 1)'
@@ -232,8 +508,8 @@ export class IndicadoresComponent implements OnInit {
         borderColor: "#B12ABC",
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[1].data,
+        label: 'Margen EBITDA',
+        data: this.arregloMargenesEBITDA,
         fill: false,
         backgroundColor: [
           'rgba(91, 206, 96, 1)'
@@ -241,8 +517,8 @@ export class IndicadoresComponent implements OnInit {
         borderColor: "#5BCE60",
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[2].data,
+        label: 'Margen EBIT',
+        data: this.arregloMargenesEBIT,
         fill: false,
         backgroundColor: [
           'rgba(227, 99, 61, 1)'
@@ -250,8 +526,8 @@ export class IndicadoresComponent implements OnInit {
         borderColor: "#E3633D",
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[3].data,
+        label: 'Margen utilidad neta',
+        data: this.arregloMargenesUN,
         fill: false,
         backgroundColor: [
           'rgba(234, 208, 79, 1)'
@@ -261,11 +537,11 @@ export class IndicadoresComponent implements OnInit {
       ]
     };
 
-    var chartData10 = {
-      labels: this.dataG2.labels,
+    this.chartData10 = {
+      labels: this.labels,
       datasets: [{
-        label: 'Datos 2',
-        data: this.dataG2.datasets[0].data,
+        label: 'Rentabilidad del patrimonio',
+        data: this.arregloRentabilidadDelPatrimonio,
         fill: false,
         backgroundColor: [
           'rgba(51, 51, 51, 1)'
@@ -273,8 +549,8 @@ export class IndicadoresComponent implements OnInit {
         borderColor: "#333333",
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[1].data,
+        label: 'Rentabilidad del activo total',
+        data: this.arregloRentabilidadActivoTotal,
         fill: false,
         backgroundColor: [
           '#EAD04F'
@@ -282,17 +558,17 @@ export class IndicadoresComponent implements OnInit {
         borderColor: "#EAD04F",
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[2].data,
+        label: 'Rentabilidad operacional del patrimonio',
+        data: this.arregloRentabilidadOperacionalPatrimonio,
         fill: false,
         backgroundColor: [
           'rgba(61, 152, 222, 1)'
         ],
-        borderColor: "#3D98DE",
+        borderColor: 'rgba(61, 152, 222, 1)',
       },
       {
-        label: 'Datos 2',
-        data: this.dataG2.datasets[3].data,
+        label: 'Rentabilidad operacional del activo fijo',
+        data: this.arregloRentabilidadOperacionalActivoTotal,
         fill: false,
         backgroundColor: [
           'rgba(37, 144, 17, 1)'
@@ -302,150 +578,53 @@ export class IndicadoresComponent implements OnInit {
       ]
     };
 
-    var chartData11 = {
-      labels: this.dataG2.labels,
+    this.chartData11 = {
+      labels: this.labels,
       datasets: [
         {
-          label: 'Prueba ácida',
-          data: this.dataG2.datasets[1].data,
+          label: 'Endeudamiento total',
+          data: this.arregloEndeudamientoTotal,
           fill: false,
-          backgroundColor: [
-            'rgba(255, 173, 173, 1)', 'rgba(255, 173, 173, 1)', 'rgba(255, 173, 173, 1)', 'rgba(255, 173, 173, 1)'
-          ],
+          backgroundColor: 'rgba(255, 173, 173, 1)',
           borderColor: "#FFADAD",
         },
         {
-        label: 'Razón corriente',
-        data: this.dataG2.datasets[0].data,
+        label: 'Endeudamiento financiero',
+        data: this.arregloEndeudamientoFinanciero,
         fill: false,
-        backgroundColor: [
-          'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)', 'rgba(237, 94, 94, 1)'
-        ],
+        backgroundColor:'rgba(237, 94, 94, 1)',
         borderColor: "#ED5E5E",
       },
       
       ]
     };
 
-    var chartData12 = {
-      labels: this.dataG2.labels,
+    this.chartData12 = {
+      labels: this.labels,
       datasets: [
         {
-          label: 'Variable',
-          data: this.dataG2.datasets[1].data,
+          label: 'ROA',
+          data: this.arregloROA,
           fill: false,
-          backgroundColor: [
-            'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)', 'rgba(177, 42, 188, 1)'
-          ],
+          backgroundColor: 'rgba(177, 42, 188, 1)',
           borderColor: "#B12ABC",
         },
         {
-          label: 'Variable',
-          data: this.dataG2.datasets[0].data,
+          label: 'ROE',
+          data: this.arregloROE,
           fill: false,
-          backgroundColor: [
-            'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)', 'rgba(234, 208, 79, 1)'
-          ],
+          backgroundColor:'rgba(234, 208, 79, 1)',
           borderColor: "#EAD04F",
         },
 
       ]
     };
 
-    var chart = new Chart(
-      graficoObj,
-      {
-        "type": 'line',
-        "data": chartData,
-        "options": {
-          "legend": {
-            "display": false
-          },
-          "scales": {
-            "yAxes": [{
-              "display": false,
-              "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
-            }]
-          }
-        }
-      }
-    );
-    var chart2 = new Chart(
-      graficoObj2,
-      {
-        "type": 'line',
-        "data": chartDat2,
-        "options": {
-          "legend": {
-            "display": false
-          },
-          "scales": {
-            "yAxes": [{
-              "display": false,
-              "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
-            }]
-          }
-        }
-      }
-    );
-    var chart3 = new Chart(
-      graficoObj3,
-      {
-        "type": 'line',
-        "data": chartData3,
-        "options": {
-          "legend": {
-            "display": false
-          },
-          "scales": {
-            "yAxes": [{
-              "display": false,
-              "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
-            }]
-          }
-        }
-      }
-    );
-    var chart4 = new Chart(
-      graficoObj4,
-      {
-        "type": 'line',
-        "data": chartData4,
-        "options": {
-          "legend": {
-            "display": false
-          },
-          "scales": {
-            "yAxes": [{
-              "display": false,
-              "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
-            }]
-          }
-        }
-      }
-    );
-
-    var chart5 = new Chart(
+    this.chart5 = new Chart(
       graficoObj5,
       {
         "type": 'bar',
-        "data": chartData5,
+        "data": this.chartData5,
         "options": {
           "legend": {
             "display": true
@@ -454,20 +633,17 @@ export class IndicadoresComponent implements OnInit {
             "yAxes": [{
               "display": true,
               "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
               }
             }]
           }
         }
       }
     );
-    var char6 = new Chart(
+    this.chart6 = new Chart(
       graficoObj6,
       {
         "type": 'line',
-        "data": chartData,
+        "data": this.chartData,
         "options": {
           "legend": {
             "display": true
@@ -476,31 +652,29 @@ export class IndicadoresComponent implements OnInit {
             "yAxes": [{
               "display": true,
               "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
-            }]
+                  callback: function(value, index, values) {
+                  return value.toLocaleString("en-US",{style:"currency", currency:"USD"});
+                    }
+                    }
+                  }]
           }
         }
       }
     );
-    var char7 = new Chart(
+    this.chart7 = new Chart(
       graficoObj7,
       {
         "type": 'bar',
-        "data": chartData7,
+        "data": this.chartData7,
         "options": {
           "legend": {
-            "display": false
+            "display": true
           },
           "scales": {
             "yAxes": [{
               "display": true,
               "ticks": {
                 "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
               }
             }]
           }
@@ -508,11 +682,11 @@ export class IndicadoresComponent implements OnInit {
       }
     );
 
-    var chart8 = new Chart(
+    this.chart8 = new Chart(
       graficoObj8,
       {
         "type": 'bar',
-        "data": chartData8,
+        "data": this.chartData8,
         "options": {
           "legend": {
             "display": true
@@ -531,22 +705,19 @@ export class IndicadoresComponent implements OnInit {
       }
     );
 
-    var chart9 = new Chart(
+    this.chart9 = new Chart(
       graficoObj9,
       {
         "type": 'line',
-        "data": chartData9,
+        "data": this.chartData9,
         "options": {
           "legend": {
-            "display": false
+            "display": true
           },
           "scales": {
             "yAxes": [{
               "display": true,
               "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
               }
             }]
           }
@@ -554,22 +725,19 @@ export class IndicadoresComponent implements OnInit {
       }
     );
 
-    var chart10 = new Chart(
+    this.chart10 = new Chart(
       graficoObj10,
       {
         "type": 'line',
-        "data": chartData10,
+        "data": this.chartData10,
         "options": {
           "legend": {
-            "display": false
+            "display": true
           },
           "scales": {
             "yAxes": [{
               "display": true,
               "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
               }
             }]
           }
@@ -577,22 +745,19 @@ export class IndicadoresComponent implements OnInit {
       }
     );
 
-    var chart11 = new Chart(
+    this.chart11 = new Chart(
       graficoObj11,
       {
         "type": 'bar',
-        "data": chartData11,
+        "data": this.chartData11,
         "options": {
           "legend": {
-            "display": false
+            "display": true
           },
           "scales": {
             "yAxes": [{
               "display": true,
               "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
               }
             }]
           }
@@ -600,27 +765,70 @@ export class IndicadoresComponent implements OnInit {
       }
     );
 
-    var chart12 = new Chart(
+    this.chart12 = new Chart(
       graficoObj12,
       {
         "type": 'bar',
-        "data": chartData12,
+        "data": this.chartData12,
         "options": {
           "legend": {
-            "display": false
+            "display": true
           },
           "scales": {
             "yAxes": [{
               "display": true,
-              "ticks": {
-                "beginAtZero": true,
-                "stepValue": 10,
-                "stepSize": 10
-              }
             }]
           }
         }
       }
     );
+  }
+
+  public myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  public actualizarGraficos(){
+    this.chartData.labels=this.labels
+    this.chartData.datasets[0].data=this.arregloCapitaldeTrabajo
+    this.chartData5.labels=this.labels
+    this.chartData5.datasets[0].data=this.arregloRazonCorriente
+    this.chartData5.datasets[1].data=this.arregloPruebaAcida
+    this.chartData7.labels=this.labels
+    this.chartData7.datasets[0].data=this.arregloRotacionCarteraDias
+    this.chartData7.datasets[1].data=this.arregloRotacionProveedoresDias
+    this.chartData7.datasets[2].data=this.arregloRotacionInventariosDias
+    this.chartData7.datasets[3].data=this.arregloCicloEfectivo
+    this.chartData8.labels=this.labels
+    this.chartData8.datasets[0].data=this.arregloRotacionActivosFijos
+    this.chartData8.datasets[1].data=this.arregloRotacionActivosTotales
+    this.chartData9.labels=this.labels
+    this.chartData9.datasets[0].data=this.arregloMargenesUB
+    this.chartData9.datasets[1].data=this.arregloMargenesEBITDA
+    this.chartData9.datasets[2].data=this.arregloMargenesEBIT
+    this.chartData9.datasets[3].data=this.arregloMargenesUN
+    this.chartData10.labels=this.labels
+    this.chartData10.datasets[0].data=this.arregloRentabilidadDelPatrimonio
+    this.chartData10.datasets[1].data=this.arregloRentabilidadActivoTotal
+    this.chartData10.datasets[2].data=this.arregloRentabilidadOperacionalPatrimonio
+    this.chartData10.datasets[3].data=this.arregloRentabilidadOperacionalActivoTotal
+    this.chartData11.labels=this.labels
+    this.chartData11.datasets[0].data=this.arregloEndeudamientoTotal
+    this.chartData11.datasets[1].data=this.arregloEndeudamientoFinanciero
+    this.chartData12.labels=this.labels
+    this.chartData12.datasets[0].data=this.arregloROA
+    this.chartData12.datasets[1].data=this.arregloROE
+    this.chart5.update()
+    this.chart6.update()
+    this.chart7.update()
+    this.chart8.update()
+    this.chart9.update()
+    this.chart10.update()
+    this.chart11.update()
+    this.chart12.update()
+  }
+
+  public goToDatos(){
+    this.router.navigate(['dashboard/lista-datos-eeff'])
   }
 }

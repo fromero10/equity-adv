@@ -8,17 +8,19 @@ import * as _ from 'lodash';
   styleUrls: ['./lista-datos.component.scss']
 })
 export class ListaDatosComponent implements OnInit {
-
+usuario: any={}
   constructor(private mainService: MainService) { }
 
 datinhos=[]
 
   ngOnInit() {
     this.cargueBase();
+    
   }
 
   public cargueBase(){
-    this.mainService.get('api/flujo_de_caja/empresa/5d5575040cc34a3ee86deb2c').subscribe(result =>{
+    this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    this.mainService.get('api/flujo_de_caja/empresa/'+ this.usuario.empresa).subscribe(result =>{
       this.datinhos=result})
   }
 

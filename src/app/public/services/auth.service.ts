@@ -10,7 +10,7 @@ export class AuthService {
   public authToken: any;
   public user: any;
   public headers: Headers;
-  public baseUrl: string = "https://monedero.herokuapp.com/";
+  public baseUrl: string = "https://equity-advisors.herokuapp.com/";
   // public baseUrl: string = "http://localhost:8080/";
 ​
   constructor(public http: Http) {

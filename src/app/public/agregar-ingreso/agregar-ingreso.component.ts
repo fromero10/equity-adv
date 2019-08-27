@@ -161,6 +161,7 @@ export class AgregarIngresoComponent implements OnInit {
     let ing:number
     let egr:number
     let cate: string
+    let usuario = JSON.parse(localStorage.getItem('usuario'));
     if(this.formAgregarMovimiento.invalid){
       console.log("falla")
       this.verificar=true
@@ -185,7 +186,7 @@ export class AgregarIngresoComponent implements OnInit {
       }
  
       let x = {
-        empresa: "5d5575040cc34a3ee86deb2c",
+        empresa: usuario.empresa,
         consecutivo: "",
         descripcion: this.formAgregarMovimiento.get('descripcion').value,
         ingreso: ing,

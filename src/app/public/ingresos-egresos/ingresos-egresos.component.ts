@@ -73,8 +73,9 @@ export class IngresosEgresosComponent implements OnInit {
     this.fromDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-01")
     this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-"+this.daysInMonth(this.hoyEnFecha.getMonth()+1,this.hoyEnFecha.getFullYear()))
     this.rango="Seleccionar rango"
-    this.mainService.get('api/flujo_de_caja/empresa/5d5575040cc34a3ee86deb2c').subscribe(result =>{
-      this.datinhos=result;
+    let usuario = JSON.parse(localStorage.getItem('usuario'));
+      this.mainService.get('api/flujo_de_caja/empresa/'+ usuario.empresa).subscribe(result =>{
+        this.datinhos=result;
     this.crearArregloDatos();
     this.crearCategoriaIngresos();
     this.crearCategoriaEgresos();

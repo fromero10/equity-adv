@@ -1,19 +1,36 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
-      <label for="">Última Actualización: {{fecha | date: 'short'}}</label>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-6">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-9">
       <div class="row">
-        <div class="col-sm-6">
-          <button class="btn btn-azul">Importar datos</button>
-        </div>
-        <div class="col-sm-6">
-          <button class="btn btn-blanco">Este año 2019 <i class="fa fa-chevron-down" aria-hidden="true" ks
-              style="margin-left: 2px"></i></button>
+          <div class="col-sm-3">
+            <div (click)="myFunction()" class="dropdown">
+              <button class="dropbtn" >PERIODO</button>
+              <div id="myDropdown" class="dropdown-content">
+                <p style="margin:0; cursor:pointer" (click)="agrupar=1;calculoIndicadores();actualizarGraficos()">Mes</p><br>
+                <!-- <p style="margin:0; cursor:pointer" (click)="agrupar=3;calculoIndicadores();actualizarGraficos()">Trimestre</p><br> -->
+                <p style="margin:0; cursor:pointer" (click)="agrupar=12;calculoIndicadores();actualizarGraficos()">Año</p><br>
+              </div>
+            </div></div>
+          <div class="col-sm-3">
+              <button class="btn btn-blanco" (click)="calendario=!calendario"
+            style="font-weight: bold; cursor:pointer">{{rango}}</button>
+            </div>
+            <div class="col-sm-3">
+              <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
+            </div>
+        <div class="col-sm-3">
+          <button class="btn btn-azul" (click)="goToImportarEEFF()">Importar datos</button>
         </div>
       </div>
+      <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+              <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)"
+              style="position: absolute;z-index:100;size:100px" size="medium"></nb-calendar-range>
+          </div> 
+      </div>
+      
     </div>
   </div>
   <br>
@@ -22,57 +39,53 @@
     <div class="col-sm-3">
       <div class="card">
         <div class="row">
-          <div class="col-sm-4" style="margin: 0 auto">
+          <div class="col-sm-12" style="margin: 0 auto; text-align: center">
             <span class="titulo">Liquidez</span>
           </div>
         </div>
-        <h3 style="margin: 0 auto; font-weight: normal">44.0</h3>
-        <div class="col-sm-4" style="margin: 0 auto">
-          <span class="pequenho verde">+9.8%</span>
+        <h3 style="margin: 0 auto; font-weight: normal">{{liquidez | number:'1.1-2'}}</h3>
+        <div class="col-sm-12" style="margin: 0 auto; text-align:center">
+          <span [ngStyle]="{color: variacionLiquidez >= 0? '#5BCE60':'#E3633D'}">{{variacionLiquidez | percent}}</span>
         </div>
-        <canvas #grafico1 style="width: 100%; height: 100px;"></canvas>
       </div>
     </div>
     <div class="col-sm-3">
       <div class="card">
         <div class="row">
-          <div class="col-sm-6" style="margin: 0 auto">
+          <div class="col-sm-12" style="margin: 0 auto; text-align:center">
             <span class="titulo">Rentabilidad</span>
           </div>
         </div>
-        <h3 style="margin: 0 auto; font-weight: normal">13%</h3>
-        <div class="col-sm-4" style="margin: 0 auto">
-          <span class="pequenho rojo">-5.7%</span>
+        <h3 style="margin: 0 auto; font-weight: normal">{{rentabilidad | percent:'1.1-2'}}</h3>
+        <div class="col-sm-12" style="margin: 0 auto; text-align:center">
+          <span [ngStyle]="{color: variacionRentabilidad >= 0? '#5BCE60':'#E3633D'}">{{variacionRentabilidad | percent}}</span>
         </div>
-        <canvas #grafico2 style="width: 100%; height: 100px;"></canvas>
       </div>
     </div>
     <div class="col-sm-3">
       <div class="card">
         <div class="row">
-          <div class="col-sm-7" style="margin: 0 auto">
+          <div class="col-sm-12" style="margin: 0 auto; text-align:center">
             <span class="titulo">Endeudamiento</span>
           </div>
         </div>
-        <h3 style="margin: 0 auto; font-weight: normal">4%</h3>
-        <div class="col-sm-4" style="margin: 0 auto">
-          <span class="pequenho verde">+9.8%</span>
+        <h3 style="margin: 0 auto; font-weight: normal">{{endeudamiento | percent:'1.1-2'}}</h3>
+        <div class="col-sm-12" style="margin: 0 auto; text-align:center">
+          <span [ngStyle]="{color: variacionEndeudamiento >= 0? '#5BCE60':'#E3633D'}">{{variacionEndeudamiento | percent}}</span>
         </div>
-        <canvas #grafico3 style="width: 100%; height: 100px;"></canvas>
       </div>
     </div>
     <div class="col-sm-3">
       <div class="card">
         <div class="row">
-          <div class="col-sm-7" style="margin: 0 auto">
+          <div class="col-sm-12" style="margin: 0 auto; text-align:center">
             <span class="titulo">Sistema Dupont</span>
           </div>
         </div>
-        <h3 style="margin: 0 auto; font-weight: normal">15.85%</h3>
-        <div class="col-sm-4" style="margin: 0 auto">
-          <span class="pequenho verde">+7%</span>
+        <h3 style="margin: 0 auto; font-weight: normal">{{sistemaDupont | percent:'1.1-2'}}</h3>
+        <div class="col-sm-12" style="margin: 0 auto; text-align:center">
+          <span [ngStyle]="{color: variacionSistemaDupont >= 0? '#5BCE60':'#E3633D'}">{{variacionSistemaDupont | percent}}</span>
         </div>
-        <canvas #grafico4 style="width: 100%; height: 100px;"></canvas>
       </div>
     </div>
   </div>
@@ -84,7 +97,7 @@
           <p>Razón corriente y prueba ácida</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico5 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico5 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -94,7 +107,7 @@
           <p>Capital de trabajo</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico6 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico6 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -103,20 +116,20 @@
     <div class="col-sm-6">
       <nb-card [nbSpinner]="spinerGrafica" nbSpinnerStatus="success" nbSpinnerMessage="Cargando">
         <nb-card-header style="padding: 10px 0px 0px 25px ;">
-          <p>Rotaciones</p>
+          <p>Rotaciones (días)</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico7 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico7 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
     <div class="col-sm-6">
       <nb-card [nbSpinner]="spinerGrafica" nbSpinnerStatus="success" nbSpinnerMessage="Cargando">
         <nb-card-header style="padding: 10px 0px 0px 25px ;">
-          <p>Rotación de activos</p>
+          <p>Rotación de activos (días)</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico8 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico8 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -128,7 +141,7 @@
           <p>Márgenes de rentabilidad</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico9 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico9 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -138,7 +151,7 @@
           <p>ROA y ROE</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico10 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico10 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -150,7 +163,7 @@
           <p>Endeudamiento</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico11 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico11 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>
@@ -160,7 +173,7 @@
           <p>Sistema Dupont</p>
         </nb-card-header>
         <nb-card-body>
-          <canvas #grafico12 style="width: 100%; height: 200px;"></canvas>
+          <canvas #grafico12 style="width: 100%; height: 300px;"></canvas>
         </nb-card-body>
       </nb-card>
     </div>

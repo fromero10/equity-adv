@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AgregarCategoriaComponent } from './agregar-categoria.component';
+import { ImportarEeffComponent } from './importar-eeff.component';
 
-describe('AgregarCategoriaComponent', () => {
-  let component: AgregarCategoriaComponent;
-  let fixture: ComponentFixture<AgregarCategoriaComponent>;
+describe('ImportarEeffComponent', () => {
+  let component: ImportarEeffComponent;
+  let fixture: ComponentFixture<ImportarEeffComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AgregarCategoriaComponent ]
+      declarations: [ ImportarEeffComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AgregarCategoriaComponent);
+    fixture = TestBed.createComponent(ImportarEeffComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
