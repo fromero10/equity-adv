@@ -7,6 +7,7 @@ import { LoginComponent } from '../login/login.component';
 import {  AuthService } from '../services/auth.service';
 import { TheadFormRowComponent } from 'ng2-smart-table/lib/components/thead/rows/thead-form-row.component';
 import { MainService } from '../services/main.service';
+import { CloudinaryUploader, CloudinaryOptions } from 'ng2-cloudinary';
 
 @Component({
   selector: 'app-signup',
@@ -21,16 +22,25 @@ export class SignupComponent implements OnInit {
   etapa3=false
   obj={}
   user: any ={};
-  empresa={}
+  empresa:any={}
   categoriaSeleccionada: Categoria = new Categoria(1,'Categoria1')
   categorias: Categoria[]
   subCategorias: subCategoria[]
+  uploader: CloudinaryUploader = new CloudinaryUploader(
+    new CloudinaryOptions({ cloudName: 'hojrkhbaq', uploadPreset: 'aizkqx2x' })
+  );
 
   constructor(
     public router: Router, 
     private authService: AuthService,
     private mainService: MainService
     ) {
+      this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
+        let res: any = JSON.parse(response);
+        console.log(res.url);
+        this.empresa.imagen = res.url;
+        return { item, response, status, headers };
+      };
   }
 
   ngOnInit() {
@@ -85,6 +95,10 @@ export class SignupComponent implements OnInit {
     ];
   }
 
+  public upload() {
+    this.uploader.uploadAll();
+  }
+
   verificacion(){
     if (!this.etapa1){ 
       if (this.signupForm.get('nombreEmpresa').invalid || this.signupForm.get('contactoNombre').invalid || this.signupForm.get('contactoTelefono').invalid || this.signupForm.get('contactoEmail').invalid || this.signupForm.get('contactoCargo').invalid || this.signupForm.get('descripcion').invalid|| this.signupForm.get('categoriaNegocio').invalid|| this.signupForm.get('subCategoriaNegocio').invalid){
@@ -94,6 +108,7 @@ export class SignupComponent implements OnInit {
       else{
         console.log("etapa1Success")
         this.etapa1=true
+        this.upload()
         return null
       }
     }
@@ -116,6 +131,7 @@ export class SignupComponent implements OnInit {
         descripcion: this.signupForm.get('descripcion').value,
         categoria: this.signupForm.get('categoriaNegocio').value,
         subcategoria: this.signupForm.get('subCategoriaNegocio').value,
+        imagen: this.empresa.imagen,
       }
       this.user={
         nombre: this.signupForm.get('nombreUsuario').value,

@@ -86,7 +86,7 @@ export class ImportarEeffComponent implements OnInit {
   }
 
   goToFlujoDeCaja(){
-    this.router.navigate(['dashboard/flujo-de-caja'])
+    this.router.navigate(['dashboard/indicadores'])
   }
   avanzarEtapa(){
 

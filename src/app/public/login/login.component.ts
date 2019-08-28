@@ -41,24 +41,22 @@ export class LoginComponent implements OnInit {
       }
       this.authService.authenticateUser(this.user).subscribe(data=>{
         if(data.success){
+          let tipo =data.user.email;
+            let empresa = data.user.empresa
+            console.log(data);
+            obj.mainService.get('api/empresa/'+ empresa).subscribe(resu =>{
+                obj.authService.storeUserData(data.token, data.user);
+                obj.router.navigate(['dashboard/flujo-de-caja']);
+            })
           Swal.fire(
             'Éxito',
             'Se ha iniciado sesión con éxito.',
             'success'
-          ).then(function (result) {
-            let tipo =data.user.email;
-            let empresa = data.user.empresa
-            let resultado = result;
-            console.log(data);
-            obj.mainService.get('api/empresa/'+ empresa).subscribe(resu =>{
-                obj.router.navigate(['dashboard/flujo-de-caja']);
-                obj.authService.storeUserData(data.token, data.user);
-            })
-          });
+          )
           const login = this.frmLogin.value;
           console.log("Llega:", login);
+          
 
-          this.onLoginRedirect();
         } else {
           Swal.fire('Error',
             'No se ha podido iniciar sesión. Por favor intente de nuevo',
@@ -73,10 +71,6 @@ export class LoginComponent implements OnInit {
       mensaje,
       titulo,
       { position, status });
-  }
-
-  onLoginRedirect(): void {
-    this.router.navigate(['dashboard/flujo-de-caja']);
   }
 
   goToRegister(){

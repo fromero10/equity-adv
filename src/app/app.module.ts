@@ -33,11 +33,12 @@ import {
   NbCalendarRangeModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { FileUploadModule } from 'ng2-file-upload';
 import { ChartModule } from 'angular2-chartjs';
 import {NbMomentDateModule} from '@nebular/moment';
 import {NbDateFnsDateModule} from '@nebular/date-fns';
 import { HttpClientModule } from '@angular/common/http';
-
+import { Ng2CloudinaryModule } from 'ng2-cloudinary';
 import { HomeComponent } from './public/home/home.component';
 import { TransaccionesComponent } from './public/transacciones/transacciones.component';
 import { DashboardComponent } from './public/dashboard/dashboard.component';
@@ -117,7 +118,9 @@ import { ListaDatosEeffComponent } from './public/lista-datos-eeff/lista-datos-e
     DlDateTimePickerModule,
     DpDatePickerModule,
     NgMultiSelectDropDownModule.forRoot(),
-    MultiSelectModule
+    MultiSelectModule,
+    Ng2CloudinaryModule,
+    FileUploadModule
   ],
   providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService],
   bootstrap: [AppComponent]

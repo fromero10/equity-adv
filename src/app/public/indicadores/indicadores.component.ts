@@ -32,7 +32,7 @@ export class IndicadoresComponent implements OnInit {
   variacionEndeudamiento=0
   sistemaDupont=0
   variacionSistemaDupont=0
-  agrupar=1
+  agrupar=12
   public rango: any;
   monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
   "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
@@ -96,8 +96,8 @@ export class IndicadoresComponent implements OnInit {
   ngOnInit() {
     this.fecha = Date.now();
     this.hoyEnFecha=new Date(this.fecha)
-    this.fromDate=new Date(this.hoyEnFecha.getFullYear()-1+"-"+"12-31")
-    this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+"12-31")
+    this.fromDate=new Date(this.hoyEnFecha.getFullYear()-1+"-"+"12-31 GMT -0500")
+    this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+"12-31 GMT -0500")
     this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
     this.cargueBase();
     
@@ -298,19 +298,14 @@ export class IndicadoresComponent implements OnInit {
       for (let j = 0; j < cantidadAnos; j++){
         let inicioAno=new Date((this.fromDate.getFullYear()+j)+"-01-01 GMT -0500")
         let siguienteAno=new Date((this.fromDate.getFullYear()+j+1)+"-01-01 GMT -0500")
-        if (j===0){
-          inicio=this.fromDate.getTime()
-        }
-        else {
+        
           inicio=inicioAno.getTime()
-        }
-        fin=siguienteAno.getTime()-1
-        if(fin >= this.toDate.getTime()){
-        fin=this.toDate.getTime()+1
-        }
+        
+          fin=siguienteAno.getTime()-1
+        
         console.log(inicioAno,siguienteAno)
           for (let i = 0; i < this.datinhosOrdenados.length; i++){
-            let fecha=(Date.parse(this.datinhosOrdenados[i].fecha))
+            let fecha=(Date.parse(this.datinhosOrdenados[i].fecha)+this.hoyEnFecha.getTimezoneOffset()*60000)
             if(this.datinhosOrdenados[i].periodoDeLosEEFF===12 && fecha < fin && fecha >= inicio){
               console.log(inicio,fecha,fin)
             /* Crear labels graficos */
