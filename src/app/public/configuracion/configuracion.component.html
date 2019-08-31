@@ -8,7 +8,7 @@
     <i class='fa fa-edit'></i>Editar perfil</div>
     <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===3? 'bold':'normal'}" (click)="seleccion=3">
     <i class="fa fa-lock" ></i>Cambiar contraseña</div>
-    <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===4? 'bold':'normal'}" (click)="seleccion=4">
+    <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===4? 'bold':'normal'}" (click)="seleccion=4;cargarUsuarios()">
     <i class="fa fa-user"></i>Administrar usuarios</div>
     <div class="row" style="padding-bottom:25px;padding-top:25px;color:white; cursor: pointer;" [ngStyle]="{'font-weight': seleccion===5? 'bold':'normal'}" (click)="seleccion=5">
   <i class="fa fa-bell"></i>Alertas</div>
@@ -22,15 +22,14 @@
   <div class="row" style="margin-bottom:20px">
 <div class="col-sm-6" style="background-color: white; border-left: 20px solid #F5F5F5; padding:15px">
   <h4 style="margin-bottom:30px">Perfil</h4>
-  <p><label style="color:#A0A0A0">Nombre de negocio</label> <br>Subway</p>
-  <p><label style="color:#A0A0A0">Correo electrónico</label> <br>comercial@subway.com.co</p>
-  <p><label style="color:#A0A0A0">País</label> <br>Colombia</p>
-  <p><label style="color:#A0A0A0">Fecha de vinculación</label> <br>28 Ene, 2019</p>
+  <p><label style="color:#A0A0A0">Nombre de negocio</label> <br>{{empresa.nombre}}</p>
+  <p><label style="color:#A0A0A0">Correo electrónico</label> <br>{{empresa.contactoEmail}}</p>
+  <p><label style="color:#A0A0A0">Fecha de vinculación</label> <br>{{empresa.createdAt | slice:0:10}}</p>
 </div>
 <div class="col-sm-6" style="background-color: white; border-left: 20px solid #F5F5F5; padding:15px">
     <h4 style="margin-bottom:30px">Comercial</h4>
-    <p><label style="color:#A0A0A0">Categoría del negocio</label> <br>Alimentos y bebidas</p>
-    <p><label style="color:#A0A0A0">Subcategoría del negocio</label> <br>Comidas rápidas</p>
+    <p><label style="color:#A0A0A0">Categoría del negocio</label> <br>{{empresa.categoria}}</p>
+    <p><label style="color:#A0A0A0">Subcategoría del negocio</label> <br>{{empresa.subcategoria}}</p>
   </div>
 </div>
 <div class="row">
@@ -53,7 +52,7 @@
       <h4 style="margin-bottom:30px">Administrar usuarios</h4>
       <p> Los usuarios son las personas capaces de observar la información de tu negocio en la plataforma y así puedan tomar mejores decisiones de negocio como equipo.</p>
       <div class="row" style="padding-left: 15px; padding-right:15px; margin-bottom: 20px">
-      <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
+      <!-- <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
         <label for="" style="color:black; font-weight: bold; padding: 15px;margin-bottom: 15px; width: 100%;background-color: #F5F5F5">Nombre</label><br>
         <div style="padding-left:15px">
           <p>Diego Valencia</p>
@@ -70,12 +69,29 @@
       <div class="col-sm-4" style="padding:0px; border:1px solid #F5F5F5">
         <label for="" style="color:black; font-weight: bold; padding: 15px;margin-bottom: 15px; width: 100%;background-color: #F5F5F5">Rol</label><br>
         <div style="padding-left:15px">
-          <p >Administrador <button class="btn btn-azul">></button></p>
-          <p>Observador<button class="btn btn-azul">></button></p>
+          <p >Administrador <button class="btn btn-azul" style="cursor: pointer">></button></p>
+          <p>Observador<button class="btn btn-azul" style="cursor: pointer">></button></p>
         </div>
-      </div>
+      </div> -->
+      <div class="main-content">
+          <div class="container-fluid">
+              <div class="row" style="width: 100%; background:white; color: black; padding: 4px 12px; border-radius: 4px; margin-bottom: 5px; margin-left: 1px; font-size: 24px; line-height: 28px;">
+                  <div class="col-sm-6" style="padding-top: 10px">LISTADO USUARIOS</div>
+                  <div class="col-sm-6">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="card">
+                          <ng2-smart-table [settings]="settings" [source]="datinhos" (editConfirm)="onActualizar($event)" (createConfirm)="onAgregar($event)"
+                              (deleteConfirm)="onEliminar($event)" (custom)="onVer($event)"></ng2-smart-table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
     </div>
-    <button class="btn btn-azul2">Agregar usuario</button>
+    <button class="btn btn-azul2" style="cursor: pointer">Agregar usuario</button>
     </div>
     <div *ngIf="seleccion===5" style="padding:0px">
       <h4 style="margin-bottom:30px">Alertas</h4>
@@ -132,9 +148,10 @@
       <option value="flujoDeCaja">Arriendo Chicó</option>
     </select><br></div></div>
   </div>
-      <form [formGroup]="editarPerfilForm" (ngSubmit)="verificacionPerfil()">
+      
 <!--Formulario editar perfil-->
        <div *ngIf="seleccion===2" style="padding:0px">
+          <form [formGroup]="editarPerfilForm" (ngSubmit)="verificacionPerfil()">
       <label for="nombreNegocio" style="color:black">Nombre del negocio:</label>
       <div class="form-group">
         <input 
@@ -167,11 +184,10 @@
       <label for="telefono" style="color:black">Teléfono:</label>
       <div class="form-group">
         <input 
-          type="text" 
+          type="number" 
           id="telefono" 
           formControlName="telefono" 
-          class="form-control"
-          value="(305)-403-4932">
+          class="form-control">
       </div>
       <label for="email" style="color:black">Correo electrónico:</label>
       <div class="form-group">
@@ -179,21 +195,16 @@
           type="email" 
           id="email" 
           formControlName="email" 
-          class="form-control"
-          value="jorgitoempanadas@gmail.com">
+          class="form-control">
       </div>
-      <div class="form-group">
-        <label for="pais" style="color:black">Pais:</label>
-        <div class="form-group">
-          <select id="pais" class="form-control">
-            <option value="colombia">Colombia</option>
-            <option value="peru">Perú</option>
-          </select>
-        </div>
+      <div class="formGroup"> 
+        <button class="btn btn-azul2" style="cursor: pointer">Actualizar empresa</button>
       </div>
+    </form>
     </div>
 <!--Formulario cambiar contraseña-->
     <div *ngIf="seleccion===3" style="padding:0px">
+        <form [formGroup]="editarPerfilForm2" (ngSubmit)="verificacionPerfil2()">
       <label for="contrasenaActual" style="color:black">Contraseña actual:</label>
       <div class="form-group">
         <input 
@@ -218,8 +229,9 @@
           formControlName="confirmarContrasena" 
           class="form-control">
       </div>
+    </form>
     </div>
-  </form>
+  
 </div>
 </div>
 </div>

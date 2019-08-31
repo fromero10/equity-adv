@@ -52,10 +52,7 @@ export class LoginComponent implements OnInit {
             'Éxito',
             'Se ha iniciado sesión con éxito.',
             'success'
-          )
-          const login = this.frmLogin.value;
-          console.log("Llega:", login);
-          
+          )       
 
         } else {
           Swal.fire('Error',

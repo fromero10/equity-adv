@@ -17,27 +17,35 @@ import { ConfiguracionComponent } from './public/configuracion/configuracion.com
 import { ListaDatosComponent } from './public/lista-datos/lista-datos.component';
 import { ImportarEeffComponent } from './public/importar-eeff/importar-eeff.component';
 import { ListaDatosEeffComponent } from './public/lista-datos-eeff/lista-datos-eeff.component';
+import { AuthGuard } from './public/guards/auth.guard';
+import { CanActivate } from '@angular/router/src/utils/preactivation';
+import { LoggedInGuard } from './public/guards/logged-in.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: 'signup',
-    component: SignupComponent
+    component: SignupComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: 'recuperar-contrasena',
-    component: SignupComponent
+    component: SignupComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'home',

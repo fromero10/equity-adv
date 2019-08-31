@@ -60,6 +60,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ImportarEeffComponent } from './public/importar-eeff/importar-eeff.component';
 import { ListaDatosEeffComponent } from './public/lista-datos-eeff/lista-datos-eeff.component';
+import { AuthGuard } from './public/guards/auth.guard';
+import { LoggedInGuard } from './public/guards/logged-in.guard';
 
 
 @NgModule({
@@ -122,7 +124,7 @@ import { ListaDatosEeffComponent } from './public/lista-datos-eeff/lista-datos-e
     Ng2CloudinaryModule,
     FileUploadModule
   ],
-  providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService],
+  providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService, AuthGuard, LoggedInGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

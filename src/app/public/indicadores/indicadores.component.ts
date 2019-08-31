@@ -100,8 +100,6 @@ export class IndicadoresComponent implements OnInit {
     this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+"12-31 GMT -0500")
     this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
     this.cargueBase();
-    
-
   }
 
   public cargueBase(){

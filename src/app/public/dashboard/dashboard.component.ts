@@ -12,7 +12,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class DashboardComponent implements OnInit {
   logueado = false;
-  public usuarioActivo = { nombre: 'Subway', foto: '/assets/img/subway.png'};
+/*   public usuarioActivo = { nombre: 'Subway', foto: '/assets/img/subway.png'}; */
   empresa:any={}
   items = null;
   constructor(
@@ -31,9 +31,9 @@ export class DashboardComponent implements OnInit {
     console.log(usuario)
     this.mainService.get('api/empresa/'+ usuario.empresa).subscribe(result =>{
       this.empresa=result;
-    this.usuarioActivo.nombre=this.empresa.nombre
-    this.usuarioActivo.foto=this.empresa.imagen
-    console.log(this.usuarioActivo.nombre)
+/*     this.usuarioActivo.nombre=this.empresa.nombre
+    this.usuarioActivo.foto=this.empresa.imagen */
+/*     console.log(this.usuarioActivo.nombre) */
     })
   }
 
