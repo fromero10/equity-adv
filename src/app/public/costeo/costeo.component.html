@@ -1,70 +1,89 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <nb-card>
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                  <div class="col-sm-4">
+                      <button class="btn btn-azul" (click)="eliminarTodo()" style="cursor:pointer">Borrar Datos</button>
+                    </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-azul" (click)="goToDatos()" style="cursor:pointer">Ver Datos</button>
+                  </div>
+              <div class="col-sm-4">
+                <button class="btn btn-azul" (click)="goToImportarCosteo()" style="cursor:pointer">Importar datos</button>
+              </div>
+              </div>
+            </div>
+          </div>
+      <nb-card>  
         <nb-card-header style="padding: 10px 0px 0px 25px ;">
           <p>Rentabilidad</p>
         </nb-card-header>
         <nb-card-body style="padding: 40px">
-          <div class="row">
-            <p>Eje vertical</p>
+          <div class="row" style="margin-bottom: 20px">
+            <div class="col-sm-3">Eje vertical</div>
             <br>
-
-          </div>
+            <div class="col-sm-3">
+                <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Variables
+                  <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
+                </div></div>
+               
+                <div class="row"  *ngIf="forma" style="position: absolute;z-index:100;">
+                    <div class="col-sm-3"></div>
+                    <div style="background-color: white; width:100%;padding-left: 20px" class="col-sm-9">
+                      <p>Selecciona máximo 10 variables</p>
+                      <form [formGroup]="formVariables" (ngSubmit)="submit()">
+                        <label formArrayName="objetosVar"
+                          *ngFor="let order of formVariables.controls.objetosVar.controls; let i = index"
+                          style="width: 33%; font-family: Calibri;font-size:11px">
+                          <input type="checkbox" [formControlName]="i">
+                          {{objetosVar[i].name}}
+                        </label><br>
+                        <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                      </form>
+                    </div>
+                </div> 
           <div class="row">
-            <div class="col-sm-2">
-              <button class="btn btn-dark">Utilidad bruta</button>
-            </div>
-            <div class="col sm-10"></div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Ingresos</button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Gastos</button>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <p>Eje horizontal</p>
-
-          </div>
-          <div class="row">
-            <div class="col-sm-2">
-              <button class="btn btn-dark">Región <i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
+            <div class="col-sm-2" *ngFor="let variable of variablesSeleccionadas; let j = index" >
+              <button class="btn btn-blanco-sm" value="variablesSeleccionadas[j]" style="margin-bottom: 10px; cursor: pointer" [ngStyle]="{'background-color': variableVertical===variablesSeleccionadas[j]? 'black':'white',
+              'color': variableVertical===variablesSeleccionadas[j]? 'white':'black'}" (click)="variableVertical=variablesSeleccionadas[j]; verVariable()">{{variablesSeleccionadas[j]}}</button>
             </div>
           </div>
           <br>
-          <div class="row">
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Mes<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Cliente<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Producto<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Presupuesto<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Filtro<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-blanco-sm">Filtro<i class="fa fa-chevron-down" aria-hidden="true"
-                  style="margin-left: 2px"></i></button>
-            </div>
-
-          </div>
+          <div class="row" style="margin-bottom: 20px">
+              <div class="col-sm-3">Eje horizontal</div>
+              <br>
+              <div class="col-sm-3">
+                  <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtros
+                    <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
+                  </div></div>
+                 
+                  <div class="row"  *ngIf="forma2" style="position: absolute;z-index:100;width:100% ;">
+                      <div class="col-sm-3"></div>
+                      <div style="background-color: white; padding-left: 20px" class="col-sm-9">
+                        <p>Selecciona máximo 5 filtros</p>
+                        <form [formGroup]="formFiltros" (ngSubmit)="submit2()">
+                          <label formArrayName="objetosFil"
+                            *ngFor="let order of formFiltros.controls.objetosFil.controls; let i = index"
+                            style="width: 33%; font-family: Calibri;font-size:11px">
+                            <input type="checkbox" [formControlName]="i">
+                            {{objetosFil[i].name}}
+                          </label><br>
+                          <button style="font-family: Calibri;font-size:11px">Aplicar</button>
+                        </form>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-2" *ngFor="let filtro of filtrosSeleccionados; let j = index" >
+                        <button class="btn btn-blanco-sm" value="filtrosSeleccionados[j]" style="margin-bottom: 10px; cursor: pointer" [ngStyle]="{'background-color': filtroHorizontal===filtrosSeleccionados[j]? 'black':'white',
+                        'color': filtroHorizontal===filtrosSeleccionados[j]? 'white':'black'}" (click)="filtroHorizontal=filtrosSeleccionados[j]; verFiltro()">{{filtrosSeleccionados[j]}}</button>
+                      </div>
+                    </div>
+                    <br>
+                
           <canvas #grafico1 style="width: 100%; height: 300px;"></canvas>
 
         </nb-card-body>

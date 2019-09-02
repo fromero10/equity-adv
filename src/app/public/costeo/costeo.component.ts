@@ -1,6 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import Chart from 'chart.js';
+import { Router } from '@angular/router';
+import { MainService } from '../services/main.service';
+import { isNumber } from 'util';
+import { isNumeric } from 'rxjs/internal-compatibility';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-costeo',
@@ -14,8 +19,21 @@ export class CosteoComponent implements OnInit {
   spinerGrafica = true;
   data: any;
 
-  usuario: any[];
+  usuario: any={};
   reservas: any[];
+  datinhos: any=[];
+  variables: any=[];
+  filtros: any=[];
+  objetosVar: any=[];
+  objetosFil:any=[]
+  formVariables: FormGroup
+  formFiltros: FormGroup
+  variablesSeleccionadas=[];
+  filtrosSeleccionados=[]
+  variableVertical=0;
+  filtroHorizontal=0;
+  forma=false;
+  forma2=false
 
   @ViewChild('grafico1', { static: false }) grafico1: ElementRef;
   @ViewChild('grafico2', { static: false }) grafico2: ElementRef;
@@ -55,7 +73,7 @@ export class CosteoComponent implements OnInit {
       },
     ]
   }
-  constructor(private theme: NbThemeService) {
+  constructor(private theme: NbThemeService, private router: Router, public mainService: MainService, private formBuilder: FormBuilder) {
     let TIME_IN_MS = 3000;
     setTimeout(() => {
       this.spinerGrafica = false;
@@ -63,8 +81,133 @@ export class CosteoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cargueBase()
     this.generarGrafico()
     this.fecha = Date.now();
+  }
+
+  public goToImportarCosteo(){
+    this.router.navigate(['dashboard/importar-costeo'])
+  }
+
+  public cargueBase(){
+    this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    this.mainService.get('api/costeo/empresa/'+ this.usuario.empresa).subscribe(result =>{
+      this.datinhos=result
+    console.log(this.datinhos)
+    this.crearArregloDatos()
+    this.configurarFiltros()
+    })
+      
+  }
+
+  public crearArregloDatos(){
+    this.variables=[]
+    this.filtros=[]
+    this.filtros.push("Año","Mes","Factura")
+    for(var key in this.datinhos){
+      let dato = this.datinhos[key].key
+      let valor = this.datinhos[key].value
+      if(!this.estaEnArreglo(this.variables,dato) && isNumeric(valor)){
+        this.variables.push(dato)
+      }
+      if(!this.estaEnArreglo(this.filtros,dato) && !(isNumeric(valor))){
+        this.filtros.push(dato)
+      }
+    }
+    console.log(this.variables,this.filtros)
+  }
+
+    public estaEnArreglo(arreglo: any[], valor: any ){
+      for(let k = 0; k < arreglo.length; k++){
+        if(arreglo[k]===valor){
+          return true
+        }
+      }
+      return false
+    }
+  
+  public configurarFiltros(){
+    for(let i=0;i<this.variables.length;i++){
+      let x={
+        id: i, name:this.variables[i]
+      }
+      this.objetosVar.push(x)
+    }
+    this.formVariables = this.formBuilder.group({
+      objetosVar: new FormArray([])
+    });
+    this.addCheckboxes();
+    for(let i=0;i<this.filtros.length;i++){
+      let x={
+        id: i, name:this.filtros[i]
+      }
+      this.objetosFil.push(x)
+    }
+    this.formFiltros = this.formBuilder.group({
+      objetosFil: new FormArray([])
+    });
+    this.addCheckboxes2();
+  }
+  
+
+  public addCheckboxes() {
+    this.objetosVar.map((o, i) => {
+      const control = new FormControl(i>=0); // if first item set to true, else false
+      (this.formVariables.controls.objetosVar as FormArray).push(control);
+    });
+  }
+
+  public addCheckboxes2() {
+    this.objetosFil.map((o, i) => {
+      const control = new FormControl(i>=0); // if first item set to true, else false
+      (this.formFiltros.controls.objetosFil as FormArray).push(control);
+    });
+  }
+
+  public submit() {
+    const selectedOrderNamesV = this.formVariables.value.objetosVar
+      .map((v, i) => v ? this.objetosVar[i].name : null)
+      .filter(v => v !== null);
+    for(let i = 0; i < selectedOrderNamesV.length; i++){
+      if(i<10){
+        this.variablesSeleccionadas[i]=selectedOrderNamesV[i]
+      }
+      
+    }
+    
+    console.log(this.variablesSeleccionadas);
+  }
+
+  public submit2() {
+    const selectedOrderNamesF = this.formFiltros.value.objetosFil
+      .map((v, i) => v ? this.objetosFil[i].name : null)
+      .filter(v => v !== null);
+    for(let i = 0; i < selectedOrderNamesF.length; i++){
+      if(i<5){
+        this.filtrosSeleccionados[i]=selectedOrderNamesF[i]
+      }
+      
+    }
+    
+    console.log(this.filtrosSeleccionados);
+  }
+
+  public eliminarTodo(){
+    for (let i=0; i<this.datinhos.length; i++){
+      this.mainService.delete('api/costeo/'+ this.datinhos[i]._id).subscribe(res =>{
+        console.log(res);
+    })
+
+    }
+  }
+
+  public verVariable(){
+    console.log(this.variableVertical)
+  }
+
+  public verFiltro(){
+    console.log(this.filtroHorizontal)
   }
 
   public generarGrafico() {

@@ -7,7 +7,7 @@
     width: 100%;
     font-size: 9px;
     padding: 10px!important;
-    
+    cursor: pointer;
 }
 .btn-dark{
     background-color: black;
@@ -15,6 +15,7 @@
     width: 100%;
     font-size: 9px;
     padding: 10px;
+    cursor: pointer;
 }
 .btn-dark-graf{
     background-color: black;
@@ -25,7 +26,8 @@
     padding: 10px;
     text-transform: none;
     border:0.5px solid grey;
-    border-radius: 5px
+    border-radius: 5px;
+    cursor: pointer;
 }
 .btn-blanco{
     background-color: white;
@@ -33,10 +35,12 @@
     width: 100%;
     font-size: 9px;
     padding: 10px;
+    cursor: pointer;
 }
 
 .btn-blanco:hover{
-    text-transform: none
+    text-transform: none;
+    cursor: pointer;
 }
 .btn-blanco-sm{
     background-color: white;
@@ -48,6 +52,7 @@
     border: 0.5px solid grey;
     text-transform: none;
     padding: 5px;
+    cursor: pointer;
 }
 .btn-blanco-sm-graf{
     background-color: white;
@@ -60,11 +65,14 @@
     border: 0.5px solid grey;
     text-transform: none;
     padding: 5px;
+    cursor: pointer;
 }
 .btn-blanco-sm:hover{
     color: black;
+    cursor: pointer;
 }.btn-blanco-sm-graf:hover{
     color: black;
+    cursor: pointer;
 }
 .valor-estadistica{
     font-size: 20px;
@@ -137,6 +145,7 @@ nb-card-header{
     padding: 10px;
     border:1px solid #3D98DE;
     width:100%;
+    cursor: pointer;
 }
 
 .btn-azul3:hover{

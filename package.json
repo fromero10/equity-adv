@@ -43,6 +43,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "nebular-icons": "^1.1.0",
+    "ng-click-outside": "^5.1.1",
     "ng-country-flags": "^1.0.7",
     "ng-multiselect-dropdown": "^0.2.3",
     "ng2-cloudinary": "^0.9.2",

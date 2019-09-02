@@ -1,11 +1,4 @@
-.btn-azul{
-    background-color: #3D98DE;
-    color: white;
-    width: 100%;
-    font-size: 9px;
-    padding: 10px!important;
-    
-}
+
 .btn-dark{
     background-color: black;
     color: white;
@@ -21,12 +14,29 @@
     font-size: 9px;
     padding: 10px;
 }
+.btn-azul{
+    background-color: #3D98DE;
+    color: white;
+    width: 100%;
+    font-size: 9px;
+    padding: 10px!important;
+    
+}
 .btn-blanco{
     background-color: white;
     color: black;
     width: 100%;
     font-size: 9px;
     padding: 10px;
+    height:100%
+}
+
+.btn-blanco:hover{
+    color:black
+}
+
+.btn-blanco::selection{
+    color:black
 }
 .btn-blanco-sm{
     background-color: white;
@@ -85,3 +95,5 @@ nb-card-header{
     font-weight: bold;
     font-size: 12px;
 }
+
+.btn{white-space:normal;}

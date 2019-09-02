@@ -306,8 +306,26 @@
      <br><br>
       <p style="font-weight: bold">Sube tu archivo:</p>
       <div>
-        <input type="file">
+        <input type="file" (change)="onFileChange($event)">
       </div>
+      <table class="table table-borderless table-dark">
+          <!-- <thead>
+            <tr>
+              <th *ngFor="let x of data[0]; let i = index" scope="col">
+                {{x}}
+              </th>
+            </tr>
+          </thead> -->
+          <tbody>
+            <tr *ngFor="let filas of data; let i = index" >
+              <td *ngFor="let columna of filas" style="width: 16%" >
+                <b *ngIf="i==0">{{columna}}</b>
+                <span *ngIf="i>0">{{columna}}</span>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
     </div>
     </div>
     </nb-card-body>

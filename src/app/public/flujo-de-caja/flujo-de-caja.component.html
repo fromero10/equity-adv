@@ -1,16 +1,12 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-4">
-      <label for="">Ultima Actualización: {{hoy | date: 'short'}}</label>
+    <div class="col-sm-4"><label for="">Última visualización: {{hoy | date: 'short'}}</label>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4"></div>
     <div class="col-sm-2">
       <button class="btn btn-azul" (click)="goToAgregarMovimiento()" style="cursor:pointer">Agregar movimiento</button>
     </div>
     <div class="col-sm-2">
-      <button class="btn btn-blanco" (click)="calendario=!calendario"
+      <button class="btn btn-blanco" (click)="calendario=!calendario" 
         style="font-weight: bold; cursor:pointer">{{rango}}</button>
       <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)"
         style="position: absolute;z-index:100;size:100px"></nb-calendar-range>
@@ -43,8 +39,6 @@
               <p class="valor-estadistica">{{saldoInicial| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
             </div>
-            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
-                class="fa fa-bar-chart grafica3"></i></div>
           </div>
         </nb-card-body>
       </nb-card>
@@ -52,7 +46,7 @@
     <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
       <nb-card>
         <nb-card-header class="header-valores">
-          <div class="row" (click)="goToIngresosEgresos()">
+          <div class="row">
             <div class="col-sm-6">
               <p class="titulo-tarjeta">Ingresos</p>
             </div>
@@ -61,13 +55,13 @@
           </div>
         </nb-card-header>
         <nb-card-body class="cuerpo-tarjeta">
-          <div class="row" style="padding-top: 0px" (click)="goToIngresosEgresos()">
+          <div class="row" style="padding-top: 0px">
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
               <p class="valor-estadistica">{{sumaIngresos| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica2"><i class="nb-arrow-thin-up"></i> 13.8%</p> -->
             </div>
-            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i
-                class="fa fa-bar-chart grafica2"></i></div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right;"><i
+                class="fa fa-bar-chart grafica2" (click)="goToIngresosEgresos()" style=" cursor: pointer;"></i></div>
           </div>
         </nb-card-body>
       </nb-card>
@@ -75,7 +69,7 @@
     <div class="col-md-3 col-xs-6 col-lg-3 col-xl-3">
       <nb-card>
         <nb-card-header>
-          <div class="row" (click)="goToIngresosEgresos()">
+          <div class="row">
             <div class="col-sm-6">
               <p class="titulo-tarjeta">Egresos</p>
             </div>
@@ -84,12 +78,12 @@
           </div>
         </nb-card-header>
         <nb-card-body class="cuerpo-tarjeta">
-          <div class="row" (click)="goToIngresosEgresos()">
+          <div class="row" >
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
               <p class="valor-estadistica">{{sumaEgresos| currency:'USD' :'symbol' : '1.0-0' }}</p>
               <!-- <p class="estadistica1"><i class="nb-arrow-thin-down"></i> 13.8%</p> -->
             </div>
-            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa  grafica1"></i>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12" style="text-align: right"><i class="fa fa-bar-chart grafica1" (click)="goToIngresosEgresos()" style="cursor: pointer"></i>
             </div>
           </div>
         </nb-card-body>
@@ -124,12 +118,12 @@
             <div class="col-sm-4">
               <button class="btn btn-dark-graf" (click)="cambiarGrafico1()"
                 [ngStyle]="{'background-color': !(mostrarGraf===1)? 'white':'black',
-                                                          'color': (mostrarGraf===1)? 'white':'black'}">Evolución</button>
+                                                          'color': (mostrarGraf===1)? 'white':'black'}"  style="cursor: pointer;">Evolución</button>
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico2()" [ngStyle]="{'background-color': !(mostrarGraf===2)? 'white':'black',
-                                                          'color': (mostrarGraf===2)? 'white':'black'}">Ingreso vs
+                                                          'color': (mostrarGraf===2)? 'white':'black'}" style="cursor: pointer;">Ingreso vs
                 egresos</button>
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico3()" [ngStyle]="{'background-color': !(mostrarGraf===3)? 'white':'black',
-                                                          'color': (mostrarGraf===3)? 'white':'black'}">vs
+                                                          'color': (mostrarGraf===3)? 'white':'black'}"  style="cursor: pointer;">vs
                 presupuesto</button>
             </div>
             <!-- <div class="col-sm-4"></div> -->
@@ -141,7 +135,7 @@
                           <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i>
                       </button>
                       <div *ngIf="escenarios"
-                      style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                      style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 10%">
                       <form [formGroup]="formEscenario" (ngSubmit)="submit4()">
                         <label formArrayName="objetosEscen"
                           *ngFor="let order of formEscenario.controls.objetosEscen.controls; let m = index"
@@ -158,7 +152,7 @@
                         <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i>
                     </button>
                     <div *ngIf="metodos"
-                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 10%">
                     <form [formGroup]="formMetodos" (ngSubmit)="submit3()">
                       <label formArrayName="objetosMetodos"
                         *ngFor="let order of formMetodos.controls.objetosMetodos.controls; let k = index"
@@ -174,14 +168,15 @@
                   <button class="btn btn-blanco-sm" (click)="forma=!forma" style="cursor: pointer">Filtrar por ingresos
                     <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
                   <div *ngIf="forma"
-                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 30%">
+                    style="position: absolute;z-index:100; background-color: white; width:100%;padding-left: 10%">
                     <form [formGroup]="formIngresos" (ngSubmit)="submit()">
                       <label formArrayName="objetosCatsI"
                         *ngFor="let order of formIngresos.controls.objetosCatsI.controls; let i = index"
-                        style="width: 100%; font-family: Calibri;font-size:11px">
+                        style="width: 100%; font-family: Calibri;font-size:11px"
+                        class="col-sm-4">
                         <input type="checkbox" [formControlName]="i">
                         {{objetosCatsI[i].name}}
-                      </label><br>
+                      </label>
                       <button style="font-family: Calibri;font-size:11px">Aplicar</button>
                     </form>
                   </div>
@@ -190,7 +185,7 @@
                   <button class="btn btn-blanco-sm" (click)="forma2=!forma2" style="cursor: pointer">Filtrar por egresos
                     <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left: 2px"></i></button>
                   <div *ngIf="forma2"
-                    style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 30%">
+                    style="position: absolute;z-index:100; background-color: white; width:100%; padding-left: 10%">
                     <form [formGroup]="formEgresos" (ngSubmit)="submit2()">
                       <label formArrayName="objetosCatsE"
                         *ngFor="let order of formEgresos.controls.objetosCatsE.controls; let j = index"
@@ -209,13 +204,13 @@
         <nb-card-body>
           <div class="col-sm-4">
             <button class="btn btn-dark-graf" (click)="agrupacionFechas=1;agruparPorDias()" [ngStyle]="{'background-color': !(agrupacionFechas===1)? 'white':'black',
-              'color': (agrupacionFechas===1)? 'white':'black'}" style="width:22%">Día</button>
+              'color': (agrupacionFechas===1)? 'white':'black'}" style="width:22%;cursor: pointer;">Día</button>
             <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=2;agruparPorSemanas()" [ngStyle]="{'background-color': !(agrupacionFechas===2)? 'white':'black',
-              'color': (agrupacionFechas===2)? 'white':'black'}" style="width:22%">Semana</button>
+              'color': (agrupacionFechas===2)? 'white':'black'}" style="width:22%;cursor: pointer;">Semana</button>
             <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=3; agruparPorMes()" [ngStyle]="{'background-color': !(agrupacionFechas===3)? 'white':'black',
-              'color': (agrupacionFechas===3)? 'white':'black'}" style="width:22%">Mes</button>
+              'color': (agrupacionFechas===3)? 'white':'black'}" style="width:22%;cursor: pointer;">Mes</button>
             <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=4; agruparPorAno()" [ngStyle]="{'background-color': !(agrupacionFechas===4)? 'white':'black',
-              'color': (agrupacionFechas===4)? 'white':'black'}" style="width:22%">Año</button>
+              'color': (agrupacionFechas===4)? 'white':'black'}" style="width:22%;cursor: pointer;">Año</button>
           </div>
           <canvas id="evolucionn" [ngStyle]="{'display': !(mostrarGraf===1)? 'none': 'flex'}"></canvas>
           <canvas id="IvsE" [ngStyle]="{'display': !(mostrarGraf===2)? 'none': 'flex'}"></canvas>

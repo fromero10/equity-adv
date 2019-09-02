@@ -62,6 +62,7 @@ import { ImportarEeffComponent } from './public/importar-eeff/importar-eeff.comp
 import { ListaDatosEeffComponent } from './public/lista-datos-eeff/lista-datos-eeff.component';
 import { AuthGuard } from './public/guards/auth.guard';
 import { LoggedInGuard } from './public/guards/logged-in.guard';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 @NgModule({
@@ -122,7 +123,8 @@ import { LoggedInGuard } from './public/guards/logged-in.guard';
     NgMultiSelectDropDownModule.forRoot(),
     MultiSelectModule,
     Ng2CloudinaryModule,
-    FileUploadModule
+    FileUploadModule,
+    ClickOutsideModule
   ],
   providers: [NbSidebarService, NbMenuService,FormsModule, MainService, AuthService, AuthGuard, LoggedInGuard],
   bootstrap: [AppComponent]
