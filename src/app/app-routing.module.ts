@@ -16,6 +16,7 @@ import { AgregarIngresoComponent } from './public/agregar-ingreso/agregar-ingres
 import { ImportarCosteoComponent } from './public/importar-costeo/importar-costeo.component';
 import { ConfiguracionComponent } from './public/configuracion/configuracion.component';
 import { AgregarCategoriaComponent } from './public/agregar-categoria/agregar-categoria.component';
+import { ListaDatosComponent } from './public/lista-datos/lista-datos.component';
 
 const routes: Routes = [
   {
@@ -89,6 +90,10 @@ const routes: Routes = [
       {
         path:'agregar-categoria',
         component: AgregarCategoriaComponent
+      },
+      {
+        path:'lista-datos',
+        component: ListaDatosComponent
       }
     ]
   }

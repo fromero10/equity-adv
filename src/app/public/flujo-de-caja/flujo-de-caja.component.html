@@ -3,11 +3,14 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-5">
-      <label for="">Ultima Actualización: {{fecha | date: 'short'}}</label>
+      <label for="">Ultima Actualización: {{hoy | date: 'short'}}</label>
     </div>
     <div class="col-sm-1"></div>
     <div class="col-sm-6">
       <div class="row">
+          <div class="col-sm-4">
+              <button class="btn btn-blanco" (click)="calendario=!calendario">Seleccionar rango</button>
+            <nb-calendar-range *ngIf="calendario" [range]="range" [showHeader]="false" (rangeChange)="getRangeDate($event)" style="position: absolute;z-index:100;size:100px"></nb-calendar-range></div>
         <div class="col-sm-4">
           <button class="btn btn-azul" (click)="goToImportarFlujo()">Importar datos</button>
         </div>
@@ -20,8 +23,7 @@
                 </div>
               </div>
         </div>
-        <div class="col-sm-4">
-              <dp-date-picker [(ngModel)]="selectedDate" style="font-size: 9px" [config]="datePickerConfig" theme="dp-material" placeholder="Seleccionar año"></dp-date-picker> </div>
+              <!-- <dp-date-picker [(ngModel)]="selectedDate" style="font-size: 9px" [config]="datePickerConfig" theme="dp-material" placeholder="Seleccionar año"></dp-date-picker> </div> -->
               <!--<div *ngIf="calendario" class="col-sm-6">
                   <dl-date-time-picker
                   startView="year"
@@ -139,7 +141,7 @@
         <nb-card-header>
           <div class="row">
             <div class="col-sm-4">
-              <button class="btn btn-dark-graf" (click)="cambiarGrafico1()" [ngStyle]="{'background-color': !(mostrarGraf===1)? 'white':'black',
+              <button class="btn btn-dark-graf" (click)="cambiarGrafico1(); generarGrafico()" [ngStyle]="{'background-color': !(mostrarGraf===1)? 'white':'black',
                                                           'color': (mostrarGraf===1)? 'white':'black'}">Evolución</button>
               <button class="btn btn-blanco-sm-graf" (click)="cambiarGrafico2()" [ngStyle]="{'background-color': !(mostrarGraf===2)? 'white':'black',
                                                           'color': (mostrarGraf===2)? 'white':'black'}">Ingreso vs egresos</button>
@@ -155,13 +157,20 @@
                 <div class="col-sm-6"><button class="btn btn-blanco-sm">Ingresos:Todos <i class="fa fa-chevron-down"
                       aria-hidden="true" style="margin-left: 2px"></i></button></div>
               </div>
-
+             
             </div>
           </div>
         </nb-card-header>
         <nb-card-body>
-          <div>
-            
+          <div class="col-sm-4">
+              <button class="btn btn-dark-graf" (click)="agrupacionFechas=1;agruparPorDias()" [ngStyle]="{'background-color': !(agrupacionFechas===1)? 'white':'black',
+              'color': (agrupacionFechas===1)? 'white':'black'}" style="width:22%">Día</button>
+              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=2" [ngStyle]="{'background-color': !(agrupacionFechas===2)? 'white':'black',
+              'color': (agrupacionFechas===2)? 'white':'black'}" style="width:22%">Semana</button>
+              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=3" [ngStyle]="{'background-color': !(agrupacionFechas===3)? 'white':'black',
+              'color': (agrupacionFechas===3)? 'white':'black'}" style="width:22%">Mes</button>
+              <button class="btn btn-blanco-sm-graf" (click)="agrupacionFechas=4" [ngStyle]="{'background-color': !(agrupacionFechas===4)? 'white':'black',
+              'color': (agrupacionFechas===4)? 'white':'black'}" style="width:22%">Año</button>
           </div>
           <canvas #grafico1 style="width: 100%; height: 300px;" [ngStyle]="{'display': !(mostrarGraf===1)? 'none': 'flex'}"></canvas>
           <canvas id="IvsE" [ngStyle]="{'display': !(mostrarGraf===2)? 'none': 'flex'}"></canvas>

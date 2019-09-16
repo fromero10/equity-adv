@@ -15,12 +15,15 @@ import { getLocaleDateTimeFormat } from '@angular/common';
 export class FlujoDeCajaComponent implements OnInit {
 
   public fecha: any;
+  public hoy: any;
+  hoyEnFecha: Date;
   calendario=false;
   spinerGrafica = true;
   data: any;
+  agrupacionFechas=1;
   mostrarGraf=1;
   dato:any;
-
+  min: Date;
   BarChart=[];
   GrafPresupuesto=[];
   usuario: any[];
@@ -35,12 +38,20 @@ export class FlujoDeCajaComponent implements OnInit {
   saldoInicial=0
   saldoFinal=0;
   categoriasIngresos=[];
+  fromDate:Date;
+  toDate:Date;
+  ingresosPorPeriodo=[];
+  egresosPorPeriodo=[];
+  saldosPorPeriodo=[];
+  labels=[];
 
   verdeAMostrar=0;
   rojoAMostrar=0;
 
 
   @ViewChild('grafico1', { static: false}) grafico1: ElementRef;
+
+  range: { start: any; end: any; };
   constructor(private theme: NbThemeService, public router: Router, private mainService: MainService) {
     let TIME_IN_MS = 3000;
     setTimeout( () => {
@@ -49,14 +60,19 @@ export class FlujoDeCajaComponent implements OnInit {
   }
 
   ngOnInit() {
-      
-      this.generarGrafico2()
-      this.generarGrafico3()
+/*       this.fromDate=Date.parse('2019-08-01');
+      this.toDate=Date.now(); */
+      this.hoy=Date.now();
+      this.hoyEnFecha=new Date(this.hoy)
+      this.fromDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-01")
+      this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-"+this.daysInMonth(this.hoyEnFecha.getMonth()+1,this.hoyEnFecha.getFullYear()))
+      this.agruparPorDias()
+      /* this.agruparPorDias(); */
       this.mainService.get('api/flujo_de_caja/empresa/5d5575040cc34a3ee86deb2c').subscribe(result =>{
         this.datinhos=result;
       this.crearArregloDatos()
-      this.generarGrafico()
       this.calcularIngresosEgresos()
+
       })
   }
 
@@ -64,17 +80,17 @@ export class FlujoDeCajaComponent implements OnInit {
     this.BarChart = new Chart('IvsE',{
       type:'bar',
       data:{
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: this.labels,
         datasets:[
           {
             label: "Ingresos",
-            data: [65, 59, 80, 81, 56, 55, 40],
+            data: this.ingresosPorPeriodo,
             backgroundColor: "#5BCE60",
           },
           {
             
             label: "Egresos",
-            data: [25, 49, 90, 101, 86, 15, 50],
+            data: this.egresosPorPeriodo,
             backgroundColor:"#E3633D",
           },
         ]
@@ -92,7 +108,7 @@ export class FlujoDeCajaComponent implements OnInit {
   public abrirCalendario() {
     this.calendario=true;
   }
-
+ 
   public crearArregloDatos(){
     /* for(let i = 0; i < this.datinhos.length; i++){ */
       for(var key in this.datinhos){
@@ -100,7 +116,8 @@ export class FlujoDeCajaComponent implements OnInit {
           this.dato=this.datinhos[key][key2]
           console.log(key2)
           if(key2==="fechaMovimiento"){
-            this.arregloFechas.push(this.dato)
+            this.fecha=Date.parse(this.dato)
+            this.arregloFechas.push(this.fecha)
           }
           else if(key2==="saldoBanco"){
             this.saldoBanco.push(this.dato)
@@ -116,7 +133,7 @@ export class FlujoDeCajaComponent implements OnInit {
         /* if(key==="saldoBanco"){
           this.labels.push(this.datinhos[key])
         } */
-    }console.log(this.arregloIngresos)
+    }console.log(this.arregloFechas)
     this.saldoInicial=this.saldoBanco[0]
   /* } */
 }
@@ -127,16 +144,17 @@ export class FlujoDeCajaComponent implements OnInit {
       this.sumaEgresos=this.sumaEgresos+this.arregloEgresos[i]
     }
     this.saldoFinal=this.saldoInicial+this.sumaIngresos-this.sumaEgresos
+    console.log(this.arregloIngresos,this.arregloEgresos)
   }
 
   public generarGrafico() {
 
     let graficoObj = this.grafico1.nativeElement.getContext('2d');
     var chartData = {
-      labels: this.arregloFechas,
+      labels: this.labels,
       datasets: [{
         label: 'Evolución',
-        data: this.saldoBanco,
+        data: this.saldosPorPeriodo,
         fill: true,
         backgroundColor: [
           '#F7F7F7'
@@ -221,4 +239,62 @@ export class FlujoDeCajaComponent implements OnInit {
     document.getElementById("myDropdown").classList.toggle("show");
   }
 
+  getRangeDate(event) {
+
+    if (event.start && event.end) {
+      this.fromDate = new Date(event.start);
+      this.toDate = new Date(event.end);
+      console.log(this.fromDate,this.toDate)
+      if(this.agrupacionFechas===1){
+        this.agruparPorDias()
+      }
+  }
+  
+  }
+
+  public agruparPorDias(){
+
+    let cantidadDias=(this.toDate.getTime()-this.fromDate.getTime())/(1000*60*60*24)+1
+    this.ingresosPorPeriodo=[]
+    this.egresosPorPeriodo=[]
+    this.saldosPorPeriodo=[]
+    this.labels=[]
+
+    for(let i = 0; i < cantidadDias; i++){
+
+      this.ingresosPorPeriodo[i]=0;
+      this.egresosPorPeriodo[i]=0;
+      this.saldosPorPeriodo[i]=0;
+      let inicio=this.fromDate.getTime()+i*(1000*60*60*24)
+      let dia=new Date(inicio)
+      let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24)
+      this.labels[i]=dia.getFullYear() + "-" + (dia.getMonth()+1)+ "-" + dia.getDate()
+
+      for(let j = 0 ; j < this.arregloIngresos.length; j++){
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin){
+
+          this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
+          this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+          this.saldosPorPeriodo[i]=this.saldoBanco[j]
+          break
+        }
+        else if(j===(this.arregloIngresos.length-1) && i > 0){
+          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]
+        }
+        else if(j===(this.arregloIngresos.length-1) && i === 0){
+          this.saldosPorPeriodo[i]=this.saldoBanco[i]
+        }
+
+      }
+    }this.generarGrafico();
+    this.generarGrafico2();
+    this.generarGrafico3();
+  }
+    
+  public daysInMonth (month, year) { 
+    return new Date(year, month, 0).getDate(); 
+} 
+  
+  
 }

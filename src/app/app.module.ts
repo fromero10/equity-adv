@@ -56,6 +56,7 @@ import { ConfiguracionComponent } from './public/configuracion/configuracion.com
 import { AgregarCategoriaComponent } from './public/agregar-categoria/agregar-categoria.component';
 import { MainService } from './public/services/main.service';
 import { AuthService } from './public/services/auth.service';
+import { ListaDatosComponent } from './public/lista-datos/lista-datos.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { AuthService } from './public/services/auth.service';
     ImportarCosteoComponent,
     ConfiguracionComponent,
     AgregarCategoriaComponent,
+    ListaDatosComponent,
   ],
   imports: [
     FormsModule,
