@@ -69,20 +69,21 @@ export class ImportarFlujoComponent implements OnInit {
       this.objetos = [];
       for (let i = 1; i < this.data.length; i++) {
       /* let x = {}; */
-      this.fecha=this.excelToJs(this.data[i][5]);
-      let formatted_date = this.fecha.getFullYear() + "-" + this.ponerCeros((this.fecha.getMonth()))+ "-" + this.ponerCeros(this.fecha.getDate())
+      this.fecha=this.excelToJs(this.data[i][6]);
+      let formatted_date = this.fecha.getFullYear() + "-" + this.ponerCeros((this.fecha.getMonth())+1)+ "-" + this.ponerCeros(this.fecha.getDate())
       {{}}
       let x = {
         empresa: "5d5575040cc34a3ee86deb2c",
-        descripcion: this.data[i][0],
-        ingreso: this.data[i][1],
-        egreso: this.data[i][2],
-        saldoBanco:this.data[i][3],
-        saldoEfectivo:this.data[i][4],
+        consecutivo: this.data[i][0],
+        descripcion: this.data[i][1],
+        ingreso: this.data[i][2],
+        egreso: this.data[i][3],
+        saldoBanco:this.data[i][4],
+        saldoEfectivo:this.data[i][5],
         fechaMovimiento:formatted_date,
-        metodoPago:this.data[i][6],
-        categoria: this.data[i][7],
-        tipo: this.data[i][8],
+        metodoPago:this.data[i][7],
+        categoria: this.data[i][8],
+        tipo: this.data[i][9],
 
         /* icono: this.data[i][3] */
       }

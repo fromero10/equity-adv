@@ -16,6 +16,7 @@ export class FlujoDeCajaComponent implements OnInit {
 
   public fecha: any;
   public hoy: any;
+  public rango: any;
   hoyEnFecha: Date;
   calendario=false;
   spinerGrafica = true;
@@ -35,7 +36,7 @@ export class FlujoDeCajaComponent implements OnInit {
   arregloEgresos=[];
   sumaIngresos=0;
   sumaEgresos=0;
-  saldoInicial=0
+  saldoInicial=0;
   saldoFinal=0;
   categoriasIngresos=[];
   fromDate:Date;
@@ -43,7 +44,15 @@ export class FlujoDeCajaComponent implements OnInit {
   ingresosPorPeriodo=[];
   egresosPorPeriodo=[];
   saldosPorPeriodo=[];
+  arregloTipos=[];
   labels=[];
+  arregloConsecutivos=[];
+  arregloDescripciones=[];
+  arregloMetodos=[];
+  saldoEfectivo=[];
+  arregloCategorias=[];
+  monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
+  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
   verdeAMostrar=0;
   rojoAMostrar=0;
@@ -66,12 +75,15 @@ export class FlujoDeCajaComponent implements OnInit {
       this.hoyEnFecha=new Date(this.hoy)
       this.fromDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-01")
       this.toDate=new Date(this.hoyEnFecha.getFullYear()+"-"+(this.hoyEnFecha.getMonth()+1)+"-"+this.daysInMonth(this.hoyEnFecha.getMonth()+1,this.hoyEnFecha.getFullYear()))
-      this.agruparPorDias()
-      /* this.agruparPorDias(); */
+      this.rango="Seleccionar rango"
       this.mainService.get('api/flujo_de_caja/empresa/5d5575040cc34a3ee86deb2c').subscribe(result =>{
         this.datinhos=result;
       this.crearArregloDatos()
+      this.calcularSaldoInicial()
       this.calcularIngresosEgresos()
+      this.agruparPorDias()
+      
+
 
       })
   }
@@ -115,27 +127,39 @@ export class FlujoDeCajaComponent implements OnInit {
         for(var key2 in this.datinhos[key]){
           this.dato=this.datinhos[key][key2]
           console.log(key2)
-          if(key2==="fechaMovimiento"){
-            this.fecha=Date.parse(this.dato)
-            this.arregloFechas.push(this.fecha)
+          if (key2==="consecutivo"){
+            this.arregloConsecutivos.push(this.dato)
           }
-          else if(key2==="saldoBanco"){
-            this.saldoBanco.push(this.dato)
+          else if (key2==="descripcion"){
+            this.arregloDescripciones.push(this.dato)
           }
-          else if(key2==="ingreso"){
+          else if (key2==="ingreso"){
             this.arregloIngresos.push(this.dato)
           }
-          else if(key2==="egreso"){
+          else if (key2==="egreso"){
             this.arregloEgresos.push(this.dato)
           }
+          else if (key2==="saldoBanco"){
+            this.saldoBanco.push(this.dato)
+          }
+          else if (key2==="saldoEfectivo"){
+            this.saldoEfectivo.push(this.dato)
+          }
+          else if (key2==="fechaMovimiento"){
+            this.fecha=(Date.parse(this.dato)+this.hoyEnFecha.getTimezoneOffset()*60000)
+            this.arregloFechas.push(this.fecha)
+          }
+          else if (key2==="metodoPago"){
+            this.arregloMetodos.push(this.dato)
+          }
+          else if (key2==="categoria"){
+            this.arregloCategorias.push(this.dato)
+          }
+          else if (key2==="tipo"){
+            this.arregloTipos.push(this.dato)
+          }
         }
-        
-        /* if(key==="saldoBanco"){
-          this.labels.push(this.datinhos[key])
-        } */
-    }console.log(this.arregloFechas)
-    this.saldoInicial=this.saldoBanco[0]
-  /* } */
+    }
 }
 
   public calcularIngresosEgresos(){
@@ -144,7 +168,6 @@ export class FlujoDeCajaComponent implements OnInit {
       this.sumaEgresos=this.sumaEgresos+this.arregloEgresos[i]
     }
     this.saldoFinal=this.saldoInicial+this.sumaIngresos-this.sumaEgresos
-    console.log(this.arregloIngresos,this.arregloEgresos)
   }
 
   public generarGrafico() {
@@ -156,6 +179,7 @@ export class FlujoDeCajaComponent implements OnInit {
         label: 'Evolución',
         data: this.saldosPorPeriodo,
         fill: true,
+        steppedLine: 'before',
         backgroundColor: [
           '#F7F7F7'
         ],
@@ -235,6 +259,10 @@ export class FlujoDeCajaComponent implements OnInit {
     this.router.navigate(['dashboard/agregar-ingreso-egreso'])
   }
 
+  public goToDatos(){
+    this.router.navigate(['dashboard/lista-datos'])
+  }
+
   public myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
   }
@@ -245,8 +273,18 @@ export class FlujoDeCajaComponent implements OnInit {
       this.fromDate = new Date(event.start);
       this.toDate = new Date(event.end);
       console.log(this.fromDate,this.toDate)
+      this.rango=this.fromDate.getFullYear()+"/"+(this.fromDate.getMonth()+1)+"/"+this.fromDate.getDate()+" - "+this.toDate.getFullYear()+"/"+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
       if(this.agrupacionFechas===1){
         this.agruparPorDias()
+      }
+      else if(this.agrupacionFechas===2){
+        this.agruparPorSemanas()
+      }
+      else if(this.agrupacionFechas===3){
+        this.agruparPorMes()
+      }
+      else if(this.agrupacionFechas===4){
+        this.agruparPorAno()
       }
   }
   
@@ -259,6 +297,7 @@ export class FlujoDeCajaComponent implements OnInit {
     this.egresosPorPeriodo=[]
     this.saldosPorPeriodo=[]
     this.labels=[]
+    this.calcularSaldoInicial()
 
     for(let i = 0; i < cantidadDias; i++){
 
@@ -272,29 +311,215 @@ export class FlujoDeCajaComponent implements OnInit {
 
       for(let j = 0 ; j < this.arregloIngresos.length; j++){
 
-        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin){
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
 
           this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
           this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
-          this.saldosPorPeriodo[i]=this.saldoBanco[j]
-          break
+
         }
-        else if(j===(this.arregloIngresos.length-1) && i > 0){
-          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]
+        if(j===(this.arregloIngresos.length-1) && i > 0){
+          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
         }
         else if(j===(this.arregloIngresos.length-1) && i === 0){
-          this.saldosPorPeriodo[i]=this.saldoBanco[i]
+          this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
         }
+        
 
       }
     }this.generarGrafico();
     this.generarGrafico2();
     this.generarGrafico3();
+    console.log(this.saldosPorPeriodo)
+  }
+
+  public agruparPorSemanas(){
+
+    let cantidadSemanas=Math.ceil(((this.toDate.getTime()-this.fromDate.getTime())/(1000*60*60*24)+1)/7)
+    this.ingresosPorPeriodo=[]
+    this.egresosPorPeriodo=[]
+    this.saldosPorPeriodo=[]
+    this.labels=[]
+    this.calcularSaldoInicial()
+
+    for(let i = 0; i < cantidadSemanas; i++){
+
+      this.ingresosPorPeriodo[i]=0;
+      this.egresosPorPeriodo[i]=0;
+      this.saldosPorPeriodo[i]=0;
+      let inicio=this.fromDate.getTime()+i*(1000*60*60*24*7)
+      let fin=this.fromDate.getTime()+(i+1)*(1000*60*60*24*7-1)
+      let inicioFecha=new Date(inicio)
+      let finFecha=new Date(fin)
+      if(fin<this.toDate.getTime()){
+        this.labels[i]=(inicioFecha.getMonth()+1)+"/"+inicioFecha.getDate()+" - "+(finFecha.getMonth()+1)+"/"+finFecha.getDate()
+      }
+      else{
+        this.labels[i]=(inicioFecha.getMonth()+1)+"/"+inicioFecha.getDate()+" - "+(this.toDate.getMonth()+1)+"/"+this.toDate.getDate()
+        fin=this.toDate.getTime()+1;
+      }
+
+      for(let j = 0 ; j < this.arregloIngresos.length; j++){
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+
+          this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
+          this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+
+        }
+        if(j===(this.arregloIngresos.length-1) && i > 0){
+          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        else if(j===(this.arregloIngresos.length-1) && i === 0){
+          this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        
+
+      }
+    }this.generarGrafico();
+    this.generarGrafico2();
+    this.generarGrafico3();
+    console.log(this.saldosPorPeriodo)
+  }
+
+  public agruparPorMes(){
+
+    let cantidadMeses=(this.toDate.getFullYear()-this.fromDate.getFullYear())*12+this.toDate.getMonth()-this.fromDate.getMonth()+1
+    this.ingresosPorPeriodo=[]
+    this.egresosPorPeriodo=[]
+    this.saldosPorPeriodo=[]
+    this.labels=[]
+    this.calcularSaldoInicial()
+    let inicio=0;
+    let fin=0;
+
+    for(let i = 0; i < cantidadMeses; i++){
+
+      this.ingresosPorPeriodo[i]=0;
+      this.egresosPorPeriodo[i]=0;
+      this.saldosPorPeriodo[i]=0;
+
+      if (i===0){
+        inicio=this.fromDate.getTime()
+        console.log(i)
+      }
+      else {
+        inicio=fin+1
+        console.log(i)
+      }
+      let inicioFecha=new Date(inicio)
+      fin=inicioFecha.getTime()+(1000*60*60*24)*(this.daysInMonth(inicioFecha.getMonth()+1,inicioFecha.getFullYear())-inicioFecha.getDate()+1)-1
+      this.labels[i]=this.monthNames[inicioFecha.getMonth()]+" - "+inicioFecha.getFullYear()
+      if(fin >= this.toDate.getTime()){
+        fin=this.toDate.getTime()+1
+      }
+      for(let j = 0 ; j < this.arregloIngresos.length; j++){
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+
+          this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
+          this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+
+        }
+        if(j===(this.arregloIngresos.length-1) && i > 0){
+          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        else if(j===(this.arregloIngresos.length-1) && i === 0){
+          this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        
+
+      }
+    }this.generarGrafico();
+    this.generarGrafico2();
+    this.generarGrafico3();
+    console.log(this.saldosPorPeriodo)
+  }
+
+  public agruparPorAno(){
+
+    let cantidadAnos=(this.toDate.getFullYear()-this.fromDate.getFullYear())+1
+    this.ingresosPorPeriodo=[]
+    this.egresosPorPeriodo=[]
+    this.saldosPorPeriodo=[]
+    this.labels=[]
+    this.calcularSaldoInicial()
+    let inicio=0;
+    let fin=0;
+
+    for(let i = 0; i < cantidadAnos; i++){
+
+      this.ingresosPorPeriodo[i]=0;
+      this.egresosPorPeriodo[i]=0;
+      this.saldosPorPeriodo[i]=0;
+      let inicioAno=new Date((this.fromDate.getFullYear()+i)+"-01-01 GMT -0500")
+      let siguienteAno=new Date((this.fromDate.getFullYear()+i+1)+"-01-01 GMT -0500")
+
+      if (i===0){
+        inicio=this.fromDate.getTime()
+        console.log(inicioAno)
+      }
+      else {
+        inicio=inicioAno.getTime()
+        console.log(inicioAno)
+      }
+      fin=siguienteAno.getTime()-1
+      this.labels[i]=inicioAno.getFullYear()
+      if(fin >= this.toDate.getTime()){
+        fin=this.toDate.getTime()+1
+      }
+      for(let j = 0 ; j < this.arregloIngresos.length; j++){
+
+        if(inicio<=this.arregloFechas[j] && this.arregloFechas[j]<fin && this.arregloTipos[j]==="Real"){
+
+          this.ingresosPorPeriodo[i]=this.ingresosPorPeriodo[i]+this.arregloIngresos[j]
+          this.egresosPorPeriodo[i]=this.egresosPorPeriodo[i]+this.arregloEgresos[j]
+
+        }
+        if(j===(this.arregloIngresos.length-1) && i > 0){
+          this.saldosPorPeriodo[i]=this.saldosPorPeriodo[i-1]+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        else if(j===(this.arregloIngresos.length-1) && i === 0){
+          this.saldosPorPeriodo[0]=this.saldoInicial+this.ingresosPorPeriodo[i]-this.egresosPorPeriodo[i]
+        }
+        
+
+      }
+    }this.generarGrafico();
+    this.generarGrafico2();
+    this.generarGrafico3();
+    console.log(this.saldosPorPeriodo)
   }
     
   public daysInMonth (month, year) { 
     return new Date(year, month, 0).getDate(); 
 } 
-  
+  public calcularSaldoInicial(){
+    let encontrado=false
+    let indices=[]
+    let consecs=[]
+    let inicio=this.fromDate.getTime()
+    let minimo: number
+    let indice=0
+
+      for(let i = 0; i < this.arregloFechas.length; i++){
+        if(this.arregloFechas[i]===inicio){
+          indices.push(i)
+          consecs.push(this.arregloConsecutivos[i])
+          encontrado=true
+        }console.log(inicio,this.arregloFechas[i])
+      }
+      if(encontrado){
+        minimo=consecs[0]
+        indice=indices[0]
+        for(let j = 1; j < indices.length; j++){
+          if(consecs[j] < minimo){
+            minimo = consecs[j]
+            indice = indices[j]
+            }
+          }
+        }
+      this.saldoInicial=this.saldoBanco[indice]
+    return this.saldoInicial
+  }
   
 }
