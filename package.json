@@ -52,7 +52,7 @@
     "ng2-file-upload": "^1.3.0",
     "ng2-smart-table": "^1.5.0",
     "ngx-bootstrap": "^5.1.1",
-    "node-sass": "^4.8.1",
+    "node-sass": "^7.0.0",
     "open-iconic": "^1.1.1",
     "react-native-picker-cascader": "^1.0.0",
     "rxjs": "^6.3.3",
